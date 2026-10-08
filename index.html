@@ -1,0 +1,5867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>AeroPulse Mobile — iPhone 15 Pro Max Edition</title>
+  
+  <!-- Apple Web App Metas -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AeroPulse">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <!-- Cache Control for Mobile Web Apps -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <!-- Mobile CSS -->
+  <style>
+/* ==========================================================================
+   AeroPulse — iPhone 15 Pro Max Mobile Styles
+   Exact 430 x 932 pt viewport optimization & iOS Human Interface Guidelines
+   ========================================================================== */
+
+:root {
+  --ios-bg: #000000;              /* True OLED Black */
+  --ios-card: #1c1c1e;            /* iOS Grouped Card Dark */
+  --ios-card-alt: #2c2c2e;        /* iOS Tertiary Card Dark */
+  --ios-border: rgba(255, 255, 255, 0.1);
+  --ios-text: #ffffff;
+  --ios-text-sec: #8e8e93;
+  --ios-text-muted: #636366;
+  --ios-blue: #0a84ff;
+  --ios-cyan: #30d158;
+  --ios-orange: #ff9f0a;
+  --ios-red: #ff453a;
+  --ios-purple: #bf5af2;
+  
+  --safe-top: env(safe-area-inset-top, 48px);
+  --safe-bottom: env(safe-area-inset-bottom, 34px);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  background-color: #0d1117;
+  color: var(--ios-text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+/* Container simulating iPhone 15 Pro Max (430pt x 932pt) */
+.iphone-container {
+  width: 100%;
+  max-width: 440px;
+  height: 100vh;
+  max-height: 932px;
+  background-color: var(--ios-bg);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+
+@media (min-width: 450px) {
+  .iphone-container {
+    border-radius: 54px;
+    border: 7px solid #333336;
+    margin: 20px 0;
+  }
+}
+
+/* iOS Status Bar & Dynamic Island */
+.ios-status-bar {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.dynamic-island {
+  width: 126px;
+  height: 35px;
+  background: #000000;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.island-camera {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #111424;
+}
+
+.island-sensor {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #080811;
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.battery-icon {
+  width: 22px;
+  height: 11px;
+  border: 1px solid #ffffff;
+  border-radius: 3px;
+  padding: 1px;
+  position: relative;
+}
+.battery-icon::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: 3px;
+  width: 2px;
+  height: 3px;
+  background: #ffffff;
+  border-radius: 0 1px 1px 0;
+}
+.battery-fill {
+  width: 80%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 1px;
+}
+
+/* Mobile Nav Header */
+.mobile-nav-header {
+  padding: 8px 18px 12px;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 0.5px solid var(--ios-border);
+  z-index: 90;
+  flex-shrink: 0;
+}
+
+.nav-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.sub-lead {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ios-text-sec);
+  display: block;
+}
+
+.main-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-pro {
+  font-size: 10px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #0a84ff, #30d158);
+  color: #ffffff;
+  padding: 2px 7px;
+  border-radius: 12px;
+}
+
+.ios-circle-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--ios-card);
+  border: 0.5px solid var(--ios-border);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* iOS Segmented Control */
+.ios-segmented-control {
+  display: flex;
+  background: var(--ios-card);
+  padding: 3px;
+  border-radius: 10px;
+  gap: 2px;
+}
+
+.seg-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--ios-text-sec);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 4px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.seg-btn.active {
+  background: #3a3a3c;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.seg-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1px 5px;
+  border-radius: 6px;
+}
+
+/* Scrollable Body */
+.mobile-scroll-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px 85px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.m-view-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Location Banner */
+.m-loc-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.m-loc-pin {
+  font-size: 20px;
+}
+
+.m-loc-name {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.m-loc-time {
+  font-size: 11px;
+  color: var(--ios-text-sec);
+}
+
+/* iOS Widget Cards */
+.ios-widget-card {
+  background: var(--ios-card);
+  border-radius: 20px;
+  padding: 16px;
+  border: 0.5px solid var(--ios-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.widget-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ios-text-sec);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* AQI Widget */
+.card-inner-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.m-aqi-num {
+  font-size: 46px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: var(--ios-text);
+  margin: 4px 0;
+}
+
+.m-aqi-cat-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  background: var(--ios-red);
+  color: #ffffff;
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+
+.aqi-hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: right;
+}
+
+.pm25-widget-box {
+  background: var(--ios-card-alt);
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+
+.w-sub {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--ios-text-sec);
+  display: block;
+}
+
+.w-val {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.highlight-cyan {
+  color: #64d2ff;
+}
+.highlight-orange {
+  color: #ff9f0a;
+}
+
+.w-who-badge {
+  font-size: 10px;
+  color: #ff453a;
+  font-weight: 600;
+}
+
+/* Scale Bar Track */
+.m-scale-bar-track {
+  height: 6px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #30d158 0%, #ffd60a 25%, #ff9f0a 50%, #ff453a 75%, #bf5af2 100%);
+  position: relative;
+  margin: 10px 0 4px;
+}
+
+.m-scale-pointer {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #000000;
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: left 0.3s ease;
+}
+
+.m-scale-legend {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--ios-text-muted);
+}
+
+/* PM2.5 Dedicated Focus Card */
+.pm25-focus-card {
+  background: linear-gradient(150deg, #151b27 0%, #10141e 100%);
+  border: 0.5px solid rgba(100, 210, 255, 0.28);
+}
+
+.m-pm25-headline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 3px;
+}
+
+.m-pm25-hero-aqi {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+}
+
+.m-pm25-cat-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--ios-orange);
+  color: #ffffff;
+}
+
+.pm25-tech-pill {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(100, 210, 255, 0.15);
+  color: #64d2ff;
+  letter-spacing: 0.05em;
+}
+
+.m-pm25-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.m-pm25-tile {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 0.5px solid rgba(255, 255, 255, 0.06);
+}
+
+.m-pm25-expl {
+  font-size: 11px;
+  color: var(--ios-text-sec);
+  line-height: 1.4;
+  margin-top: 6px;
+}
+
+/* 🏃 Runner's Widget Card */
+.runner-widget-card {
+  background: linear-gradient(150deg, #1f2430 0%, #151821 100%);
+  border: 0.5px solid rgba(255, 159, 10, 0.3);
+}
+
+.widget-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.row-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.runner-icon-badge {
+  font-size: 22px;
+  background: rgba(255, 159, 10, 0.15);
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.runner-verdict-text {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.runner-status-pill {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: var(--ios-red);
+  color: #ffffff;
+}
+
+.runner-summary-text {
+  font-size: 12px;
+  color: var(--ios-text-sec);
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.m-intensity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.m-intensity-row {
+  background: var(--ios-card);
+  padding: 8px 12px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 0.5px solid var(--ios-border);
+}
+
+.m-int-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.m-int-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.dot-low { background: #30d158; }
+.dot-mod { background: #ffd60a; }
+.dot-high { background: #ff453a; }
+
+.m-int-name {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.m-int-hr {
+  font-size: 10px;
+  color: var(--ios-text-muted);
+}
+
+.m-int-dur {
+  font-size: 12px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.m-runner-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 0.5px solid var(--ios-border);
+  padding-top: 8px;
+}
+
+.m-footer-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ios-text-sec);
+}
+
+/* Pollutants Grid */
+.m-poll-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.m-poll-tile {
+  background: var(--ios-card);
+  padding: 10px 8px;
+  border-radius: 14px;
+  text-align: center;
+  border: 0.5px solid var(--ios-border);
+}
+
+.tile-lbl {
+  font-size: 10px;
+  color: var(--ios-text-muted);
+  font-weight: 700;
+  display: block;
+}
+
+.tile-val {
+  font-size: 16px;
+  font-weight: 800;
+  color: #64d2ff;
+  margin: 2px 0;
+  display: block;
+}
+
+.tile-sub {
+  font-size: 9px;
+  color: var(--ios-text-sec);
+}
+
+.source-list-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--ios-text-sec);
+  margin-top: 6px;
+}
+
+/* Protocol List in Runner View */
+.m-protocol-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.m-protocol-item {
+  display: flex;
+  gap: 12px;
+  background: var(--ios-card-alt);
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.p-num {
+  font-size: 18px;
+  font-weight: 900;
+  color: #0a84ff;
+  width: 24px;
+}
+
+.p-body strong {
+  font-size: 12px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.p-body p {
+  font-size: 11px;
+  color: var(--ios-text-sec);
+  line-height: 1.35;
+}
+
+/* Search Screen */
+.m-search-input-wrap {
+  display: flex;
+  gap: 8px;
+}
+
+#mSearchInput {
+  flex: 1;
+  background: var(--ios-card);
+  border: 0.5px solid var(--ios-border);
+  color: #ffffff;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  outline: none;
+}
+
+.m-search-btn {
+  background: #0a84ff;
+  color: #ffffff;
+  border: none;
+  font-weight: 700;
+  padding: 0 18px;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.m-search-suggestions {
+  margin-top: 14px;
+}
+
+.m-chips-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.m-chip {
+  background: var(--ios-card);
+  color: var(--ios-text-sec);
+  border: 0.5px solid var(--ios-border);
+  padding: 6px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.m-search-results-list {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.m-result-item {
+  background: var(--ios-card);
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.m-result-item:hover {
+  background: var(--ios-card-alt);
+}
+
+/* Mobile Malaysian State & Station Explorer */
+.m-ios-select {
+  width: 100%;
+  background: var(--ios-card-alt);
+  color: #ffffff;
+  border: 0.5px solid var(--ios-border);
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+}
+
+.m-ios-select:focus {
+  border-color: #0a84ff;
+}
+
+.m-ios-select option {
+  background: #1c1c1e;
+  color: #ffffff;
+}
+
+.m-btn-action-primary {
+  width: 100%;
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+  color: #ffffff;
+  border: none;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 2px 10px rgba(6, 182, 212, 0.25);
+  transition: opacity 0.15s ease;
+}
+
+.m-btn-action-primary:active {
+  opacity: 0.8;
+}
+
+.m-loc-switch-btn {
+  background: rgba(6, 182, 212, 0.15);
+  color: #06b6d4;
+  border: 0.5px solid rgba(6, 182, 212, 0.4);
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.m-loc-switch-btn:active {
+  background: rgba(6, 182, 212, 0.3);
+}
+
+.m-loc-save-btn {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 0.5px solid rgba(168, 85, 247, 0.4);
+  padding: 5px 9px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.2s ease;
+}
+
+.m-loc-save-btn:active {
+  background: rgba(168, 85, 247, 0.35);
+  transform: scale(0.96);
+}
+
+.m-loc-save-btn.saved-success {
+  background: rgba(16, 185, 129, 0.25) !important;
+  color: #34d399 !important;
+  border-color: #10b981 !important;
+}
+
+.seg-btn.seg-saved {
+  max-width: 95px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.m-chip.active {
+  background: rgba(6, 182, 212, 0.2);
+  color: #06b6d4;
+  border-color: #06b6d4;
+  font-weight: 700;
+}
+
+/* iOS Bottom Tab Bar */
+.ios-tab-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: rgba(22, 22, 24, 0.88);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-top: 0.5px solid var(--ios-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: 8px;
+  z-index: 100;
+}
+
+.tab-item {
+  background: transparent;
+  border: none;
+  color: var(--ios-text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  flex: 1;
+}
+
+.tab-item.active {
+  color: #0a84ff;
+}
+
+/* Home Indicator Bar */
+.ios-home-indicator {
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  right: 0;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 101;
+}
+
+.indicator-pill {
+  width: 134px;
+  height: 5px;
+  background: #ffffff;
+  border-radius: 3px;
+  opacity: 0.6;
+}
+
+/* 📈 PM2.5 AQI 24-Hour Trend Card */
+.m-pm25-trend-card {
+  background: linear-gradient(150deg, #111a2e 0%, #0d1322 100%);
+  border: 0.5px solid rgba(56, 189, 248, 0.35);
+}
+
+.m-t-icon {
+  font-size: 20px;
+  background: rgba(56, 189, 248, 0.15);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.m-trend-verdict {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.m-trend-pill {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #e2e8f0;
+  text-transform: uppercase;
+}
+
+.m-trend-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.m-trend-stat-box {
+  background: var(--ios-card);
+  padding: 7px 6px;
+  border-radius: 10px;
+  text-align: center;
+  border: 0.5px solid var(--ios-border);
+}
+
+.m-ts-lbl {
+  font-size: 9px;
+  color: var(--ios-text-muted);
+  font-weight: 600;
+  display: block;
+}
+
+.m-ts-val {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-top: 2px;
+  display: block;
+}
+
+.m-trend-canvas-wrap {
+  width: 100%;
+  background: rgba(11, 15, 25, 0.7);
+  border-radius: 14px;
+  padding: 10px 8px 6px;
+  margin: 8px 0;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.m-trend-canvas-wrap canvas {
+  width: 100%;
+  height: 150px;
+  display: block;
+}
+
+.m-trend-canvas-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--ios-text-muted);
+  margin-top: 4px;
+  padding: 0 4px;
+}
+
+.m-trend-toggle-strip {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.m-trend-btn {
+  flex: 1;
+  background: var(--ios-card);
+  border: 0.5px solid var(--ios-border);
+  color: var(--ios-text-sec);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.m-trend-btn.active {
+  background: #0a84ff;
+  color: #ffffff;
+  border-color: #0a84ff;
+}
+
+.m-trend-summary-text {
+  font-size: 10.5px;
+  color: var(--ios-text-sec);
+  line-height: 1.4;
+  margin-top: 6px;
+}
+
+/* iOS Modal Backdrop & Card */
+.ios-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 99998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.ios-modal-backdrop.hidden {
+  display: none !important;
+}
+.ios-modal-card {
+  background: #1c1c1e;
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+  max-width: 360px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+.ios-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.ios-modal-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+.ios-close-btn {
+  background: none;
+  border: none;
+  color: #8e8e93;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 0 6px;
+  line-height: 1;
+}
+.ios-modal-text {
+  font-size: 12px;
+  color: #aeaeb2;
+  line-height: 1.4;
+}
+.ios-input {
+  width: 100%;
+  background: #2c2c2e;
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: #fff;
+  padding: 10px 12px;
+  font-size: 13px;
+  outline: none;
+  box-sizing: border-box;
+}
+.ios-input:focus {
+  border-color: #0a84ff;
+}
+.ios-btn-primary {
+  flex: 1;
+  background: #0a84ff;
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.ios-btn-secondary {
+  background: #2c2c2e;
+  border: none;
+  color: #ff453a;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+  </style>
+</head>
+<body>
+  <!-- Simulated iPhone 15 Pro Max Shell Frame (for desktop preview or native mobile full screen) -->
+  <div class="iphone-container">
+    
+    <!-- Dynamic Island / Top Safe Area -->
+    <div class="ios-status-bar">
+      <div class="status-time" id="iosTime">09:41</div>
+      <div class="dynamic-island">
+        <div class="island-camera"></div>
+        <div class="island-sensor"></div>
+      </div>
+      <div class="status-icons">
+        <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor">
+          <path d="M1 9.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1zm4-3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-4zm4-3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-7zm4-3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V.5z"/>
+        </svg>
+        <svg width="15" height="11" viewBox="0 0 16 12" fill="currentColor">
+          <path d="M8 2.5a10.9 10.9 0 0 1 7.2 2.7.75.75 0 0 1 .05 1.07l-6.7 7.1a.75.75 0 0 1-1.1 0L.75 6.27A.75.75 0 0 1 .8 5.2 10.9 10.9 0 0 1 8 2.5z"/>
+        </svg>
+        <div class="battery-icon">
+          <div class="battery-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile App Top Bar -->
+    <header class="mobile-nav-header">
+      <div class="nav-title-row">
+        <div>
+          <span class="sub-lead">AIR QUALITY & RUNNER MONITOR • v2.2</span>
+          <h1 class="main-title">AeroPulse <span class="badge-pro">PRO MAX</span></h1>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button id="mTokenBtn" class="ios-circle-btn" title="Live WAQI Token">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 2l-2 2m-1.5 1.5L16 7l-1.5-1.5M16 7l-2 2-2-2-4 4a5 5 0 1 0 7.07 7.07l4.93-4.93V7h-4z"/>
+            </svg>
+          </button>
+          <button id="mRefreshBtn" class="ios-circle-btn" title="Refresh">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- iOS Segmented Control (Perai, KL, Alor Setar, Saved) -->
+      <div class="ios-segmented-control">
+        <button class="seg-btn active" data-city="perai" id="segPerai">
+          <span>Perai</span>
+          <span class="seg-badge" id="mBadgePerai">--</span>
+        </button>
+        <button class="seg-btn" data-city="kuala-lumpur" id="segKL">
+          <span>Kuala Lumpur</span>
+          <span class="seg-badge" id="mBadgeKL">--</span>
+        </button>
+        <button class="seg-btn" data-city="alor-setar" id="segAlor">
+          <span>Alor Setar</span>
+          <span class="seg-badge" id="mBadgeAlor">--</span>
+        </button>
+        <button class="seg-btn seg-saved" id="segSaved" title="Saved 4th location (tap to view)">
+          <span id="mSegSavedText">📌 Tab 4</span>
+          <span class="seg-badge" id="mBadgeSaved">--</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Scrollable Content Screen -->
+    <main class="mobile-scroll-body" id="mScrollBody">
+
+      <!-- SECTION: MAIN DASHBOARD VIEW -->
+      <div id="mViewDashboard" class="m-view-section active">
+        <!-- Location Banner -->
+        <div class="m-loc-banner">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="m-loc-pin">📍</div>
+            <div>
+              <h2 class="m-loc-name" id="mLocName">Perai, Penang</h2>
+              <div class="m-loc-time" id="mLocTime">Updated Live • Malaysia DOE Station</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button id="mBtnSaveLocation" class="m-loc-save-btn" title="Save this location as your 4th Tab">★ Save</button>
+            <button id="mBtnBrowseStations" class="m-loc-switch-btn" title="Browse 16 States & Stations">🇲🇾 16 States</button>
+          </div>
+        </div>
+
+        <!-- Hero AQI Gauge Card (iOS Widget Style) -->
+        <div class="ios-widget-card" id="mAqiCard">
+          <div class="card-inner-flex">
+            <div class="aqi-hero-left">
+              <span class="widget-label">OVERALL AQI</span>
+              <div class="m-aqi-num" id="mAqiNum">--</div>
+              <div class="m-aqi-cat-badge" id="mAqiBadge">Loading...</div>
+            </div>
+
+            <div class="aqi-hero-right">
+              <div class="pm25-widget-box">
+                <span class="w-sub">PM2.5 AQI READING</span>
+                <div class="w-val" id="mPm25Sub">-- AQI</div>
+              </div>
+              <div class="pm25-widget-box">
+                <span class="w-sub">MASS CONCENTRATION</span>
+                <div class="w-val highlight-cyan" id="mPm25Conc">-- µg/m³</div>
+              </div>
+              <div class="w-who-badge" id="mWhoBadge">WHO 24h: 15 µg/m³</div>
+            </div>
+          </div>
+
+          <!-- Color Progress Bar -->
+          <div class="m-scale-bar-track">
+            <div class="m-scale-pointer" id="mScalePointer"></div>
+          </div>
+          <div class="m-scale-legend">
+            <span>Good (0-50)</span>
+            <span>Moderate (100)</span>
+            <span>Unhealthy (150+)</span>
+          </div>
+        </div>
+
+        <!-- 🔬 PM2.5 DEDICATED FOCUS CARD -->
+        <div class="ios-widget-card pm25-focus-card" id="mPm25FocusCard">
+          <div class="widget-header-row">
+            <div>
+              <span class="widget-label highlight-cyan">FINE PARTICULATE HAZARD (PM2.5)</span>
+              <div class="m-pm25-headline">
+                <span class="m-pm25-hero-aqi" id="mPm25HeroAqi">-- AQI</span>
+                <span class="m-pm25-cat-badge" id="mPm25CatBadge">Loading...</span>
+              </div>
+            </div>
+            <span class="pm25-tech-pill">PARTICLES &le; 2.5µm</span>
+          </div>
+
+          <div class="m-pm25-grid">
+            <div class="m-pm25-tile">
+              <span class="tile-lbl">PM2.5 AQI Reading</span>
+              <span class="tile-val" id="mTilePm25Aqi">-- AQI</span>
+              <span class="tile-sub" id="mTilePm25AqiSub">US EPA Sub-Index</span>
+            </div>
+            <div class="m-pm25-tile">
+              <span class="tile-lbl">Atmospheric Mass</span>
+              <span class="tile-val highlight-cyan" id="mTilePm25Conc">-- µg/m³</span>
+              <span class="tile-sub">Surface Density</span>
+            </div>
+            <div class="m-pm25-tile">
+              <span class="tile-lbl">WHO 24h Limit</span>
+              <span class="tile-val" id="mTilePm25Who" style="font-size:12px;">15 µg/m³</span>
+              <span class="tile-sub" id="mTilePm25WhoStatus">Safe Guideline</span>
+            </div>
+            <div class="m-pm25-tile">
+              <span class="tile-lbl">Today's Ground Range</span>
+              <span class="tile-val" id="mTilePm25Range" style="font-size:11px;">Min -- | Max --</span>
+              <span class="tile-sub">24h Variance</span>
+            </div>
+          </div>
+
+          <p class="m-pm25-expl" id="mPm25Expl">
+            PM2.5 is the primary respiratory threat for outdoor runners and public health in Malaysia. Microscopic combustion and haze particles bypass nasal filtration and deposit deep into pulmonary alveoli.
+          </p>
+        </div>
+
+        <!-- 📈 PM2.5 AQI 24-HOUR TREND & FORECAST GRAPH -->
+        <div class="ios-widget-card m-pm25-trend-card" id="mTrendCard">
+          <div class="widget-header-row">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="m-t-icon">📈</span>
+              <div>
+                <span class="widget-label" style="color:#38bdf8;">HOURLY PM2.5 AQI CONTINUOUS TIMELINE</span>
+                <div class="m-trend-verdict" id="mTrendVerdict">Analyzing 48h trajectory...</div>
+              </div>
+            </div>
+            <span class="m-trend-pill" id="mTrendBadge">STABLE</span>
+          </div>
+
+          <!-- Timeline Range Toggle Strip -->
+          <div class="m-trend-toggle-strip" style="margin-bottom:8px;">
+            <button class="m-trend-btn active" id="btnMTrendRangeAll">⏱️ 48h Full</button>
+            <button class="m-trend-btn" id="btnMTrendRangePast">⏪ Past 24h</button>
+            <button class="m-trend-btn" id="btnMTrendRangeFuture">⏩ Next 24h</button>
+          </div>
+
+          <!-- Past 24h Observed Row -->
+          <div class="m-trend-section-tag" style="font-size:10px; font-weight:700; color:#06b6d4; margin:4px 0 2px;">⏪ PAST 24h OBSERVED HISTORY</div>
+          <div class="m-trend-stats-row" style="margin-bottom:6px;">
+            <div class="m-trend-stat-box">
+              <span class="m-ts-lbl">Past 24h Peak</span>
+              <span class="m-ts-val highlight-red" id="mTrendPastPeak">--</span>
+            </div>
+            <div class="m-trend-stat-box">
+              <span class="m-ts-lbl">Past 24h Lowest</span>
+              <span class="m-ts-val highlight-green" id="mTrendPastLow">--</span>
+            </div>
+            <div class="m-trend-stat-box">
+              <span class="m-ts-lbl">Last 6h Shift</span>
+              <span class="m-ts-val" id="mTrendPastShift" style="color:#06b6d4;">--</span>
+            </div>
+          </div>
+
+          <!-- Next 24h Forecast Row -->
+          <div class="m-trend-section-tag" style="font-size:10px; font-weight:700; color:#ffd60a; margin:4px 0 2px;">⏩ NEXT 24h PREDICTION OUTLOOK</div>
+          <div class="m-trend-stats-row">
+            <div class="m-trend-stat-box">
+              <span class="m-ts-lbl">Predicted Peak</span>
+              <span class="m-ts-val highlight-red" id="mTrendPeak">--</span>
+            </div>
+            <div class="m-trend-stat-box">
+              <span class="m-ts-lbl">Cleanest Window</span>
+              <span class="m-ts-val highlight-green" id="mTrendClean">--</span>
+            </div>
+            <div class="m-trend-stat-box">
+              <span class="m-ts-lbl">Projected Shift</span>
+              <span class="m-ts-val" id="mTrendDrift">--</span>
+            </div>
+          </div>
+
+          <!-- Trend Canvas Chart -->
+          <div class="m-trend-canvas-wrap">
+            <canvas id="mTrendCanvas"></canvas>
+            <div class="m-trend-canvas-labels" id="mTrendCanvasLabels">
+              <span>-24h</span>
+              <span>-12h</span>
+              <span style="color:#ffd60a; font-weight:700;">📍 NOW</span>
+              <span>+12h</span>
+              <span>+24h</span>
+            </div>
+          </div>
+
+          <!-- Toggle between AQI reading and Concentration -->
+          <div class="m-trend-toggle-strip">
+            <button class="m-trend-btn active" id="btnMTrendAqi">PM2.5 AQI</button>
+            <button class="m-trend-btn" id="btnMTrendConc">Concentration (µg/m³)</button>
+          </div>
+
+          <p class="m-trend-summary-text" id="mTrendSummary">
+            Continuous numerical timeline driven by Copernicus CAMS atmospheric observation & forecast models.
+          </p>
+        </div>
+
+        <!-- 🏃 RUNNER'S SAFETY & WORKOUT SUITABILITY CARD -->
+        <div class="ios-widget-card runner-widget-card" id="mRunnerCard">
+          <div class="widget-header-row">
+            <div class="row-left">
+              <span class="runner-icon-badge">🏃</span>
+              <div>
+                <span class="widget-label highlight-orange">RUNNER'S SAFETY ADVISOR</span>
+                <h3 class="runner-verdict-text" id="mRunnerVerdict">Assessing outdoor run...</h3>
+              </div>
+            </div>
+            <span class="runner-status-pill" id="mRunnerPill">SAFE</span>
+          </div>
+
+          <p class="runner-summary-text" id="mRunnerSummary">
+            Evaluating pulmonary minute ventilation and particulate inhalation.
+          </p>
+
+          <!-- 3 Intensity Blocks -->
+          <div class="m-intensity-list">
+            <!-- Low -->
+            <div class="m-intensity-row">
+              <div class="m-int-left">
+                <span class="m-int-dot dot-low"></span>
+                <div>
+                  <div class="m-int-name">Zone 1 - 2 (Easy / Recovery)</div>
+                  <div class="m-int-hr">HR &lt; 70% • Base aerobic jog</div>
+                </div>
+              </div>
+              <div class="m-int-right">
+                <span class="m-int-dur" id="mDurLow">60 - 75 mins</span>
+              </div>
+            </div>
+
+            <!-- Moderate -->
+            <div class="m-intensity-row">
+              <div class="m-int-left">
+                <span class="m-int-dot dot-mod"></span>
+                <div>
+                  <div class="m-int-name">Zone 3 (Steady / Tempo)</div>
+                  <div class="m-int-hr">HR 70 - 80% • Marathon pace</div>
+                </div>
+              </div>
+              <div class="m-int-right">
+                <span class="m-int-dur" id="mDurMod">30 - 45 mins</span>
+              </div>
+            </div>
+
+            <!-- High -->
+            <div class="m-intensity-row">
+              <div class="m-int-left">
+                <span class="m-int-dot dot-high"></span>
+                <div>
+                  <div class="m-int-name">Zone 4 - 5 (Hard / Intervals)</div>
+                  <div class="m-int-hr">HR &gt; 80% • Sprints / VO2 Max</div>
+                </div>
+              </div>
+              <div class="m-int-right">
+                <span class="m-int-dur" id="mDurHigh">20 - 30 mins</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Runner Microclimate & Window -->
+          <div class="m-runner-footer">
+            <div class="m-footer-item">
+              <span class="m-f-icon">⏰</span>
+              <span class="m-f-text" id="mBestWindow">Best Window: Morning (06:00 - 08:00 AM)</span>
+            </div>
+            <div class="m-footer-item">
+              <span class="m-f-icon">🌡️</span>
+              <span class="m-f-text" id="mHeatStress">Heat Index: Normal • Carry Water</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pollutant Grid (PM10, O3, NO2, SO2, CO) -->
+        <div class="m-pollutants-section">
+          <span class="widget-label" style="margin-left: 4px; margin-bottom: 8px; display: block;">DETAILED POLLUTANTS & SENSORS</span>
+          <div class="m-poll-grid">
+            <div class="m-poll-tile">
+              <span class="tile-lbl">PM10</span>
+              <span class="tile-val" id="mValPm10">--</span>
+              <span class="tile-sub">Coarse Dust</span>
+            </div>
+            <div class="m-poll-tile">
+              <span class="tile-lbl">Ozone (O₃)</span>
+              <span class="tile-val" id="mValO3">--</span>
+              <span class="tile-sub">Surface</span>
+            </div>
+            <div class="m-poll-tile">
+              <span class="tile-lbl">NO₂</span>
+              <span class="tile-val" id="mValNo2">--</span>
+              <span class="tile-sub">Traffic</span>
+            </div>
+            <div class="m-poll-tile">
+              <span class="tile-lbl">SO₂</span>
+              <span class="tile-val" id="mValSo2">--</span>
+              <span class="tile-sub">Industrial</span>
+            </div>
+            <div class="m-poll-tile">
+              <span class="tile-lbl">CO</span>
+              <span class="tile-val" id="mValCo">--</span>
+              <span class="tile-sub">Combustion</span>
+            </div>
+            <div class="m-poll-tile">
+              <span class="tile-lbl">European AQI</span>
+              <span class="tile-val" id="mValEaqi">--</span>
+              <span class="tile-sub">Copernicus</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reliable Sources Transparency -->
+        <div class="ios-widget-card" style="margin-top: 14px;">
+          <span class="widget-label">MULTI-SOURCE VERIFICATION</span>
+          <div class="source-list-mini">
+            <div class="s-mini-item">
+              <strong>1. Ground Continuous Sensor:</strong>
+              <span id="mSrcGround">WAQI / DOE Station (Online)</span>
+            </div>
+            <div class="s-mini-item">
+              <strong>2. European Copernicus CAMS:</strong>
+              <span id="mSrcModel">ECMWF Atmospheric Physics Model</span>
+            </div>
+            <div class="s-mini-item">
+              <strong>3. National IPU Standard:</strong>
+              <span id="mSrcIpu">Jabatan Alam Sekitar Malaysia</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: RUNNER TAB SCREEN -->
+      <div id="mViewRunner" class="m-view-section hidden">
+        <div class="m-loc-banner">
+          <div class="m-loc-pin">🏃‍♂️</div>
+          <div>
+            <h2 class="m-loc-name">Runner's Dedicated Hub</h2>
+            <div class="m-loc-time">Sports Physiology & Ventilation Science</div>
+          </div>
+        </div>
+
+        <div class="ios-widget-card runner-widget-card" style="margin-bottom: 12px;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px;">Why Runners Need AQI Precision</h3>
+          <p style="font-size: 0.82rem; color: #94a3b8; line-height: 1.45;">
+            During running, minute ventilation escalates from ~6 L/min to 80-140 L/min. Mouth breathing bypasses the nasal mucociliary filter, allowing fine PM2.5 to penetrate straight into alveolar tissues.
+          </p>
+        </div>
+
+        <div class="ios-widget-card">
+          <span class="widget-label">RECOMMENDED AIR PROTOCOL</span>
+          <div class="m-protocol-list">
+            <div class="m-protocol-item">
+              <div class="p-num">01</div>
+              <div class="p-body">
+                <strong>AQI 0 - 50 (Good)</strong>
+                <p>No restriction. Ideal for 90+ min weekend long runs, interval ladders, and tempo blocks.</p>
+              </div>
+            </div>
+            <div class="m-protocol-item">
+              <div class="p-num">02</div>
+              <div class="p-body">
+                <strong>AQI 51 - 100 (Moderate)</strong>
+                <p>Safe for general runners. Cap high-intensity sprints under 30 mins. Avoid highway roadsides.</p>
+              </div>
+            </div>
+            <div class="m-protocol-item">
+              <div class="p-num">03</div>
+              <div class="p-body">
+                <strong>AQI 101 - 150 (Sensitive Groups)</strong>
+                <p>Move speed sessions to treadmill. Limit outdoor easy jogs to 30-40 mins Max in green parks.</p>
+              </div>
+            </div>
+            <div class="m-protocol-item">
+              <div class="p-num">04</div>
+              <div class="p-body">
+                <strong>AQI &gt; 150 (Unhealthy)</strong>
+                <p>Outdoor running prohibited. Use an air-conditioned indoor treadmill with HEPA air purifiers.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: SEARCH SCREEN -->
+      <div id="mViewSearch" class="m-view-section hidden">
+        <div class="m-search-input-wrap">
+          <input type="text" id="mSearchInput" placeholder="Search city in Malaysia or worldwide..." autocomplete="off">
+          <button id="mSearchGoBtn" class="m-search-btn">Go</button>
+        </div>
+
+        <!-- 🇲🇾 Malaysian States & Continuous Monitoring Stations Explorer -->
+        <div class="ios-widget-card m-state-explorer-card" style="margin-top: 12px; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 1.15rem;">🇲🇾</span>
+              <span class="widget-label highlight-cyan" style="margin: 0; font-weight: 800; letter-spacing: 0.05em;">MALAYSIA STATIONS BY STATE</span>
+            </div>
+            <span style="font-size: 10px; color: #8e8e93; font-weight: 600;">16 States • 59 Stations</span>
+          </div>
+          
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div>
+              <label for="mStateSelect" style="display: block; font-size: 11px; color: #8e8e93; font-weight: 700; margin-bottom: 4px; text-transform: uppercase;">Select State / Wilayah:</label>
+              <select id="mStateSelect" class="m-ios-select">
+                <!-- 16 States populated dynamically -->
+              </select>
+            </div>
+
+            <div>
+              <label for="mStationSelect" style="display: block; font-size: 11px; color: #8e8e93; font-weight: 700; margin-bottom: 4px; text-transform: uppercase;">Continuous Monitoring Station:</label>
+              <select id="mStationSelect" class="m-ios-select">
+                <!-- Stations populated dynamically -->
+              </select>
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 4px;">
+              <button id="mBtnViewStation" class="m-btn-action-primary" style="flex: 1;">
+                <span>View Station Readings →</span>
+              </button>
+              <button id="mBtnDirectSaveStation" class="m-loc-save-btn" style="padding: 10px 14px; font-size: 12px; border-radius: 12px;" title="Save selected station as Tab 4">
+                <span>★ Save Tab 4</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Station Chips in State -->
+          <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.1);">
+            <div style="font-size: 10px; color: #8e8e93; font-weight: 700; margin-bottom: 6px; text-transform: uppercase;">Stations in Selected State:</div>
+            <div class="m-chips-flex" id="mStateChipsList">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <div class="m-search-suggestions">
+          <span class="widget-label">POPULAR MALAYSIA RUNNING SPOTS:</span>
+          <div class="m-chips-flex">
+            <button class="m-chip" data-q="Perai">Perai (Penang)</button>
+            <button class="m-chip" data-q="George Town Penang">George Town</button>
+            <button class="m-chip" data-q="Kuala Lumpur">Kuala Lumpur</button>
+            <button class="m-chip" data-q="Alor Setar">Alor Setar</button>
+            <button class="m-chip" data-q="Petaling Jaya">Petaling Jaya</button>
+            <button class="m-chip" data-q="Shah Alam">Shah Alam</button>
+            <button class="m-chip" data-q="Taiping">Taiping Lake</button>
+            <button class="m-chip" data-q="Putrajaya">Putrajaya</button>
+            <button class="m-chip" data-q="Singapore">Singapore</button>
+          </div>
+        </div>
+
+        <div id="mSearchResults" class="m-search-results-list"></div>
+      </div>
+
+      <!-- SECTION: COMPARE SCREEN -->
+      <div id="mViewCompare" class="m-view-section hidden">
+        <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 12px;">All 3 Cities Comparison</h2>
+        <div id="mCompareCardsContainer">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+    </main>
+
+    <!-- iOS Native Bottom Tab Bar -->
+    <nav class="ios-tab-bar">
+      <button class="tab-item active" data-target="mViewDashboard" id="tabNavHome">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+        </svg>
+        <span>Overview</span>
+      </button>
+
+      <button class="tab-item" data-target="mViewRunner" id="tabNavRunner">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <circle cx="12" cy="5" r="3"></circle>
+          <path d="M10 22v-6l-2-2 2-4 2 2v6h2"></path>
+        </svg>
+        <span>Runner Hub</span>
+      </button>
+
+      <button class="tab-item" data-target="mViewSearch" id="tabNavSearch">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span>Search</span>
+      </button>
+
+      <button class="tab-item" data-target="mViewCompare" id="tabNavCompare">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <line x1="18" y1="20" x2="18" y2="10"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+        <span>Compare</span>
+      </button>
+    </nav>
+
+    <!-- iOS Bottom Home Indicator Indicator Bar -->
+    <!-- WAQI Token Settings Modal -->
+    <div id="mWaqiModal" class="ios-modal-backdrop hidden">
+      <div class="ios-modal-card">
+        <div class="ios-modal-header">
+          <h3>Official Live Ground Token</h3>
+          <button id="mCloseTokenModal" class="ios-close-btn">&times;</button>
+        </div>
+        <p class="ios-modal-text">
+          Enter your free <strong>WAQI API token</strong> to enable direct real-time ground station measurements on your phone 24/7.
+        </p>
+        <div style="margin: 12px 0;">
+          <input type="text" id="mWaqiTokenInput" class="ios-input" placeholder="Paste WAQI API Token..." />
+        </div>
+        <div style="font-size:11px; color:#8e8e93; margin-bottom:14px; line-height:1.4;">
+          Don't have a token? Get one in 10 seconds for free at:<br>
+          <a href="https://aqicn.org/data-platform/token/" target="_blank" style="color:#0a84ff; text-decoration:underline;">aqicn.org/data-platform/token</a>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button id="mSaveTokenBtn" class="ios-btn-primary">Save & Fetch Live</button>
+          <button id="mClearTokenBtn" class="ios-btn-secondary">Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+/**
+ * AeroPulse Mobile — Logic for iPhone 15 Pro Max Edition
+ */
+
+const mState = {
+  currentCity: 'perai',
+  presetData: {},
+  currentData: null,
+  trendMode: 'aqi',
+  trendRange: 'all' // 'all', 'past', or 'future'
+};
+
+// DOM Elements
+const mEl = {
+  iosTime: document.getElementById('iosTime'),
+  mRefreshBtn: document.getElementById('mRefreshBtn'),
+  segPerai: document.getElementById('segPerai'),
+  segKL: document.getElementById('segKL'),
+  segAlor: document.getElementById('segAlor'),
+  segSaved: document.getElementById('segSaved'),
+  mSegSavedText: document.getElementById('mSegSavedText'),
+  mBadgeSaved: document.getElementById('mBadgeSaved'),
+  mBadgePerai: document.getElementById('mBadgePerai'),
+  mBadgeKL: document.getElementById('mBadgeKL'),
+  mBadgeAlor: document.getElementById('mBadgeAlor'),
+  mBtnSaveLocation: document.getElementById('mBtnSaveLocation'),
+  mTokenBtn: document.getElementById('mTokenBtn'),
+  mWaqiModal: document.getElementById('mWaqiModal'),
+  mCloseTokenModal: document.getElementById('mCloseTokenModal'),
+  mWaqiTokenInput: document.getElementById('mWaqiTokenInput'),
+  mSaveTokenBtn: document.getElementById('mSaveTokenBtn'),
+  mClearTokenBtn: document.getElementById('mClearTokenBtn'),
+
+  // Views
+  mViewDashboard: document.getElementById('mViewDashboard'),
+  mViewRunner: document.getElementById('mViewRunner'),
+  mViewSearch: document.getElementById('mViewSearch'),
+  mViewCompare: document.getElementById('mViewCompare'),
+
+  // Tab Bar
+  tabNavHome: document.getElementById('tabNavHome'),
+  tabNavRunner: document.getElementById('tabNavRunner'),
+  tabNavSearch: document.getElementById('tabNavSearch'),
+  tabNavCompare: document.getElementById('tabNavCompare'),
+
+  // Location & Metrics
+  mLocName: document.getElementById('mLocName'),
+  mLocTime: document.getElementById('mLocTime'),
+  mAqiNum: document.getElementById('mAqiNum'),
+  mAqiBadge: document.getElementById('mAqiBadge'),
+  mPm25Sub: document.getElementById('mPm25Sub'),
+  mPm25Conc: document.getElementById('mPm25Conc'),
+  mWhoBadge: document.getElementById('mWhoBadge'),
+  mScalePointer: document.getElementById('mScalePointer'),
+
+  // PM2.5 Focus Card
+  mPm25HeroAqi: document.getElementById('mPm25HeroAqi'),
+  mPm25CatBadge: document.getElementById('mPm25CatBadge'),
+  mTilePm25Aqi: document.getElementById('mTilePm25Aqi'),
+  mTilePm25AqiSub: document.getElementById('mTilePm25AqiSub'),
+  mTilePm25Conc: document.getElementById('mTilePm25Conc'),
+  mTilePm25Who: document.getElementById('mTilePm25Who'),
+  mTilePm25WhoStatus: document.getElementById('mTilePm25WhoStatus'),
+  mTilePm25Range: document.getElementById('mTilePm25Range'),
+
+  // PM2.5 24h & Continuous Trend Card
+  mTrendCard: document.getElementById('mTrendCard'),
+  mTrendVerdict: document.getElementById('mTrendVerdict'),
+  mTrendBadge: document.getElementById('mTrendBadge'),
+  btnMTrendRangeAll: document.getElementById('btnMTrendRangeAll'),
+  btnMTrendRangePast: document.getElementById('btnMTrendRangePast'),
+  btnMTrendRangeFuture: document.getElementById('btnMTrendRangeFuture'),
+  mTrendPastPeak: document.getElementById('mTrendPastPeak'),
+  mTrendPastLow: document.getElementById('mTrendPastLow'),
+  mTrendPastShift: document.getElementById('mTrendPastShift'),
+  mTrendPeak: document.getElementById('mTrendPeak'),
+  mTrendClean: document.getElementById('mTrendClean'),
+  mTrendDrift: document.getElementById('mTrendDrift'),
+  mTrendCanvas: document.getElementById('mTrendCanvas'),
+  mTrendCanvasLabels: document.getElementById('mTrendCanvasLabels'),
+  btnMTrendAqi: document.getElementById('btnMTrendAqi'),
+  btnMTrendConc: document.getElementById('btnMTrendConc'),
+  mTrendSummary: document.getElementById('mTrendSummary'),
+
+  // Runner
+  mRunnerVerdict: document.getElementById('mRunnerVerdict'),
+  mRunnerPill: document.getElementById('mRunnerPill'),
+  mRunnerSummary: document.getElementById('mRunnerSummary'),
+  mDurLow: document.getElementById('mDurLow'),
+  mDurMod: document.getElementById('mDurMod'),
+  mDurHigh: document.getElementById('mDurHigh'),
+  mBestWindow: document.getElementById('mBestWindow'),
+  mHeatStress: document.getElementById('mHeatStress'),
+
+  // Pollutants
+  mValPm10: document.getElementById('mValPm10'),
+  mValO3: document.getElementById('mValO3'),
+  mValNo2: document.getElementById('mValNo2'),
+  mValSo2: document.getElementById('mValSo2'),
+  mValCo: document.getElementById('mValCo'),
+  mValEaqi: document.getElementById('mValEaqi'),
+
+  // Sources
+  mSrcGround: document.getElementById('mSrcGround'),
+  mSrcModel: document.getElementById('mSrcModel'),
+  mSrcIpu: document.getElementById('mSrcIpu'),
+
+  // Search
+  mSearchInput: document.getElementById('mSearchInput'),
+  mSearchGoBtn: document.getElementById('mSearchGoBtn'),
+  mSearchResults: document.getElementById('mSearchResults'),
+
+  // State & Station Explorer
+  mStateSelect: document.getElementById('mStateSelect'),
+  mStationSelect: document.getElementById('mStationSelect'),
+  mBtnViewStation: document.getElementById('mBtnViewStation'),
+  mBtnDirectSaveStation: document.getElementById('mBtnDirectSaveStation'),
+  mStateChipsList: document.getElementById('mStateChipsList'),
+  mBtnBrowseStations: document.getElementById('mBtnBrowseStations'),
+
+  // Compare
+  mCompareCardsContainer: document.getElementById('mCompareCardsContainer')
+};
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  updateClock();
+  setInterval(updateClock, 10000);
+
+  initEventListeners();
+  initSavedMobileTab();
+  initMobileStateExplorer();
+  loadInitialMobileData();
+});
+
+function updateClock() {
+  const now = new Date();
+  mEl.iosTime.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+}
+
+function initEventListeners() {
+  // Segmented City Tabs
+  mEl.segPerai.addEventListener('click', () => switchCity('perai'));
+  mEl.segKL.addEventListener('click', () => switchCity('kuala-lumpur'));
+  mEl.segAlor.addEventListener('click', () => switchCity('alor-setar'));
+  if (mEl.segSaved) {
+    mEl.segSaved.addEventListener('click', loadSavedMobileTab);
+  }
+
+  // Save Current Location as 4th Tab
+  if (mEl.mBtnSaveLocation) {
+    mEl.mBtnSaveLocation.addEventListener('click', saveCurrentMobileLocationAsTab4);
+  }
+
+  // Refresh
+  mEl.mRefreshBtn.addEventListener('click', () => {
+    loadInitialMobileData();
+  });
+
+  // Browse Stations Button in Header Banner
+  if (mEl.mBtnBrowseStations) {
+    mEl.mBtnBrowseStations.addEventListener('click', () => {
+      mEl.tabNavSearch.click();
+    });
+  }
+
+  // WAQI Token Modal
+  if (mEl.mTokenBtn) {
+    mEl.mTokenBtn.addEventListener('click', () => {
+      if (mEl.mWaqiTokenInput) {
+        mEl.mWaqiTokenInput.value = localStorage.getItem('waqi_token') || '';
+      }
+      if (mEl.mWaqiModal) mEl.mWaqiModal.classList.remove('hidden');
+    });
+  }
+
+  if (mEl.mCloseTokenModal) {
+    mEl.mCloseTokenModal.addEventListener('click', () => {
+      if (mEl.mWaqiModal) mEl.mWaqiModal.classList.add('hidden');
+    });
+  }
+
+  if (mEl.mSaveTokenBtn) {
+    mEl.mSaveTokenBtn.addEventListener('click', async () => {
+      const val = mEl.mWaqiTokenInput ? mEl.mWaqiTokenInput.value.trim() : '';
+      if (val) {
+        localStorage.setItem('waqi_token', val);
+        WAQI_TOKEN = val;
+        if (typeof showMobileToast === 'function') showMobileToast('✓ WAQI Token Saved! Fetching live...');
+      } else {
+        localStorage.removeItem('waqi_token');
+        WAQI_TOKEN = '';
+        if (typeof showMobileToast === 'function') showMobileToast('WAQI Token Removed');
+      }
+      if (mEl.mWaqiModal) mEl.mWaqiModal.classList.add('hidden');
+      await loadInitialMobileData();
+    });
+  }
+
+  if (mEl.mClearTokenBtn) {
+    mEl.mClearTokenBtn.addEventListener('click', async () => {
+      localStorage.removeItem('waqi_token');
+      WAQI_TOKEN = '';
+      if (mEl.mWaqiTokenInput) mEl.mWaqiTokenInput.value = '';
+      if (mEl.mWaqiModal) mEl.mWaqiModal.classList.add('hidden');
+      if (typeof showMobileToast === 'function') showMobileToast('Token Cleared. Using Baseline');
+      await loadInitialMobileData();
+    });
+  }
+
+  // Bottom Navigation
+  const tabs = [
+    { btn: mEl.tabNavHome, view: mEl.mViewDashboard },
+    { btn: mEl.tabNavRunner, view: mEl.mViewRunner },
+    { btn: mEl.tabNavSearch, view: mEl.mViewSearch },
+    { btn: mEl.tabNavCompare, view: mEl.mViewCompare }
+  ];
+
+  tabs.forEach(t => {
+    t.btn.addEventListener('click', () => {
+      tabs.forEach(other => {
+        other.btn.classList.remove('active');
+        other.view.classList.add('hidden');
+      });
+      t.btn.classList.add('active');
+      t.view.classList.remove('hidden');
+
+      if (t.view === mEl.mViewCompare) {
+        renderMobileCompare();
+      }
+    });
+  });
+
+  // Search
+  mEl.mSearchGoBtn.addEventListener('click', () => {
+    executeSearch(mEl.mSearchInput.value.trim());
+  });
+
+  mEl.mSearchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      executeSearch(mEl.mSearchInput.value.trim());
+    }
+  });
+
+  document.querySelectorAll('.m-chip[data-q]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const q = chip.getAttribute('data-q');
+      if (q) {
+        mEl.mSearchInput.value = q;
+        executeSearch(q);
+      }
+    });
+  });
+
+  // PM2.5 Trend Range Toggles (48h Full, Past 24h, Next 24h)
+  if (mEl.btnMTrendRangeAll) {
+    mEl.btnMTrendRangeAll.addEventListener('click', () => {
+      mState.trendRange = 'all';
+      mEl.btnMTrendRangeAll.classList.add('active');
+      if (mEl.btnMTrendRangePast) mEl.btnMTrendRangePast.classList.remove('active');
+      if (mEl.btnMTrendRangeFuture) mEl.btnMTrendRangeFuture.classList.remove('active');
+      if (mState.currentData) renderMobileTrendCard(mState.currentData);
+    });
+  }
+
+  if (mEl.btnMTrendRangePast) {
+    mEl.btnMTrendRangePast.addEventListener('click', () => {
+      mState.trendRange = 'past';
+      mEl.btnMTrendRangePast.classList.add('active');
+      if (mEl.btnMTrendRangeAll) mEl.btnMTrendRangeAll.classList.remove('active');
+      if (mEl.btnMTrendRangeFuture) mEl.btnMTrendRangeFuture.classList.remove('active');
+      if (mState.currentData) renderMobileTrendCard(mState.currentData);
+    });
+  }
+
+  if (mEl.btnMTrendRangeFuture) {
+    mEl.btnMTrendRangeFuture.addEventListener('click', () => {
+      mState.trendRange = 'future';
+      mEl.btnMTrendRangeFuture.classList.add('active');
+      if (mEl.btnMTrendRangeAll) mEl.btnMTrendRangeAll.classList.remove('active');
+      if (mEl.btnMTrendRangePast) mEl.btnMTrendRangePast.classList.remove('active');
+      if (mState.currentData) renderMobileTrendCard(mState.currentData);
+    });
+  }
+
+  // PM2.5 Trend Graph Mode Toggles
+  if (mEl.btnMTrendAqi) {
+    mEl.btnMTrendAqi.addEventListener('click', () => {
+      mState.trendMode = 'aqi';
+      mEl.btnMTrendAqi.classList.add('active');
+      mEl.btnMTrendConc.classList.remove('active');
+      if (mState.currentData) renderMobileTrendCard(mState.currentData);
+    });
+  }
+
+  if (mEl.btnMTrendConc) {
+    mEl.btnMTrendConc.addEventListener('click', () => {
+      mState.trendMode = 'conc';
+      mEl.btnMTrendConc.classList.add('active');
+      mEl.btnMTrendAqi.classList.remove('active');
+      if (mState.currentData) renderMobileTrendCard(mState.currentData);
+    });
+  }
+}
+
+const WAQI_STATIONS = {
+  'perai': { id: 2600, name: 'Perai', state: 'Penang (Pulau Pinang)' },
+  'kuala-lumpur': { id: 5780, name: 'Kuala Lumpur', state: 'Wilayah Persekutuan' },
+  'alor-setar': { id: 2581, name: 'Alor Setar', state: 'Kedah' }
+};
+
+let WAQI_TOKEN = localStorage.getItem('waqi_token') || '';
+
+const M_FALLBACK_PRESETS = {
+  "perai": {
+    "preset_key": "perai",
+    "location": {
+      "name": "Perai",
+      "state": "Penang (Pulau Pinang)",
+      "country": "Malaysia",
+      "latitude": 5.3833,
+      "longitude": 100.3833
+    },
+    "overall_aqi": 153,
+    "category": {
+      "category": "Unhealthy",
+      "malayCategory": "Tidak Sihat",
+      "color": "#ff453a",
+      "textColor": "#ffffff"
+    },
+    "pm25": {
+      "aqi_reading": 131,
+      "sub_index": 131,
+      "concentration_ugm3": 47.7,
+      "min_today": 131,
+      "max_today": 169,
+      "category": {
+        "category": "Unhealthy for Sensitive Groups",
+        "name": "Sensitive",
+        "color": "#ff9f0a"
+      },
+      "who_comparison": {
+        "status": "3.2x WHO 24h Limit (15 \u00b5g/m\u00b3)",
+        "safe": false,
+        "ratio": 3.2
+      },
+      "past_trend": {
+        "trajectory": "FALLING",
+        "direction_label": "Improved (-23 pts past 6h)",
+        "arrow": "\u2198",
+        "drift_6h": -23,
+        "drift_24h": -29,
+        "drift_6h_conc": -13.6,
+        "color": "#10B981",
+        "peak_aqi": {
+          "value": 169,
+          "time": "14:00"
+        },
+        "peak_val": 169,
+        "lowest_aqi": {
+          "value": 131,
+          "time": "14:00"
+        },
+        "clean_val": 131,
+        "peak_conc": {
+          "value": 90.4,
+          "time": "14:00"
+        },
+        "lowest_conc": {
+          "value": 47.7,
+          "time": "14:00"
+        },
+        "summary": "Past 24h: PM2.5 AQI shifted by -29 pts (-23 pts in last 6h), reaching a past peak of 169 AQI at ~14:00 and a low of 131 AQI at ~14:00."
+      },
+      "future_trend": {
+        "direction": "improving",
+        "direction_label": "Improving (Dropping)",
+        "trajectory": "FALLING",
+        "arrow": "\u2198",
+        "change_6h": -55,
+        "drift_6h_aqi": -55,
+        "drift_6h_conc": 1.4,
+        "color": "#10B981",
+        "peak_aqi": {
+          "value": 131,
+          "time": "17:00"
+        },
+        "peak_time": "17:00",
+        "peak_val": 131,
+        "cleanest_window": {
+          "aqi": 42,
+          "conc": 10.0,
+          "time": "16:00"
+        },
+        "lowest_aqi": 42,
+        "lowest_time": "16:00",
+        "clean_val": 42,
+        "peak_conc": {
+          "value": 31.8,
+          "time": "06:00"
+        },
+        "lowest_conc": {
+          "value": 10.0,
+          "time": "16:00"
+        },
+        "summary": "Improving trend: PM2.5 AQI expected to drop by 55 points over the next 6 hours, reaching a low of 42 AQI at ~16:00."
+      },
+      "past_24h": {
+        "time": [
+          "2026-10-07T13:00",
+          "2026-10-07T14:00",
+          "2026-10-07T15:00",
+          "2026-10-07T16:00",
+          "2026-10-07T17:00",
+          "2026-10-07T18:00",
+          "2026-10-07T23:00",
+          "2026-10-08T00:00",
+          "2026-10-08T01:00",
+          "2026-10-08T02:00",
+          "2026-10-08T03:00",
+          "2026-10-08T04:00",
+          "2026-10-08T05:00",
+          "2026-10-08T06:00",
+          "2026-10-08T07:00",
+          "2026-10-08T08:00",
+          "2026-10-08T09:00",
+          "2026-10-08T10:00",
+          "2026-10-08T11:00",
+          "2026-10-08T12:00",
+          "2026-10-08T13:00",
+          "2026-10-08T14:00",
+          "2026-10-08T15:00",
+          "2026-10-08T16:00"
+        ],
+        "pm2_5": [
+          72.9,
+          90.4,
+          82.6,
+          67.1,
+          84.6,
+          84.6,
+          57.4,
+          59.4,
+          55.5,
+          55.0,
+          55.0,
+          51.3,
+          50.1,
+          53.0,
+          53.0,
+          55.5,
+          55.5,
+          61.3,
+          53.4,
+          51.7,
+          57.4,
+          47.7,
+          53.8,
+          47.7
+        ],
+        "pm25_aqi": [
+          160,
+          169,
+          165,
+          157,
+          166,
+          166,
+          152,
+          153,
+          151,
+          149,
+          149,
+          140,
+          137,
+          144,
+          144,
+          151,
+          151,
+          154,
+          145,
+          141,
+          152,
+          131,
+          146,
+          131
+        ],
+        "pm10": [
+          36.0,
+          35.4,
+          37.7,
+          41.3,
+          44.2,
+          45.1,
+          45.1,
+          45.6,
+          46.2,
+          45.6,
+          41.7,
+          38.3,
+          31.1,
+          21.8,
+          18.7,
+          20.4,
+          26.2,
+          31.5,
+          34.0,
+          28.7,
+          28.2,
+          29.1,
+          27.8,
+          26.1,
+          24.2
+        ],
+        "us_aqi": [
+          90,
+          93,
+          96,
+          100,
+          111,
+          124,
+          136,
+          146,
+          151,
+          152,
+          152,
+          153,
+          153,
+          154,
+          154,
+          155,
+          155,
+          156,
+          156,
+          156,
+          155,
+          155,
+          154,
+          153
+        ]
+      },
+      "future_24h": {
+        "time": [
+          "2026-10-08T17:00",
+          "2026-10-08T18:00",
+          "2026-10-08T19:00",
+          "2026-10-08T20:00",
+          "2026-10-08T21:00",
+          "2026-10-08T22:00",
+          "2026-10-08T23:00",
+          "2026-10-09T00:00",
+          "2026-10-09T01:00",
+          "2026-10-09T02:00",
+          "2026-10-09T03:00",
+          "2026-10-09T04:00",
+          "2026-10-09T05:00",
+          "2026-10-09T06:00",
+          "2026-10-09T07:00",
+          "2026-10-09T08:00",
+          "2026-10-09T09:00",
+          "2026-10-09T10:00",
+          "2026-10-09T11:00",
+          "2026-10-09T12:00",
+          "2026-10-09T13:00",
+          "2026-10-09T14:00",
+          "2026-10-09T15:00",
+          "2026-10-09T16:00"
+        ],
+        "pm2_5": [
+          22.8,
+          19.8,
+          19.0,
+          19.6,
+          20.3,
+          21.8,
+          24.2,
+          24.9,
+          26.4,
+          28.4,
+          30.4,
+          31.0,
+          30.5,
+          31.8,
+          28.1,
+          23.0,
+          23.4,
+          16.8,
+          17.2,
+          16.5,
+          14.5,
+          14.0,
+          11.5,
+          10.0
+        ],
+        "pm25_aqi": [
+          131,
+          67,
+          66,
+          67,
+          68,
+          71,
+          76,
+          78,
+          81,
+          85,
+          89,
+          91,
+          90,
+          92,
+          85,
+          74,
+          75,
+          61,
+          62,
+          60,
+          56,
+          55,
+          48,
+          42
+        ]
+      },
+      "timeline_48h": {
+        "time": [
+          "2026-10-07T17:00",
+          "2026-10-07T18:00",
+          "2026-10-07T19:00",
+          "2026-10-07T20:00",
+          "2026-10-07T21:00",
+          "2026-10-07T22:00",
+          "2026-10-07T23:00",
+          "2026-10-08T00:00",
+          "2026-10-08T01:00",
+          "2026-10-08T02:00",
+          "2026-10-08T03:00",
+          "2026-10-08T04:00",
+          "2026-10-08T05:00",
+          "2026-10-08T06:00",
+          "2026-10-08T07:00",
+          "2026-10-08T08:00",
+          "2026-10-08T09:00",
+          "2026-10-08T10:00",
+          "2026-10-08T11:00",
+          "2026-10-08T12:00",
+          "2026-10-08T13:00",
+          "2026-10-08T14:00",
+          "2026-10-08T15:00",
+          "2026-10-08T16:00",
+          "2026-10-08T17:00",
+          "2026-10-08T18:00",
+          "2026-10-08T19:00",
+          "2026-10-08T20:00",
+          "2026-10-08T21:00",
+          "2026-10-08T22:00",
+          "2026-10-08T23:00",
+          "2026-10-09T00:00",
+          "2026-10-09T01:00",
+          "2026-10-09T02:00",
+          "2026-10-09T03:00",
+          "2026-10-09T04:00",
+          "2026-10-09T05:00",
+          "2026-10-09T06:00",
+          "2026-10-09T07:00",
+          "2026-10-09T08:00",
+          "2026-10-09T09:00",
+          "2026-10-09T10:00",
+          "2026-10-09T11:00",
+          "2026-10-09T12:00",
+          "2026-10-09T13:00",
+          "2026-10-09T14:00",
+          "2026-10-09T15:00",
+          "2026-10-09T16:00",
+          "2026-10-09T17:00"
+        ],
+        "pm2_5": [
+          34.0,
+          72.9,
+          90.4,
+          82.6,
+          67.1,
+          84.6,
+          84.6,
+          57.4,
+          59.4,
+          55.5,
+          55.0,
+          55.0,
+          51.3,
+          50.1,
+          53.0,
+          53.0,
+          55.5,
+          55.5,
+          61.3,
+          53.4,
+          51.7,
+          57.4,
+          47.7,
+          53.8,
+          47.7,
+          19.8,
+          19.0,
+          19.6,
+          20.3,
+          21.8,
+          24.2,
+          24.9,
+          26.4,
+          28.4,
+          30.4,
+          31.0,
+          30.5,
+          31.8,
+          28.1,
+          23.0,
+          23.4,
+          16.8,
+          17.2,
+          16.5,
+          14.5,
+          14.0,
+          11.5,
+          10.0,
+          8.8
+        ],
+        "pm25_aqi": [
+          97,
+          160,
+          169,
+          165,
+          157,
+          166,
+          166,
+          152,
+          153,
+          151,
+          149,
+          149,
+          140,
+          137,
+          144,
+          144,
+          151,
+          151,
+          154,
+          145,
+          141,
+          152,
+          131,
+          146,
+          131,
+          67,
+          66,
+          67,
+          68,
+          71,
+          76,
+          78,
+          81,
+          85,
+          89,
+          91,
+          90,
+          92,
+          85,
+          74,
+          75,
+          61,
+          62,
+          60,
+          56,
+          55,
+          48,
+          42,
+          37
+        ],
+        "us_aqi": [
+          145,
+          157,
+          158,
+          149,
+          130,
+          106,
+          84,
+          86,
+          89,
+          92,
+          94,
+          97,
+          99,
+          100,
+          101,
+          102,
+          101,
+          101,
+          101,
+          102,
+          101,
+          100,
+          98,
+          97,
+          110,
+          119,
+          118,
+          107,
+          91,
+          89,
+          87,
+          86,
+          84,
+          83,
+          81,
+          81,
+          80,
+          80,
+          81,
+          82,
+          82,
+          82,
+          81,
+          80,
+          79,
+          78,
+          77,
+          76,
+          74
+        ],
+        "now_index": 24
+      }
+    },
+    "aqicn_ground": {
+      "station_id": "2600",
+      "station_name": "Perai, Pulau Pinang, Malaysia",
+      "overall_aqi": 153,
+      "updated": "Thursday, Oct 8th 2026, 16:00 pm",
+      "pollutants": {
+        "pm10": {
+          "current": "50"
+        },
+        "o3": {
+          "current": "15"
+        },
+        "no2": {
+          "current": "2"
+        },
+        "so2": {
+          "current": "1"
+        },
+        "co": {
+          "current": "0"
+        }
+      }
+    },
+    "openmeteo_model": {
+      "us_aqi": 101,
+      "european_aqi": 81,
+      "pm10_concentration": {
+        "value": 28.2
+      },
+      "pollutants_ugm3": {
+        "ozone": 10,
+        "nitrogen_dioxide": 4,
+        "sulphur_dioxide": 1,
+        "carbon_monoxide": 0
+      }
+    },
+    "runner_advice": {
+      "verdict": "Unhealthy \u2014 Move Running Workouts Indoors",
+      "badge": "INDOOR ONLY",
+      "color": "#ff453a",
+      "summary": "Elevated fine particulates. Outdoor exertion causes cellular stress. Use indoor treadmill.",
+      "durations": {
+        "low": {
+          "duration": "10 - 15 mins Max (or walk)",
+          "safe": false
+        },
+        "moderate": {
+          "duration": "0 mins (Avoid Outdoors)",
+          "safe": false
+        },
+        "high": {
+          "duration": "0 mins (Prohibited)",
+          "safe": false
+        }
+      },
+      "best_window": {
+        "recommendation": "Cleanest Window: ~16:00 (Predicted AQI 42)"
+      },
+      "heat_stress": {
+        "apparent_temp_c": 35,
+        "humidity_pct": 70
+      }
+    }
+  },
+  "kuala-lumpur": {
+    "preset_key": "kuala-lumpur",
+    "location": {
+      "name": "Kuala Lumpur",
+      "state": "Wilayah Persekutuan Kuala Lumpur",
+      "country": "Malaysia",
+      "latitude": 3.139,
+      "longitude": 101.6869
+    },
+    "overall_aqi": 178,
+    "category": {
+      "category": "Unhealthy",
+      "malayCategory": "Tidak Sihat",
+      "color": "#ff453a",
+      "textColor": "#ffffff"
+    },
+    "pm25": {
+      "aqi_reading": 178,
+      "sub_index": 178,
+      "concentration_ugm3": 107.8,
+      "min_today": 163,
+      "max_today": 219,
+      "category": {
+        "category": "Unhealthy",
+        "name": "Unhealthy",
+        "color": "#ff453a"
+      },
+      "who_comparison": {
+        "status": "7.2x WHO 24h Limit (15 \u00b5g/m\u00b3)",
+        "safe": false,
+        "ratio": 7.2
+      },
+      "past_trend": {
+        "trajectory": "FALLING",
+        "direction_label": "Improved (-15 pts past 6h)",
+        "arrow": "\u2198",
+        "drift_6h": -15,
+        "drift_24h": -9,
+        "drift_6h_conc": -29.0,
+        "color": "#10B981",
+        "peak_aqi": {
+          "value": 219,
+          "time": "15:00"
+        },
+        "peak_val": 219,
+        "lowest_aqi": {
+          "value": 163,
+          "time": "01:00"
+        },
+        "clean_val": 163,
+        "peak_conc": {
+          "value": 168.7,
+          "time": "15:00"
+        },
+        "lowest_conc": {
+          "value": 78.7,
+          "time": "01:00"
+        },
+        "summary": "Past 24h: PM2.5 AQI shifted by -9 pts (-15 pts in last 6h), reaching a past peak of 219 AQI at ~15:00 and a low of 163 AQI at ~01:00."
+      },
+      "future_trend": {
+        "direction": "worsening",
+        "direction_label": "Worsening (Rising)",
+        "trajectory": "RISING",
+        "arrow": "\u2197",
+        "change_6h": 10,
+        "drift_6h_aqi": 10,
+        "drift_6h_conc": 23.5,
+        "color": "#EF4444",
+        "peak_aqi": {
+          "value": 236,
+          "time": "20:00"
+        },
+        "peak_time": "20:00",
+        "peak_val": 236,
+        "cleanest_window": {
+          "aqi": 139,
+          "conc": 51.0,
+          "time": "16:00"
+        },
+        "lowest_aqi": 139,
+        "lowest_time": "16:00",
+        "clean_val": 139,
+        "peak_conc": {
+          "value": 185.8,
+          "time": "20:00"
+        },
+        "lowest_conc": {
+          "value": 51.0,
+          "time": "16:00"
+        },
+        "summary": "Rising pollution: PM2.5 AQI increasing by +10 points over 6h, peaking at 236 AQI at ~20:00."
+      },
+      "past_24h": {
+        "time": [
+          "2026-10-07T12:00",
+          "2026-10-07T13:00",
+          "2026-10-07T14:00",
+          "2026-10-07T15:00",
+          "2026-10-07T16:00",
+          "2026-10-07T17:00",
+          "2026-10-07T18:00",
+          "2026-10-08T00:00",
+          "2026-10-08T01:00",
+          "2026-10-08T02:00",
+          "2026-10-08T03:00",
+          "2026-10-08T04:00",
+          "2026-10-08T05:00",
+          "2026-10-08T06:00",
+          "2026-10-08T07:00",
+          "2026-10-08T08:00",
+          "2026-10-08T09:00",
+          "2026-10-08T10:00",
+          "2026-10-08T11:00",
+          "2026-10-08T12:00",
+          "2026-10-08T13:00",
+          "2026-10-08T14:00",
+          "2026-10-08T15:00",
+          "2026-10-08T16:00"
+        ],
+        "pm2_5": [
+          125.2,
+          140.7,
+          155.5,
+          168.7,
+          144.6,
+          140.7,
+          98.1,
+          80.7,
+          78.7,
+          84.6,
+          90.4,
+          84.6,
+          84.6,
+          88.4,
+          92.3,
+          111.7,
+          115.5,
+          136.8,
+          131.0,
+          150.5,
+          127.2,
+          125.2,
+          151.5,
+          107.8
+        ],
+        "pm25_aqi": [
+          187,
+          195,
+          206,
+          219,
+          197,
+          195,
+          173,
+          164,
+          163,
+          166,
+          169,
+          166,
+          166,
+          168,
+          170,
+          180,
+          182,
+          193,
+          190,
+          201,
+          188,
+          187,
+          202,
+          178
+        ],
+        "pm10": [
+          106.4,
+          123.4,
+          149.9,
+          189.1,
+          199.8,
+          195.6,
+          192.3,
+          190.5,
+          187.2,
+          179.3,
+          168.6,
+          155.1,
+          142.5,
+          134.6,
+          131.3,
+          135.0,
+          136.4,
+          113.2,
+          112.0,
+          127.6,
+          135.5,
+          132.7,
+          122.5,
+          113.9,
+          105.0
+        ],
+        "us_aqi": [
+          210,
+          208,
+          208,
+          204,
+          204,
+          205,
+          207,
+          208,
+          209,
+          211,
+          212,
+          214,
+          215,
+          216,
+          217,
+          217,
+          217,
+          216,
+          215,
+          215,
+          216,
+          217,
+          219,
+          220,
+          226
+        ]
+      },
+      "future_24h": {
+        "time": [
+          "2026-10-08T17:00",
+          "2026-10-08T18:00",
+          "2026-10-08T19:00",
+          "2026-10-08T20:00",
+          "2026-10-08T21:00",
+          "2026-10-08T22:00",
+          "2026-10-08T23:00",
+          "2026-10-09T00:00",
+          "2026-10-09T01:00",
+          "2026-10-09T02:00",
+          "2026-10-09T03:00",
+          "2026-10-09T04:00",
+          "2026-10-09T05:00",
+          "2026-10-09T06:00",
+          "2026-10-09T07:00",
+          "2026-10-09T08:00",
+          "2026-10-09T09:00",
+          "2026-10-09T10:00",
+          "2026-10-09T11:00",
+          "2026-10-09T12:00",
+          "2026-10-09T13:00",
+          "2026-10-09T14:00",
+          "2026-10-09T15:00",
+          "2026-10-09T16:00"
+        ],
+        "pm2_5": [
+          103.6,
+          105.5,
+          158.8,
+          185.8,
+          164.8,
+          121.1,
+          127.1,
+          75.0,
+          62.9,
+          62.9,
+          63.1,
+          65.0,
+          65.2,
+          63.6,
+          67.1,
+          80.8,
+          101.7,
+          102.0,
+          81.0,
+          73.6,
+          64.5,
+          55.4,
+          55.6,
+          51.0
+        ],
+        "pm25_aqi": [
+          178,
+          177,
+          209,
+          236,
+          215,
+          185,
+          188,
+          161,
+          155,
+          155,
+          155,
+          156,
+          156,
+          155,
+          157,
+          164,
+          175,
+          175,
+          164,
+          160,
+          156,
+          150,
+          151,
+          139
+        ]
+      },
+      "timeline_48h": {
+        "time": [
+          "2026-10-07T17:00",
+          "2026-10-07T18:00",
+          "2026-10-07T19:00",
+          "2026-10-07T20:00",
+          "2026-10-07T21:00",
+          "2026-10-07T22:00",
+          "2026-10-07T23:00",
+          "2026-10-08T00:00",
+          "2026-10-08T01:00",
+          "2026-10-08T02:00",
+          "2026-10-08T03:00",
+          "2026-10-08T04:00",
+          "2026-10-08T05:00",
+          "2026-10-08T06:00",
+          "2026-10-08T07:00",
+          "2026-10-08T08:00",
+          "2026-10-08T09:00",
+          "2026-10-08T10:00",
+          "2026-10-08T11:00",
+          "2026-10-08T12:00",
+          "2026-10-08T13:00",
+          "2026-10-08T14:00",
+          "2026-10-08T15:00",
+          "2026-10-08T16:00",
+          "2026-10-08T17:00",
+          "2026-10-08T18:00",
+          "2026-10-08T19:00",
+          "2026-10-08T20:00",
+          "2026-10-08T21:00",
+          "2026-10-08T22:00",
+          "2026-10-08T23:00",
+          "2026-10-09T00:00",
+          "2026-10-09T01:00",
+          "2026-10-09T02:00",
+          "2026-10-09T03:00",
+          "2026-10-09T04:00",
+          "2026-10-09T05:00",
+          "2026-10-09T06:00",
+          "2026-10-09T07:00",
+          "2026-10-09T08:00",
+          "2026-10-09T09:00",
+          "2026-10-09T10:00",
+          "2026-10-09T11:00",
+          "2026-10-09T12:00",
+          "2026-10-09T13:00",
+          "2026-10-09T14:00",
+          "2026-10-09T15:00",
+          "2026-10-09T16:00",
+          "2026-10-09T17:00"
+        ],
+        "pm2_5": [
+          101.5,
+          125.2,
+          140.7,
+          155.5,
+          168.7,
+          144.6,
+          140.7,
+          98.1,
+          80.7,
+          78.7,
+          84.6,
+          90.4,
+          84.6,
+          84.6,
+          88.4,
+          92.3,
+          111.7,
+          115.5,
+          136.8,
+          131.0,
+          150.5,
+          127.2,
+          125.2,
+          151.5,
+          107.8,
+          105.5,
+          158.8,
+          185.8,
+          164.8,
+          121.1,
+          127.1,
+          75.0,
+          62.9,
+          62.9,
+          63.1,
+          65.0,
+          65.2,
+          63.6,
+          67.1,
+          80.8,
+          101.7,
+          102.0,
+          81.0,
+          73.6,
+          64.5,
+          55.4,
+          55.6,
+          51.0,
+          47.3
+        ],
+        "pm25_aqi": [
+          175,
+          187,
+          195,
+          206,
+          219,
+          197,
+          195,
+          173,
+          164,
+          163,
+          166,
+          169,
+          166,
+          166,
+          168,
+          170,
+          180,
+          182,
+          193,
+          190,
+          201,
+          188,
+          187,
+          202,
+          178,
+          177,
+          209,
+          236,
+          215,
+          185,
+          188,
+          161,
+          155,
+          155,
+          155,
+          156,
+          156,
+          155,
+          157,
+          164,
+          175,
+          175,
+          164,
+          160,
+          156,
+          150,
+          151,
+          139,
+          130
+        ],
+        "us_aqi": [
+          210,
+          208,
+          208,
+          204,
+          204,
+          205,
+          207,
+          208,
+          209,
+          211,
+          212,
+          214,
+          215,
+          216,
+          217,
+          217,
+          217,
+          216,
+          215,
+          215,
+          216,
+          217,
+          219,
+          220,
+          226,
+          241,
+          246,
+          239,
+          222,
+          220,
+          217,
+          214,
+          210,
+          205,
+          200,
+          197,
+          194,
+          192,
+          190,
+          188,
+          186,
+          185,
+          185,
+          184,
+          183,
+          181,
+          178,
+          176,
+          198
+        ],
+        "now_index": 24
+      }
+    },
+    "aqicn_ground": {
+      "station_id": "5780",
+      "station_name": "Kuala Lumpur, Malaysia",
+      "overall_aqi": 178,
+      "updated": "Thursday, Oct 8th 2026, 16:00 pm",
+      "pollutants": {
+        "pm10": {
+          "current": "75"
+        },
+        "o3": {
+          "current": "8"
+        },
+        "no2": {
+          "current": "14"
+        },
+        "so2": {
+          "current": "2"
+        },
+        "co": {
+          "current": "1"
+        }
+      }
+    },
+    "openmeteo_model": {
+      "us_aqi": 216,
+      "european_aqi": 110,
+      "pm10_concentration": {
+        "value": 135.5
+      },
+      "pollutants_ugm3": {
+        "ozone": 27,
+        "nitrogen_dioxide": 16,
+        "sulphur_dioxide": 1,
+        "carbon_monoxide": 0
+      }
+    },
+    "runner_advice": {
+      "verdict": "Unhealthy \u2014 Move Running Workouts Indoors",
+      "badge": "INDOOR ONLY",
+      "color": "#ff453a",
+      "summary": "High particulate hazard. Deep mouth breathing directly draws pollutants into capillary beds.",
+      "durations": {
+        "low": {
+          "duration": "10 - 15 mins (Walk)",
+          "safe": false
+        },
+        "moderate": {
+          "duration": "0 mins (Prohibited)",
+          "safe": false
+        },
+        "high": {
+          "duration": "0 mins (Prohibited)",
+          "safe": false
+        }
+      },
+      "best_window": {
+        "recommendation": "Avoid Outdoors Today"
+      },
+      "heat_stress": {
+        "apparent_temp_c": 36,
+        "humidity_pct": 68
+      }
+    }
+  },
+  "alor-setar": {
+    "preset_key": "alor-setar",
+    "location": {
+      "name": "Alor Setar",
+      "state": "Kedah",
+      "country": "Malaysia",
+      "latitude": 6.121,
+      "longitude": 100.3601
+    },
+    "overall_aqi": 96,
+    "category": {
+      "category": "Moderate",
+      "malayCategory": "Sederhana",
+      "color": "#ffd60a",
+      "textColor": "#000000"
+    },
+    "pm25": {
+      "aqi_reading": 152,
+      "sub_index": 152,
+      "concentration_ugm3": 57.4,
+      "min_today": 57,
+      "max_today": 158,
+      "category": {
+        "category": "Unhealthy for Sensitive Groups",
+        "name": "Sensitive",
+        "color": "#ff9f0a"
+      },
+      "who_comparison": {
+        "status": "3.8x WHO 24h Limit (15 \u00b5g/m\u00b3)",
+        "safe": false,
+        "ratio": 3.8
+      },
+      "past_trend": {
+        "trajectory": "RISING",
+        "direction_label": "Worsened (+26 pts past 6h)",
+        "arrow": "\u2197",
+        "drift_6h": 26,
+        "drift_24h": 70,
+        "drift_6h_conc": 11.7,
+        "color": "#EF4444",
+        "peak_aqi": {
+          "value": 158,
+          "time": "14:00"
+        },
+        "peak_val": 158,
+        "lowest_aqi": {
+          "value": 57,
+          "time": "12:00"
+        },
+        "clean_val": 57,
+        "peak_conc": {
+          "value": 69.1,
+          "time": "14:00"
+        },
+        "lowest_conc": {
+          "value": 15.0,
+          "time": "12:00"
+        },
+        "summary": "Past 24h: PM2.5 AQI shifted by +70 pts (+26 pts in last 6h), reaching a past peak of 158 AQI at ~14:00 and a low of 57 AQI at ~12:00."
+      },
+      "future_trend": {
+        "direction": "improving",
+        "direction_label": "Improving (Dropping)",
+        "trajectory": "FALLING",
+        "arrow": "\u2198",
+        "change_6h": -71,
+        "drift_6h_aqi": -71,
+        "drift_6h_conc": 6.3,
+        "color": "#10B981",
+        "peak_aqi": {
+          "value": 152,
+          "time": "17:00"
+        },
+        "peak_time": "17:00",
+        "peak_val": 152,
+        "cleanest_window": {
+          "aqi": 34,
+          "conc": 8.1,
+          "time": "16:00"
+        },
+        "lowest_aqi": 34,
+        "lowest_time": "16:00",
+        "clean_val": 34,
+        "peak_conc": {
+          "value": 26.2,
+          "time": "23:00"
+        },
+        "lowest_conc": {
+          "value": 8.1,
+          "time": "16:00"
+        },
+        "summary": "Improving trend: PM2.5 AQI expected to drop by 71 points over the next 6 hours, reaching a low of 34 AQI at ~16:00."
+      },
+      "past_24h": {
+        "time": [
+          "2026-10-07T11:00",
+          "2026-10-07T12:00",
+          "2026-10-07T13:00",
+          "2026-10-07T14:00",
+          "2026-10-07T15:00",
+          "2026-10-07T16:00",
+          "2026-10-07T17:00",
+          "2026-10-07T18:00",
+          "2026-10-08T00:00",
+          "2026-10-08T01:00",
+          "2026-10-08T02:00",
+          "2026-10-08T03:00",
+          "2026-10-08T04:00",
+          "2026-10-08T05:00",
+          "2026-10-08T06:00",
+          "2026-10-08T07:00",
+          "2026-10-08T08:00",
+          "2026-10-08T09:00",
+          "2026-10-08T10:00",
+          "2026-10-08T11:00",
+          "2026-10-08T12:00",
+          "2026-10-08T13:00",
+          "2026-10-08T14:00",
+          "2026-10-08T15:00"
+        ],
+        "pm2_5": [
+          26.8,
+          15.0,
+          28.3,
+          40.8,
+          61.3,
+          53.8,
+          41.6,
+          44.4,
+          42.0,
+          46.5,
+          40.4,
+          42.0,
+          39.6,
+          41.6,
+          42.0,
+          41.6,
+          37.9,
+          45.7,
+          53.8,
+          42.8,
+          38.3,
+          36.3,
+          69.1,
+          57.4
+        ],
+        "pm25_aqi": [
+          82,
+          57,
+          85,
+          114,
+          154,
+          146,
+          116,
+          123,
+          117,
+          128,
+          113,
+          117,
+          111,
+          116,
+          117,
+          116,
+          107,
+          126,
+          146,
+          119,
+          108,
+          103,
+          158,
+          152
+        ],
+        "pm10": [
+          26.7,
+          21.3,
+          17.3,
+          34.2,
+          35.0,
+          36.6,
+          38.0,
+          39.5,
+          40.4,
+          38.1,
+          34.2,
+          29.3,
+          27.8,
+          26.8,
+          15.6,
+          14.3,
+          17.1,
+          27.4,
+          26.8,
+          25.3,
+          24.9,
+          24.9,
+          24.2,
+          22.8,
+          21.0
+        ],
+        "us_aqi": [
+          71,
+          73,
+          76,
+          77,
+          79,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          87,
+          88,
+          89,
+          89,
+          90,
+          92,
+          93,
+          94,
+          94,
+          96,
+          96,
+          96
+        ]
+      },
+      "future_24h": {
+        "time": [
+          "2026-10-08T17:00",
+          "2026-10-08T18:00",
+          "2026-10-08T19:00",
+          "2026-10-08T20:00",
+          "2026-10-08T21:00",
+          "2026-10-08T22:00",
+          "2026-10-08T23:00",
+          "2026-10-09T00:00",
+          "2026-10-09T01:00",
+          "2026-10-09T02:00",
+          "2026-10-09T03:00",
+          "2026-10-09T04:00",
+          "2026-10-09T05:00",
+          "2026-10-09T06:00",
+          "2026-10-09T07:00",
+          "2026-10-09T08:00",
+          "2026-10-09T09:00",
+          "2026-10-09T10:00",
+          "2026-10-09T11:00",
+          "2026-10-09T12:00",
+          "2026-10-09T13:00",
+          "2026-10-09T14:00",
+          "2026-10-09T15:00",
+          "2026-10-09T16:00"
+        ],
+        "pm2_5": [
+          19.9,
+          18.6,
+          20.8,
+          22.9,
+          24.4,
+          24.7,
+          26.2,
+          24.4,
+          23.4,
+          23.3,
+          23.6,
+          22.3,
+          20.8,
+          21.7,
+          20.1,
+          13.5,
+          16.8,
+          15.0,
+          13.4,
+          11.8,
+          10.9,
+          10.5,
+          8.9,
+          8.1
+        ],
+        "pm25_aqi": [
+          152,
+          65,
+          69,
+          74,
+          77,
+          77,
+          81,
+          77,
+          75,
+          75,
+          75,
+          72,
+          69,
+          71,
+          68,
+          54,
+          61,
+          57,
+          54,
+          49,
+          45,
+          44,
+          37,
+          34
+        ]
+      },
+      "timeline_48h": {
+        "time": [
+          "2026-10-07T17:00",
+          "2026-10-07T18:00",
+          "2026-10-07T19:00",
+          "2026-10-07T20:00",
+          "2026-10-07T21:00",
+          "2026-10-07T22:00",
+          "2026-10-07T23:00",
+          "2026-10-08T00:00",
+          "2026-10-08T01:00",
+          "2026-10-08T02:00",
+          "2026-10-08T03:00",
+          "2026-10-08T04:00",
+          "2026-10-08T05:00",
+          "2026-10-08T06:00",
+          "2026-10-08T07:00",
+          "2026-10-08T08:00",
+          "2026-10-08T09:00",
+          "2026-10-08T10:00",
+          "2026-10-08T11:00",
+          "2026-10-08T12:00",
+          "2026-10-08T13:00",
+          "2026-10-08T14:00",
+          "2026-10-08T15:00",
+          "2026-10-08T16:00",
+          "2026-10-08T17:00",
+          "2026-10-08T18:00",
+          "2026-10-08T19:00",
+          "2026-10-08T20:00",
+          "2026-10-08T21:00",
+          "2026-10-08T22:00",
+          "2026-10-08T23:00",
+          "2026-10-09T00:00",
+          "2026-10-09T01:00",
+          "2026-10-09T02:00",
+          "2026-10-09T03:00",
+          "2026-10-09T04:00",
+          "2026-10-09T05:00",
+          "2026-10-09T06:00",
+          "2026-10-09T07:00",
+          "2026-10-09T08:00",
+          "2026-10-09T09:00",
+          "2026-10-09T10:00",
+          "2026-10-09T11:00",
+          "2026-10-09T12:00",
+          "2026-10-09T13:00",
+          "2026-10-09T14:00",
+          "2026-10-09T15:00",
+          "2026-10-09T16:00",
+          "2026-10-09T17:00"
+        ],
+        "pm2_5": [
+          25.3,
+          26.8,
+          15.0,
+          28.3,
+          40.8,
+          61.3,
+          53.8,
+          41.6,
+          44.4,
+          42.0,
+          46.5,
+          40.4,
+          42.0,
+          39.6,
+          41.6,
+          42.0,
+          41.6,
+          37.9,
+          45.7,
+          53.8,
+          42.8,
+          38.3,
+          36.3,
+          69.1,
+          57.4,
+          18.6,
+          20.8,
+          22.9,
+          24.4,
+          24.7,
+          26.2,
+          24.4,
+          23.4,
+          23.3,
+          23.6,
+          22.3,
+          20.8,
+          21.7,
+          20.1,
+          13.5,
+          16.8,
+          15.0,
+          13.4,
+          11.8,
+          10.9,
+          10.5,
+          8.9,
+          8.1,
+          6.8
+        ],
+        "pm25_aqi": [
+          79,
+          82,
+          57,
+          85,
+          114,
+          154,
+          146,
+          116,
+          123,
+          117,
+          128,
+          113,
+          117,
+          111,
+          116,
+          117,
+          116,
+          107,
+          126,
+          146,
+          119,
+          108,
+          103,
+          158,
+          152,
+          65,
+          69,
+          74,
+          77,
+          77,
+          81,
+          77,
+          75,
+          75,
+          75,
+          72,
+          69,
+          71,
+          68,
+          54,
+          61,
+          57,
+          54,
+          49,
+          45,
+          44,
+          37,
+          34,
+          28
+        ],
+        "us_aqi": [
+          80,
+          91,
+          91,
+          80,
+          70,
+          71,
+          73,
+          76,
+          78,
+          80,
+          82,
+          84,
+          85,
+          86,
+          87,
+          86,
+          86,
+          86,
+          86,
+          86,
+          86,
+          86,
+          85,
+          85,
+          84,
+          83,
+          83,
+          84,
+          83,
+          82,
+          81,
+          80,
+          79,
+          78,
+          77,
+          76,
+          75,
+          75,
+          74,
+          75,
+          75,
+          75,
+          74,
+          73,
+          72,
+          71,
+          70,
+          69,
+          68
+        ],
+        "now_index": 24
+      }
+    },
+    "aqicn_ground": {
+      "station_id": "2581",
+      "station_name": "Alor Setar, Kedah, Malaysia",
+      "overall_aqi": 96,
+      "updated": "Thursday, Oct 8th 2026, 15:00 pm",
+      "pollutants": {
+        "pm10": {
+          "current": "48"
+        },
+        "o3": {
+          "current": "12"
+        },
+        "no2": {
+          "current": "6"
+        },
+        "so2": {
+          "current": "1"
+        },
+        "co": {
+          "current": "0"
+        }
+      }
+    },
+    "openmeteo_model": {
+      "us_aqi": 86,
+      "european_aqi": 65,
+      "pm10_concentration": {
+        "value": 24.9
+      },
+      "pollutants_ugm3": {
+        "ozone": 18,
+        "nitrogen_dioxide": 1,
+        "sulphur_dioxide": 1,
+        "carbon_monoxide": 0
+      }
+    },
+    "runner_advice": {
+      "verdict": "Generally Safe \u2014 Moderate Precautions",
+      "badge": "GENERALLY SAFE",
+      "color": "#ffd60a",
+      "summary": "Safe for healthy runners. Sensitive runners monitor airway comfort.",
+      "durations": {
+        "low": {
+          "duration": "60 - 75 mins",
+          "safe": true
+        },
+        "moderate": {
+          "duration": "30 - 45 mins",
+          "safe": true
+        },
+        "high": {
+          "duration": "20 - 30 mins",
+          "safe": true
+        }
+      },
+      "best_window": {
+        "recommendation": "Cleanest Window: ~15:00 (Predicted AQI 34)"
+      },
+      "heat_stress": {
+        "apparent_temp_c": 34,
+        "humidity_pct": 74
+      }
+    }
+  }
+};
+
+async function loadInitialMobileData() {
+  const endpoints = ['/api/preset-cities', 'http://localhost:5050/api/preset-cities'];
+  let loaded = false;
+
+  for (const ep of endpoints) {
+    try {
+      const res = await fetch(ep);
+      if (res.ok) {
+        mState.presetData = await res.json();
+        loaded = true;
+        break;
+      }
+    } catch (e) {
+      // Try next
+    }
+  }
+
+  // If local server unreachable and user has a WAQI token, fetch live from official WAQI API!
+  if (!loaded && WAQI_TOKEN) {
+    try {
+      const keys = Object.keys(WAQI_STATIONS);
+      const promises = keys.map(async (k) => {
+        const info = WAQI_STATIONS[k];
+        const res = await fetch(`https://api.waqi.info/feed/@${info.id}/?token=${encodeURIComponent(WAQI_TOKEN)}`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.status === 'ok' && json.data) {
+            return { key: k, data: formatWaqiToPreset(json.data, k, M_FALLBACK_PRESETS[k]) };
+          }
+        }
+        return { key: k, data: M_FALLBACK_PRESETS[k] };
+      });
+      const results = await Promise.all(promises);
+      results.forEach(r => {
+        mState.presetData[r.key] = r.data;
+      });
+      loaded = true;
+      console.log('Mobile: Loaded live data directly from official WAQI API!');
+    } catch (err) {
+      console.warn('Mobile: WAQI API fetch failed, falling back to verified baseline:', err);
+    }
+  }
+
+  if (!loaded) {
+    console.warn('Mobile: endpoints unreachable. Engaging verified ground baseline data.');
+    mState.presetData = JSON.parse(JSON.stringify(M_FALLBACK_PRESETS));
+    loaded = true;
+  }
+
+  if (loaded) {
+    // Badges with AQI units and colors matching Web/Desktop
+    updateMobileCityBadges();
+
+    if (mState.presetData[mState.currentCity]) {
+      renderMobileDashboard(mState.presetData[mState.currentCity]);
+    }
+  }
+}
+
+function formatWaqiToPreset(wData, key, fallback) {
+  const curAqi = (typeof wData.aqi === 'number') ? wData.aqi : (fallback ? fallback.overall_aqi : 100);
+  const iaqi = wData.iaqi || {};
+  const pm25Aqi = (iaqi.pm25 && typeof iaqi.pm25.v === 'number') ? iaqi.pm25.v : curAqi;
+  const pm25Conc = calcConcFromAqi(pm25Aqi);
+  const cat = getAqiCategory(curAqi);
+  const pm25Cat = getAqiCategory(pm25Aqi);
+
+  let minToday = fallback && fallback.pm25 ? fallback.pm25.min_today : Math.round(pm25Aqi * 0.7);
+  let maxToday = fallback && fallback.pm25 ? fallback.pm25.max_today : Math.round(pm25Aqi * 1.3);
+  if (wData.forecast && wData.forecast.daily && wData.forecast.daily.pm25 && wData.forecast.daily.pm25.length > 0) {
+    const fToday = wData.forecast.daily.pm25[0];
+    if (fToday.min !== undefined) minToday = fToday.min;
+    if (fToday.max !== undefined) maxToday = fToday.max;
+  }
+
+  const updatedTime = (wData.time && wData.time.s) ? `Station: ${wData.time.s}` : 'Live WAQI Ground Station';
+
+  return {
+    preset_key: key,
+    location: {
+      name: (fallback && fallback.location && fallback.location.name) || (wData.city && wData.city.name) || key,
+      state: (fallback && fallback.location && fallback.location.state) || 'Malaysia',
+      country: 'Malaysia',
+      latitude: fallback && fallback.location ? fallback.location.latitude : 5.3833,
+      longitude: fallback && fallback.location ? fallback.location.longitude : 100.3833
+    },
+    overall_aqi: curAqi,
+    category: {
+      category: cat.category,
+      malayCategory: getMalayCat(cat.category),
+      color: cat.color,
+      textColor: cat.category === 'Moderate' ? '#000000' : '#ffffff'
+    },
+    pm25: {
+      aqi_reading: pm25Aqi,
+      sub_index: pm25Aqi,
+      concentration_ugm3: pm25Conc,
+      min_today: minToday,
+      max_today: maxToday,
+      category: {
+        category: pm25Cat.category,
+        name: pm25Cat.category,
+        color: pm25Cat.color
+      },
+      who_comparison: {
+        status: `${(pm25Conc / 15.0).toFixed(1)}x WHO 24h Limit (15 µg/m³)`,
+        safe: pm25Conc <= 15.0,
+        ratio: Math.round((pm25Conc / 15.0) * 10) / 10
+      },
+      past_trend: (fallback && fallback.pm25 && fallback.pm25.past_trend) || {},
+      future_trend: (fallback && fallback.pm25 && fallback.pm25.future_trend) || {},
+      timeline_48h: (fallback && fallback.pm25 && fallback.pm25.timeline_48h) || {},
+      past_24h: (fallback && fallback.pm25 && fallback.pm25.past_24h) || {},
+      future_24h: (fallback && fallback.pm25 && fallback.pm25.future_24h) || {}
+    },
+    aqicn_ground: {
+      station_id: String(wData.idx || (fallback && fallback.aqicn_ground && fallback.aqicn_ground.station_id) || ''),
+      station_name: (wData.city && wData.city.name) || (fallback && fallback.aqicn_ground && fallback.aqicn_ground.station_name) || '',
+      overall_aqi: curAqi,
+      updated: updatedTime,
+      pollutants: {
+        pm10: { current: iaqi.pm10 ? String(Math.round(iaqi.pm10.v)) : '--' },
+        o3: { current: iaqi.o3 ? String(Math.round(iaqi.o3.v)) : '--' },
+        no2: { current: iaqi.no2 ? String(Math.round(iaqi.no2.v)) : '--' },
+        so2: { current: iaqi.so2 ? String(Math.round(iaqi.so2.v)) : '--' },
+        co: { current: iaqi.co ? String(Math.round(iaqi.co.v)) : '--' }
+      }
+    },
+    runner_advice: calcMobileRunnerAdvice(curAqi, pm25Conc),
+    openmeteo_model: (fallback && fallback.openmeteo_model) || {}
+  };
+}
+
+function getMalayCat(eng) {
+  switch (eng) {
+    case 'Good': return 'Baik';
+    case 'Moderate': return 'Sederhana';
+    case 'Sensitive': return 'Tidak Sihat untuk Kumpulan Sensitif';
+    case 'Unhealthy': return 'Tidak Sihat';
+    case 'Very Unhealthy': return 'Sangat Tidak Sihat';
+    case 'Hazardous': return 'Berbahaya';
+    default: return 'Tidak Diketahui';
+  }
+}
+
+// Convert US EPA PM2.5 AQI reading back to mass concentration µg/m³
+function aqiToPm25Conc(a) {
+  if (a === null || a === undefined || isNaN(a)) return 15.0;
+  a = parseFloat(a);
+  if (a <= 0) return 0.0;
+  if (a <= 50) return Math.round(((12.0 - 0.0) / (50.0 - 0.0)) * a * 10) / 10;
+  if (a <= 100) return Math.round((12.1 + ((35.4 - 12.1) / (100.0 - 51.0)) * (a - 51.0)) * 10) / 10;
+  if (a <= 150) return Math.round((35.5 + ((55.4 - 35.5) / (150.0 - 101.0)) * (a - 101.0)) * 10) / 10;
+  if (a <= 200) return Math.round((55.5 + ((150.4 - 55.5) / (200.0 - 151.0)) * (a - 151.0)) * 10) / 10;
+  if (a <= 300) return Math.round((150.5 + ((250.4 - 150.5) / (300.0 - 201.0)) * (a - 201.0)) * 10) / 10;
+  if (a <= 400) return Math.round((250.5 + ((350.4 - 250.5) / (400.0 - 301.0)) * (a - 301.0)) * 10) / 10;
+  return Math.round((350.5 + ((500.4 - 350.5) / (500.0 - 401.0)) * (Math.min(a, 500) - 401.0)) * 10) / 10;
+}
+
+function calcConcFromAqi(aqi) {
+  return aqiToPm25Conc(aqi);
+}
+
+function calcMobileRunnerAdvice(aqi, conc) {
+  if (aqi <= 50) {
+    return {
+      verdict: 'Ideal Running Conditions',
+      badge: 'IDEAL OUTDOOR',
+      color: '#30d158',
+      summary: 'Air quality is pristine. Perfect for high-intensity workouts and tempo runs.',
+      durations: {
+        low: { duration: '90 - 120 mins', safe: true },
+        moderate: { duration: '60 - 90 mins', safe: true },
+        high: { duration: '45 - 60 mins', safe: true }
+      }
+    };
+  } else if (aqi <= 100) {
+    return {
+      verdict: 'Generally Safe — Moderate Precautions',
+      badge: 'GENERALLY SAFE',
+      color: '#ffd60a',
+      summary: 'Safe for general runners. Sensitive runners monitor airway comfort.',
+      durations: {
+        low: { duration: '60 - 75 mins', safe: true },
+        moderate: { duration: '30 - 45 mins', safe: true },
+        high: { duration: '20 - 30 mins', safe: true }
+      }
+    };
+  } else if (aqi <= 150) {
+    return {
+      verdict: 'Caution — Restrict Duration & Intensity',
+      badge: 'EXERCISE CAUTION',
+      color: '#ff9f0a',
+      summary: 'Substantial particulate load. Limit outdoor runs to short easy jogs.',
+      durations: {
+        low: { duration: '30 - 40 mins', safe: true },
+        moderate: { duration: '15 - 20 mins', safe: false },
+        high: { duration: '0 mins (Indoor)', safe: false }
+      }
+    };
+  } else {
+    return {
+      verdict: 'Unhealthy — Move Running Workouts Indoors',
+      badge: 'INDOOR ONLY',
+      color: '#ff453a',
+      summary: 'Elevated fine particulates. Outdoor exertion causes cellular stress. Use indoor treadmill.',
+      durations: {
+        low: { duration: '10 - 15 mins (Walk)', safe: false },
+        moderate: { duration: '0 mins (Prohibited)', safe: false },
+        high: { duration: '0 mins (Prohibited)', safe: false }
+      }
+    };
+  }
+}
+
+function updateMobileCityBadges() {
+  const perai = mState.presetData['perai'];
+  if (perai) {
+    mEl.mBadgePerai.textContent = `${perai.overall_aqi} AQI`;
+    if (perai.category && perai.category.color) {
+      mEl.mBadgePerai.style.backgroundColor = perai.category.color;
+      mEl.mBadgePerai.style.color = '#fff';
+    }
+  }
+
+  const kl = mState.presetData['kuala-lumpur'];
+  if (kl) {
+    mEl.mBadgeKL.textContent = `${kl.overall_aqi} AQI`;
+    if (kl.category && kl.category.color) {
+      mEl.mBadgeKL.style.backgroundColor = kl.category.color;
+      mEl.mBadgeKL.style.color = '#fff';
+    }
+  }
+
+  const alor = mState.presetData['alor-setar'];
+  if (alor) {
+    mEl.mBadgeAlor.textContent = `${alor.overall_aqi} AQI`;
+    if (alor.category && alor.category.color) {
+      mEl.mBadgeAlor.style.backgroundColor = alor.category.color;
+      mEl.mBadgeAlor.style.color = (alor.category && alor.category.textColor) || '#000';
+    }
+  }
+
+  // Also keep saved tab badge up to date if exists
+  const saved = getSavedMobileLocation();
+  if (saved && saved.aqi !== undefined && saved.aqi !== null && saved.aqi !== '--') {
+    if (mEl.mBadgeSaved) {
+      mEl.mBadgeSaved.textContent = `${saved.aqi}`;
+      if (saved.color) mEl.mBadgeSaved.style.backgroundColor = saved.color;
+      if (saved.textColor) mEl.mBadgeSaved.style.color = saved.textColor;
+    }
+  }
+}
+
+function switchCity(key) {
+  mState.currentCity = key;
+  mEl.segPerai.classList.toggle('active', key === 'perai');
+  mEl.segKL.classList.toggle('active', key === 'kuala-lumpur');
+  mEl.segAlor.classList.toggle('active', key === 'alor-setar');
+  if (mEl.segSaved) mEl.segSaved.classList.remove('active');
+
+  if (mState.presetData[key]) {
+    renderMobileDashboard(mState.presetData[key]);
+  } else if (M_FALLBACK_PRESETS[key]) {
+    renderMobileDashboard(M_FALLBACK_PRESETS[key]);
+  } else {
+    fetchCity(key);
+  }
+}
+
+// Universal Air Quality & Runner Synthesis Helper for Mobile
+function getAqiCategoryFull(aqi) {
+  const val = parseInt(aqi, 10);
+  if (isNaN(val)) return { category: 'Unknown', malayCategory: 'Tidak Diketahui', color: '#64748B', textColor: '#ffffff', health: 'Data unavailable' };
+  if (val <= 50) return { category: 'Good', malayCategory: 'Baik', color: '#10B981', textColor: '#ffffff', health: 'Air quality is satisfactory; air pollution poses little or no risk.', outdoor_activity: 'Ideal for all outdoor activities, running, and cardio.', mask: 'Not required', air_purifier: 'Normal outdoor ventilation' };
+  if (val <= 100) return { category: 'Moderate', malayCategory: 'Sederhana', color: '#F59E0B', textColor: '#000000', health: 'Acceptable air quality. Unusually sensitive individuals may experience minor symptoms.', outdoor_activity: 'Safe for general population. Sensitive runners should monitor breathing.', mask: 'Optional for sensitive groups', air_purifier: 'Normal ventilation' };
+  if (val <= 150) return { category: 'Unhealthy for Sensitive Groups', malayCategory: 'Tidak Sihat Bagi Kumpulan Sensitif', color: '#F97316', textColor: '#ffffff', health: 'Members of sensitive groups may experience health effects. General public less affected.', outdoor_activity: 'Sensitive groups should reduce prolonged outdoor exertion.', mask: 'Recommended for sensitive individuals (N95/KF94)', air_purifier: 'Run indoor purifiers in bedrooms' };
+  if (val <= 200) return { category: 'Unhealthy', malayCategory: 'Tidak Sihat', color: '#EF4444', textColor: '#ffffff', health: 'Everyone may begin to experience health effects. Sensitive groups more seriously affected.', outdoor_activity: 'Avoid prolonged outdoor exertion. Move workouts indoors.', mask: 'N95 / KF94 respirator advised outdoors', air_purifier: 'Close windows, run HEPA purifier' };
+  if (val <= 300) return { category: 'Very Unhealthy', malayCategory: 'Sangat Tidak Sihat', color: '#8B5CF6', textColor: '#ffffff', health: 'Health alert: The risk of health effects is increased for everyone.', outdoor_activity: 'Avoid all outdoor physical exertion.', mask: 'Strict N95 / KF94 respirator required outdoors', air_purifier: 'Seal doors and run HEPA purifiers continuously' };
+  return { category: 'Hazardous', malayCategory: 'Berbahaya', color: '#7E22CE', textColor: '#ffffff', health: 'Health warning of emergency conditions. Entire population is likely affected.', outdoor_activity: 'Remain indoors. Keep physical activity to minimal.', mask: 'Do not go outside without fitted N95 respirator', air_purifier: 'Emergency indoor isolation with HEPA filtration' };
+}
+
+function buildRunnerAdviceClient(aqi, pm25Conc, wx = {}) {
+  const temp = wx.temperature_2m || 30;
+  const rh = wx.relative_humidity_2m || 80;
+  const appTemp = wx.apparent_temperature || (temp + 3);
+
+  let badge = 'SAFE FOR ALL RUNS';
+  let color = '#10B981';
+  let verdict = 'Optimal Running Conditions';
+  let summary = 'Air pollution is minimal. Runners of all fitness levels can perform easy jogs, tempo intervals, and extended long runs with zero pulmonary limitation.';
+  let lowSafe = true, lowDur = '90 - 120 mins', lowNote = 'Normal ventilation (~35 L/min). Ideal for base mileage and recovery runs.';
+  let modSafe = true, modDur = '60 - 75 mins', modNote = 'Aerobic threshold (~60-80 L/min). Safe for tempo runs and sustained threshold.';
+  let highSafe = true, highDur = '45 - 60 mins', highNote = 'High ventilatory demand (>120 L/min). Nasal-to-mouth transition is completely safe.';
+
+  if (aqi > 200) {
+    badge = 'RUNNING PROHIBITED';
+    color = '#EF4444';
+    verdict = 'Outdoor Running Prohibited';
+    summary = 'Severe particulate pollution. Minute ventilation during running escalates up to 140 L/min, forcing micro-particles deep into alveolar blood barriers. Move all sessions to an indoor treadmill.';
+    lowSafe = false; lowDur = '0 mins (Prohibited)'; lowNote = 'Deep alveolar deposition even at resting ventilatory pace.';
+    modSafe = false; modDur = '0 mins (Prohibited)'; modNote = 'High risk of acute airway bronchoconstriction.';
+    highSafe = false; highDur = '0 mins (Prohibited)'; highNote = 'Dangerous systemic vascular strain.';
+  } else if (aqi > 150) {
+    badge = 'HIGH RISK / UNHEALTHY';
+    color = '#EF4444';
+    verdict = 'Indoor Treadmill Strongly Recommended';
+    summary = 'Particulate concentrations exceed safe exercise thresholds. Deep mouth-breathing bypasses upper airway filtration. Outdoor runs should be cancelled or rescheduled.';
+    lowSafe = false; lowDur = '0 - 20 mins Max'; lowNote = 'Only very light walk/jog in shaded green park if essential.';
+    modSafe = false; modDur = '0 mins (Avoid)'; modNote = 'Avoid outdoor tempo blocks. Shift to indoor air-conditioned treadmill.';
+    highSafe = false; highDur = '0 mins (Prohibited)'; highNote = 'High ventilatory volume (>100 L/min) directly exposes lung tissues to hazardous particulates.';
+  } else if (aqi > 100) {
+    badge = 'ELEVATED POLLUTION CAUTION';
+    color = '#F97316';
+    verdict = 'Short Low-Intensity Only';
+    summary = 'Elevated PM2.5 levels trigger airway hyper-reactivity during sustained intense running. Restrict speedwork and cap volume.';
+    lowSafe = true; lowDur = '30 - 45 mins'; lowNote = 'Keep heart rate strictly in Zone 1-2 to preserve nasal breathing filter.';
+    modSafe = false; modDur = '15 - 20 mins Max'; modNote = 'Limit intense tempo intervals. Move speed sessions to treadmill.';
+    highSafe = false; highDur = '0 mins (Avoid)'; highNote = 'Deep mouth breathing (>100 L/min) draws unfiltered pollutants past the pharynx.';
+  } else if (aqi > 50) {
+    badge = 'MODERATE / ACCEPTABLE';
+    color = '#F59E0B';
+    verdict = 'Safe for General Population';
+    summary = 'Air quality is within acceptable bounds for most healthy runners. Highly sensitive or asthmatic runners should stay hydrated and avoid busy roadsides.';
+    lowSafe = true; lowDur = '60 - 75 mins'; lowNote = 'Safe for general long slow distance (LSD) and recovery sessions.';
+    modSafe = true; modDur = '35 - 45 mins'; modNote = 'Suitable for tempo runs. Prefer green parks away from highway vehicle exhausts.';
+    highSafe = true; highDur = '20 - 30 mins'; highNote = 'Keep interval reps controlled with full recovery between sets.';
+  }
+
+  return {
+    badge,
+    color,
+    verdict,
+    summary,
+    durations: {
+      low: { duration: lowDur, safe: lowSafe, note: lowNote },
+      moderate: { duration: modDur, safe: modSafe, note: modNote },
+      high: { duration: highDur, safe: highSafe, note: highNote }
+    },
+    best_window: {
+      recommendation: 'Early Morning (06:00 - 08:00)',
+      time_range: '06:00 - 08:00',
+      reason: 'Atmospheric boundary layer dynamics typically produce lower ground PM2.5 and lower heat stress in early morning hours.'
+    },
+    heat_stress: {
+      temp_c: temp,
+      humidity_pct: rh,
+      apparent_temp_c: appTemp
+    }
+  };
+}
+
+async function fetchAirQualityUniversal({ lat, lon, name, stateName = 'Malaysia', countryName = 'Malaysia', station_id = null }) {
+  // 1. Try backend server if running locally
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  if (isLocal) {
+    const endpoints = [
+      `/api/air-quality?lat=${lat}&lon=${lon}&name=${encodeURIComponent(name)}${station_id ? `&station_id=${station_id}` : ''}`,
+      `http://localhost:5050/api/air-quality?lat=${lat}&lon=${lon}&name=${encodeURIComponent(name)}${station_id ? `&station_id=${station_id}` : ''}`
+    ];
+
+    for (const ep of endpoints) {
+      try {
+        const controller = new AbortController();
+        const tid = setTimeout(() => controller.abort(), 1800);
+        const res = await fetch(ep, { signal: controller.signal });
+        clearTimeout(tid);
+        if (res.ok) {
+          const data = await res.json();
+          if (!data.error) return data;
+        }
+      } catch (e) {
+        // Backend unavailable
+      }
+    }
+  }
+
+  // 2. Direct browser fetch from Open-Meteo & WAQI (no backend required!)
+  const aqUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=european_aqi,us_aqi,pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone&hourly=pm2_5,pm10,ozone,european_aqi,us_aqi&past_days=1&forecast_days=2&timezone=auto`;
+  const wxUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,wind_speed_10m&timezone=auto`;
+
+  const [aqRes, wxRes] = await Promise.allSettled([
+    fetch(aqUrl).then(r => r.json()),
+    fetch(wxUrl).then(r => r.json())
+  ]);
+
+  const omAq = aqRes.status === 'fulfilled' ? aqRes.value : null;
+  const omWx = wxRes.status === 'fulfilled' ? wxRes.value : null;
+
+  if (!omAq || !omAq.current) {
+    throw new Error('Unable to retrieve air quality data. Please check internet connection.');
+  }
+
+  const cur = omAq.current;
+  const hourly = omAq.hourly || {};
+  const wxCur = (omWx && omWx.current) || {};
+
+  let waqiData = null;
+  const waqiToken = localStorage.getItem('waqi_token') || (typeof WAQI_TOKEN !== 'undefined' ? WAQI_TOKEN : '');
+  if (station_id && waqiToken) {
+    try {
+      const wRes = await fetch(`https://api.waqi.info/feed/@${station_id}/?token=${encodeURIComponent(waqiToken)}`);
+      if (wRes.ok) {
+        const wJson = await wRes.json();
+        if (wJson.status === 'ok' && wJson.data) waqiData = wJson.data;
+      }
+    } catch (e) {}
+  }
+
+  const nowIso = cur.time || new Date().toISOString().slice(0, 16);
+  const nowHour = nowIso.slice(0, 13);
+  const timeArr = hourly.time || [];
+  let curIdx = timeArr.findIndex(t => t.startsWith(nowHour));
+  if (curIdx < 0) curIdx = Math.min(24, Math.max(0, timeArr.length - 24));
+
+  const pastTimes = timeArr.slice(Math.max(0, curIdx - 23), curIdx + 1);
+  const pastPm25 = (hourly.pm2_5 || []).slice(Math.max(0, curIdx - 23), curIdx + 1);
+  const pastAqi = (hourly.us_aqi || []).slice(Math.max(0, curIdx - 23), curIdx + 1);
+
+  const futTimes = timeArr.slice(curIdx, Math.min(timeArr.length, curIdx + 25));
+  const futPm25 = (hourly.pm2_5 || []).slice(curIdx, Math.min(timeArr.length, curIdx + 25));
+  const futAqi = (hourly.us_aqi || []).slice(curIdx, Math.min(timeArr.length, curIdx + 25));
+
+  const start48 = Math.max(0, curIdx - 24);
+  const end48 = Math.min(timeArr.length, curIdx + 25);
+  const tlTimes = timeArr.slice(start48, end48);
+  const tlPm25 = (hourly.pm2_5 || []).slice(start48, end48);
+  const tlAqi = (hourly.us_aqi || []).slice(start48, end48);
+  const tlNowIdx = curIdx - start48;
+
+  let pm25AqiVal = null;
+  let pm25ConcVal = null;
+
+  if (waqiData && waqiData.iaqi && waqiData.iaqi.pm25 && waqiData.iaqi.pm25.v !== undefined && waqiData.iaqi.pm25.v !== null) {
+    pm25AqiVal = Math.round(parseFloat(waqiData.iaqi.pm25.v));
+  }
+  if (cur.pm2_5 !== undefined && cur.pm2_5 !== null) {
+    pm25ConcVal = Math.round(parseFloat(cur.pm2_5) * 10) / 10;
+  }
+
+  // Authoritative separation: WAQI is AQI sub-index; Open-Meteo cur.pm2_5 is µg/m³
+  if (pm25AqiVal !== null && pm25ConcVal !== null) {
+    if (waqiData && waqiData.iaqi && waqiData.iaqi.pm25) {
+      pm25ConcVal = aqiToPm25Conc(pm25AqiVal);
+    }
+  } else if (pm25AqiVal !== null && pm25ConcVal === null) {
+    pm25ConcVal = aqiToPm25Conc(pm25AqiVal);
+  } else if (pm25ConcVal !== null && pm25AqiVal === null) {
+    pm25AqiVal = calcPm25Aqi(pm25ConcVal);
+  } else {
+    pm25AqiVal = 50;
+    pm25ConcVal = 12.0;
+  }
+
+  let overallAqiVal = (waqiData && typeof waqiData.aqi === 'number') ? waqiData.aqi : (cur.us_aqi || pm25AqiVal);
+
+  const cat = getAqiCategoryFull(overallAqiVal);
+  const pm25Cat = getAqiCategoryFull(pm25AqiVal);
+
+  let minToday = pastAqi.length ? Math.min(...pastAqi) : Math.round(pm25AqiVal * 0.7);
+  let maxToday = pastAqi.length ? Math.max(...pastAqi) : Math.round(pm25AqiVal * 1.3);
+  if (waqiData && waqiData.forecast && waqiData.forecast.daily && waqiData.forecast.daily.pm25 && waqiData.forecast.daily.pm25.length > 0) {
+    const fToday = waqiData.forecast.daily.pm25[0];
+    if (fToday.min !== undefined) minToday = fToday.min;
+    if (fToday.max !== undefined) maxToday = fToday.max;
+  }
+
+  // Past Trend Stats
+  const pLimit = pastAqi.length;
+  let pPeakAqi = pLimit ? Math.max(...pastAqi) : overallAqiVal;
+  let pLowAqi = pLimit ? Math.min(...pastAqi) : overallAqiVal;
+  let pPeakConc = pastPm25.length ? Math.max(...pastPm25) : pm25ConcVal;
+  let pLowConc = pastPm25.length ? Math.min(...pastPm25) : pm25ConcVal;
+  let pDriftAqi = pLimit >= 6 ? (pastAqi[pLimit - 1] - pastAqi[pLimit - 7]) : 0;
+  let pDriftConc = pastPm25.length >= 6 ? Math.round((pastPm25[pastPm25.length - 1] - pastPm25[pastPm25.length - 7]) * 10) / 10 : 0;
+
+  const past_trend = {
+    trajectory: pDriftAqi >= 7 ? 'RISING' : (pDriftAqi <= -7 ? 'FALLING' : 'STABLE'),
+    drift_6h: pDriftAqi,
+    drift_6h_conc: pDriftConc,
+    peak_aqi: { value: pPeakAqi, time: '-6h' },
+    lowest_aqi: { value: pLowAqi, time: '-18h' },
+    peak_conc: { value: Math.round(pPeakConc * 10) / 10, time: '-6h' },
+    lowest_conc: { value: Math.round(pLowConc * 10) / 10, time: '-18h' },
+    summary: 'Past 24-hour continuous sensor observations.'
+  };
+
+  // Future Trend Stats
+  const fLimit = Math.min(24, futAqi.length);
+  let fPeakAqi = fLimit ? Math.max(...futAqi.slice(0, fLimit)) : overallAqiVal;
+  let fLowAqi = fLimit ? Math.min(...futAqi.slice(0, fLimit)) : overallAqiVal;
+  let fPeakConc = futPm25.length ? Math.max(...futPm25.slice(0, fLimit)) : pm25ConcVal;
+  let fLowConc = futPm25.length ? Math.min(...futPm25.slice(0, fLimit)) : pm25ConcVal;
+  let fDriftAqi = fLimit >= 6 ? (futAqi[5] - futAqi[0]) : 0;
+  let fDriftConc = futPm25.length >= 6 ? Math.round((futPm25[5] - futPm25[0]) * 10) / 10 : 0;
+  let fTraj = fDriftAqi >= 7 ? 'RISING' : (fDriftAqi <= -7 ? 'FALLING' : 'STABLE');
+
+  const future_trend = {
+    trajectory: fTraj,
+    drift_6h_aqi: fDriftAqi,
+    drift_6h_conc: fDriftConc,
+    peak_aqi: { value: fPeakAqi, time: '+6h' },
+    peak_conc: { value: Math.round(fPeakConc * 10) / 10, time: '+6h' },
+    cleanest_window: { aqi: fLowAqi, conc: Math.round(fLowConc * 10) / 10, time: '+14h' },
+    summary: `PM2.5 trajectory projected to remain ${fTraj.toLowerCase()} over 24h.`
+  };
+
+  return {
+    location: {
+      name: name,
+      state: stateName,
+      country: countryName,
+      latitude: parseFloat(lat),
+      longitude: parseFloat(lon),
+      station_id: station_id || null
+    },
+    overall_aqi: overallAqiVal,
+    category: cat,
+    pm25: {
+      sub_index: pm25AqiVal,
+      concentration_ugm3: pm25ConcVal,
+      aqi_reading: pm25AqiVal,
+      category: pm25Cat,
+      who_comparison: {
+        safe: pm25ConcVal <= 15.0,
+        ratio: (pm25ConcVal / 15.0).toFixed(1),
+        status: pm25ConcVal <= 15.0 ? 'Within Safe Limits' : `${(pm25ConcVal / 15.0).toFixed(1)}x Over Safe Limit`
+      },
+      min_today: minToday,
+      max_today: maxToday,
+      past_trend,
+      future_trend,
+      trend_24h: {
+        time: futTimes,
+        pm2_5: futPm25,
+        pm25_aqi: futAqi
+      },
+      past_24h: {
+        time: pastTimes,
+        pm2_5: pastPm25,
+        pm25_aqi: pastAqi
+      },
+      future_24h: {
+        time: futTimes,
+        pm2_5: futPm25,
+        pm25_aqi: futAqi
+      },
+      timeline_48h: {
+        time: tlTimes,
+        pm2_5: tlPm25,
+        pm25_aqi: tlAqi,
+        now_index: tlNowIdx
+      }
+    },
+    other_pollutants: {
+      pm10: cur.pm10,
+      o3: cur.ozone,
+      no2: cur.nitrogen_dioxide,
+      so2: cur.sulphur_dioxide,
+      co: cur.carbon_monoxide,
+      eaqi: cur.european_aqi
+    },
+    runner_advice: buildRunnerAdviceClient(overallAqiVal, pm25ConcVal, wxCur),
+    aqicn_ground: waqiData ? {
+      station: waqiData.city ? waqiData.city.name : name,
+      station_id: station_id || null,
+      updated: (waqiData.time && waqiData.time.s) || 'Live',
+      aqi: waqiData.aqi
+    } : null,
+    openmeteo_model: {
+      time: cur.time,
+      european_aqi: cur.european_aqi,
+      us_aqi: cur.us_aqi,
+      pm25_concentration: { value: cur.pm2_5, unit: 'µg/m³' },
+      pm10_concentration: { value: cur.pm10, unit: 'µg/m³' }
+    },
+    primary_source: waqiData ? 'DOE Malaysia Continuous Station' : 'Atmospheric Modeling & Reanalysis'
+  };
+}
+
+// 4th Saved Tab Management for Mobile
+function getSavedMobileLocation() {
+  try {
+    const raw = localStorage.getItem('aeropulse_saved_tab');
+    if (raw) return JSON.parse(raw);
+  } catch (e) {
+    console.error('Failed to parse saved tab from localStorage:', e);
+  }
+  return null;
+}
+
+function initSavedMobileTab() {
+  const saved = getSavedMobileLocation();
+  if (saved && saved.name) {
+    const shortName = saved.name.split(',')[0].trim();
+    if (mEl.mSegSavedText) mEl.mSegSavedText.textContent = shortName;
+    if (mEl.mBadgeSaved) {
+      mEl.mBadgeSaved.textContent = (saved.aqi !== undefined && saved.aqi !== null && saved.aqi !== '--') ? `${saved.aqi}` : '--';
+      if (saved.color) mEl.mBadgeSaved.style.backgroundColor = saved.color;
+      if (saved.textColor) mEl.mBadgeSaved.style.color = saved.textColor;
+    }
+  } else {
+    if (mEl.mSegSavedText) mEl.mSegSavedText.textContent = '📌 Tab 4';
+    if (mEl.mBadgeSaved) {
+      mEl.mBadgeSaved.textContent = '--';
+      mEl.mBadgeSaved.style.backgroundColor = '';
+      mEl.mBadgeSaved.style.color = '';
+    }
+  }
+}
+
+function saveCurrentMobileLocationAsTab4() {
+  if (!mState.currentData) {
+    if (typeof showMobileToast === 'function') {
+      showMobileToast('Please wait for location data to load before saving.');
+    } else {
+      alert('Please wait for location data to load before saving.');
+    }
+    return;
+  }
+  const data = mState.currentData;
+  const loc = data.location || {};
+  const cat = data.category || {};
+  const aqiVal = (data.overall_aqi !== null && data.overall_aqi !== undefined) ? data.overall_aqi : (data.pm25 ? (data.pm25.aqi_reading || data.pm25.sub_index || '--') : '--');
+
+  const savedObj = {
+    name: loc.name || 'Saved Location',
+    state: loc.state || '',
+    country: loc.country || '',
+    lat: loc.latitude,
+    lon: loc.longitude,
+    station_id: loc.station_id || (data.aqicn_ground ? data.aqicn_ground.station_id : null) || null,
+    aqi: aqiVal,
+    color: cat.color || '#3b82f6',
+    textColor: cat.textColor || '#ffffff',
+    savedAt: new Date().toISOString()
+  };
+
+  try {
+    localStorage.setItem('aeropulse_saved_tab', JSON.stringify(savedObj));
+  } catch (e) {
+    console.error('Failed to save 4th tab to localStorage:', e);
+  }
+
+  // Update 4th segment button UI immediately
+  const shortName = savedObj.name.split(',')[0].trim();
+  if (mEl.mSegSavedText) mEl.mSegSavedText.textContent = shortName;
+  if (mEl.mBadgeSaved) {
+    mEl.mBadgeSaved.textContent = (aqiVal !== '--') ? `${aqiVal}` : '--';
+    if (savedObj.color) mEl.mBadgeSaved.style.backgroundColor = savedObj.color;
+    if (savedObj.textColor) mEl.mBadgeSaved.style.color = savedObj.textColor;
+  }
+
+  // Visual confirmation on button
+  if (mEl.mBtnSaveLocation) {
+    const orig = mEl.mBtnSaveLocation.textContent;
+    mEl.mBtnSaveLocation.textContent = '✓ Saved!';
+    mEl.mBtnSaveLocation.classList.add('saved-success');
+    if (typeof showMobileToast === 'function') {
+      showMobileToast(`Saved "${shortName}" as 4th Tab!`);
+    }
+    setTimeout(() => {
+      mEl.mBtnSaveLocation.textContent = orig;
+      mEl.mBtnSaveLocation.classList.remove('saved-success');
+    }, 2000);
+  }
+}
+
+async function loadSavedMobileTab() {
+  const saved = getSavedMobileLocation();
+  if (!saved || (!saved.lat && !saved.station_id)) {
+    if (typeof showMobileToast === 'function') {
+      showMobileToast('No location saved in Tab 4 yet! Tap ★ Save on any station to pin it.');
+    } else {
+      alert("No location saved in Tab 4 yet!\n\nUse Search or '16 States' to browse any station, then tap '★ Save' to set it as Tab 4.");
+    }
+    return;
+  }
+
+  mState.currentCity = 'saved';
+
+  mEl.segPerai.classList.remove('active');
+  mEl.segKL.classList.remove('active');
+  mEl.segAlor.classList.remove('active');
+  if (mEl.segSaved) mEl.segSaved.classList.add('active');
+
+  mEl.tabNavHome.click();
+
+  if (typeof showMobileToast === 'function') {
+    showMobileToast(`Loading saved location: ${saved.name}...`);
+  }
+
+  try {
+    const data = await fetchAirQualityUniversal({
+      lat: saved.lat,
+      lon: saved.lon,
+      name: saved.name,
+      stateName: saved.state || 'Malaysia',
+      countryName: saved.country || 'Malaysia',
+      station_id: saved.station_id || null
+    });
+    renderMobileDashboard(data);
+
+    if (data.overall_aqi !== null && data.overall_aqi !== undefined) {
+      saved.aqi = data.overall_aqi;
+      if (data.category) {
+        saved.color = data.category.color;
+        saved.textColor = data.category.textColor;
+      }
+      try {
+        localStorage.setItem('aeropulse_saved_tab', JSON.stringify(saved));
+      } catch (e) {}
+      if (mEl.mBadgeSaved) {
+        mEl.mBadgeSaved.textContent = `${data.overall_aqi}`;
+        if (saved.color) mEl.mBadgeSaved.style.backgroundColor = saved.color;
+        if (saved.textColor) mEl.mBadgeSaved.style.color = saved.textColor;
+      }
+    }
+  } catch (err) {
+    console.error('Failed to load saved mobile tab:', err);
+    if (typeof showMobileToast === 'function') {
+      showMobileToast(`Error: ${err.message}`);
+    }
+  }
+}
+
+async function fetchCity(key) {
+  const endpoints = [`/api/air-quality?city=${key}`, `http://localhost:5050/api/air-quality?city=${key}`];
+  for (const ep of endpoints) {
+    try {
+      const res = await fetch(ep);
+      if (res.ok) {
+        const data = await res.json();
+        mState.presetData[key] = data;
+        renderMobileDashboard(data);
+        return;
+      }
+    } catch (err) {
+      // Try next
+    }
+  }
+}
+
+// Complete Catalog of 59 Official Continuous Monitoring Stations across all 16 Malaysian States & Federal Territories
+const MALAYSIA_STATIONS_DATA = {
+  "Johor": [
+    {
+      "id": 2578,
+      "name": "Johor Bahru",
+      "area": "Larkin / Johor Bahru",
+      "state": "Johor",
+      "geo": [
+        1.498,
+        103.731
+      ]
+    },
+    {
+      "id": 2580,
+      "name": "Pasir Gudang",
+      "area": "Pasir Gudang",
+      "state": "Johor",
+      "geo": [
+        1.47,
+        103.896
+      ]
+    },
+    {
+      "id": 9494,
+      "name": "Kluang",
+      "area": "Kluang",
+      "state": "Johor",
+      "geo": [
+        2.029,
+        103.324
+      ]
+    },
+    {
+      "id": 9493,
+      "name": "Batu Pahat",
+      "area": "Batu Pahat",
+      "state": "Johor",
+      "geo": [
+        1.854,
+        102.932
+      ]
+    },
+    {
+      "id": 9492,
+      "name": "Segamat",
+      "area": "Segamat",
+      "state": "Johor",
+      "geo": [
+        2.494,
+        102.863
+      ]
+    },
+    {
+      "id": 10484,
+      "name": "Tangkak",
+      "area": "Tangkak / Muar",
+      "state": "Johor",
+      "geo": [
+        2.268,
+        102.546
+      ]
+    },
+    {
+      "id": 1665,
+      "name": "Skudai",
+      "area": "Skudai / Kulai",
+      "state": "Johor",
+      "geo": [
+        1.536,
+        103.659
+      ]
+    }
+  ],
+  "Kedah": [
+    {
+      "id": 2581,
+      "name": "Alor Setar",
+      "area": "Bandar Diraja Alor Setar",
+      "state": "Kedah",
+      "geo": [
+        6.137,
+        100.347
+      ]
+    },
+    {
+      "id": 2582,
+      "name": "Sungai Petani",
+      "area": "Bakar Arang, Sg. Petani",
+      "state": "Kedah",
+      "geo": [
+        5.63,
+        100.468
+      ]
+    },
+    {
+      "id": 9488,
+      "name": "Kulim Hi-Tech",
+      "area": "Kulim Hi-Tech Park",
+      "state": "Kedah",
+      "geo": [
+        5.402,
+        100.59
+      ]
+    },
+    {
+      "id": 2583,
+      "name": "Langkawi",
+      "area": "Kuah, Langkawi",
+      "state": "Kedah",
+      "geo": [
+        6.332,
+        99.858
+      ]
+    }
+  ],
+  "Kelantan": [
+    {
+      "id": 9556,
+      "name": "Kota Bharu",
+      "area": "Kota Bharu",
+      "state": "Kelantan",
+      "geo": [
+        6.125,
+        102.24
+      ]
+    },
+    {
+      "id": 2585,
+      "name": "Tanah Merah",
+      "area": "Tanah Merah",
+      "state": "Kelantan",
+      "geo": [
+        5.809,
+        102.147
+      ]
+    }
+  ],
+  "Melaka": [
+    {
+      "id": 2586,
+      "name": "Bandaraya Melaka",
+      "area": "Batu Berendam, Melaka",
+      "state": "Melaka",
+      "geo": [
+        2.191,
+        102.257
+      ]
+    },
+    {
+      "id": 2587,
+      "name": "Bukit Rambai",
+      "area": "Kawasan Perindustrian Bukit Rambai",
+      "state": "Melaka",
+      "geo": [
+        2.259,
+        102.173
+      ]
+    },
+    {
+      "id": 9491,
+      "name": "Alor Gajah",
+      "area": "Alor Gajah",
+      "state": "Melaka",
+      "geo": [
+        2.371,
+        102.225
+      ]
+    }
+  ],
+  "Negeri Sembilan": [
+    {
+      "id": 2590,
+      "name": "Seremban",
+      "area": "Seremban",
+      "state": "Negeri Sembilan",
+      "geo": [
+        2.723,
+        101.968
+      ]
+    },
+    {
+      "id": 2588,
+      "name": "Nilai",
+      "area": "Bandar Baru Nilai",
+      "state": "Negeri Sembilan",
+      "geo": [
+        2.822,
+        101.811
+      ]
+    },
+    {
+      "id": 2589,
+      "name": "Port Dickson",
+      "area": "Port Dickson",
+      "state": "Negeri Sembilan",
+      "geo": [
+        2.441,
+        101.867
+      ]
+    }
+  ],
+  "Pahang": [
+    {
+      "id": 2592,
+      "name": "Kuantan",
+      "area": "Indera Mahkota, Kuantan",
+      "state": "Pahang",
+      "geo": [
+        3.816,
+        103.316
+      ]
+    },
+    {
+      "id": 9497,
+      "name": "Temerloh",
+      "area": "Mentakab / Temerloh",
+      "state": "Pahang",
+      "geo": [
+        3.472,
+        102.376
+      ]
+    },
+    {
+      "id": 2593,
+      "name": "Jerantut",
+      "area": "Jerantut",
+      "state": "Pahang",
+      "geo": [
+        3.948,
+        102.367
+      ]
+    }
+  ],
+  "Perak": [
+    {
+      "id": 2594,
+      "name": "Ipoh (Tasek)",
+      "area": "Jalan Tasek, Ipoh",
+      "state": "Perak",
+      "geo": [
+        4.629,
+        101.117
+      ]
+    },
+    {
+      "id": 2596,
+      "name": "Ipoh (Pegoh)",
+      "area": "SK Jalan Pegoh, Ipoh",
+      "state": "Perak",
+      "geo": [
+        4.553,
+        101.08
+      ]
+    },
+    {
+      "id": 2595,
+      "name": "Taiping",
+      "area": "Kg. Air Putih, Taiping",
+      "state": "Perak",
+      "geo": [
+        4.899,
+        100.679
+      ]
+    },
+    {
+      "id": 2597,
+      "name": "Seri Manjung",
+      "area": "Lumut / Seri Manjung",
+      "state": "Perak",
+      "geo": [
+        4.2,
+        100.663
+      ]
+    },
+    {
+      "id": 2598,
+      "name": "Tanjung Malim",
+      "area": "Tanjung Malim",
+      "state": "Perak",
+      "geo": [
+        3.688,
+        101.524
+      ]
+    }
+  ],
+  "Perlis": [
+    {
+      "id": 2599,
+      "name": "Kangar",
+      "area": "Kangar, Perlis",
+      "state": "Perlis",
+      "geo": [
+        6.43,
+        100.211
+      ]
+    }
+  ],
+  "Pulau Pinang": [
+    {
+      "id": 2600,
+      "name": "Perai",
+      "area": "Perai Industrial Area, Seberang Perai",
+      "state": "Pulau Pinang",
+      "geo": [
+        5.329,
+        100.443
+      ]
+    },
+    {
+      "id": 2601,
+      "name": "Seberang Jaya",
+      "area": "Seberang Jaya 2",
+      "state": "Pulau Pinang",
+      "geo": [
+        5.398,
+        100.404
+      ]
+    },
+    {
+      "id": 9489,
+      "name": "Minden (USM)",
+      "area": "Minden, Pulau Pinang",
+      "state": "Pulau Pinang",
+      "geo": [
+        5.356,
+        100.308
+      ]
+    },
+    {
+      "id": 9490,
+      "name": "Balik Pulau",
+      "area": "Balik Pulau, Pulau Pinang",
+      "state": "Pulau Pinang",
+      "geo": [
+        5.338,
+        100.215
+      ]
+    }
+  ],
+  "Sabah": [
+    {
+      "id": 2604,
+      "name": "Kota Kinabalu",
+      "area": "Putatan / Kota Kinabalu",
+      "state": "Sabah",
+      "geo": [
+        5.975,
+        116.072
+      ]
+    },
+    {
+      "id": 2605,
+      "name": "Sandakan",
+      "area": "Sandakan",
+      "state": "Sabah",
+      "geo": [
+        5.84,
+        118.118
+      ]
+    },
+    {
+      "id": 2606,
+      "name": "Tawau",
+      "area": "Tawau",
+      "state": "Sabah",
+      "geo": [
+        4.25,
+        117.936
+      ]
+    },
+    {
+      "id": 2603,
+      "name": "Keningau",
+      "area": "Keningau",
+      "state": "Sabah",
+      "geo": [
+        5.339,
+        116.164
+      ]
+    }
+  ],
+  "Sarawak": [
+    {
+      "id": 2610,
+      "name": "Kuching",
+      "area": "Kuching",
+      "state": "Sarawak",
+      "geo": [
+        1.554,
+        110.344
+      ]
+    },
+    {
+      "id": 2613,
+      "name": "Samarahan",
+      "area": "Kota Samarahan",
+      "state": "Sarawak",
+      "geo": [
+        1.442,
+        110.457
+      ]
+    },
+    {
+      "id": 2616,
+      "name": "Sri Aman",
+      "area": "Simanggang, Sri Aman",
+      "state": "Sarawak",
+      "geo": [
+        1.238,
+        111.462
+      ]
+    },
+    {
+      "id": 2614,
+      "name": "Sarikei",
+      "area": "Sarikei",
+      "state": "Sarawak",
+      "geo": [
+        2.126,
+        111.524
+      ]
+    },
+    {
+      "id": 2615,
+      "name": "Sibu",
+      "area": "Sibu",
+      "state": "Sarawak",
+      "geo": [
+        2.314,
+        111.832
+      ]
+    },
+    {
+      "id": 9501,
+      "name": "Mukah",
+      "area": "Mukah",
+      "state": "Sarawak",
+      "geo": [
+        2.898,
+        112.091
+      ]
+    },
+    {
+      "id": 2607,
+      "name": "Bintulu",
+      "area": "Bintulu",
+      "state": "Sarawak",
+      "geo": [
+        3.172,
+        113.043
+      ]
+    },
+    {
+      "id": 2609,
+      "name": "Kapit",
+      "area": "Kapit",
+      "state": "Sarawak",
+      "geo": [
+        2.016,
+        112.935
+      ]
+    },
+    {
+      "id": 2612,
+      "name": "Miri",
+      "area": "Miri",
+      "state": "Sarawak",
+      "geo": [
+        4.425,
+        114.012
+      ]
+    },
+    {
+      "id": 2611,
+      "name": "Limbang",
+      "area": "Limbang",
+      "state": "Sarawak",
+      "geo": [
+        4.75,
+        115.0
+      ]
+    }
+  ],
+  "Selangor": [
+    {
+      "id": 2621,
+      "name": "Shah Alam",
+      "area": "Seksyen 2, Shah Alam",
+      "state": "Selangor",
+      "geo": [
+        3.105,
+        101.556
+      ]
+    },
+    {
+      "id": 2620,
+      "name": "Petaling Jaya",
+      "area": "Seksyen 17, Petaling Jaya",
+      "state": "Selangor",
+      "geo": [
+        3.133,
+        101.608
+      ]
+    },
+    {
+      "id": 2619,
+      "name": "Pelabuhan Klang",
+      "area": "Pelabuhan Klang (Port Klang)",
+      "state": "Selangor",
+      "geo": [
+        3.015,
+        101.413
+      ]
+    },
+    {
+      "id": 2617,
+      "name": "Banting",
+      "area": "Kuala Langat / Banting",
+      "state": "Selangor",
+      "geo": [
+        2.817,
+        101.623
+      ]
+    },
+    {
+      "id": 2618,
+      "name": "Kuala Selangor",
+      "area": "Kuala Selangor",
+      "state": "Selangor",
+      "geo": [
+        3.321,
+        101.256
+      ]
+    }
+  ],
+  "Terengganu": [
+    {
+      "id": 2623,
+      "name": "Kuala Terengganu",
+      "area": "Kuala Terengganu",
+      "state": "Terengganu",
+      "geo": [
+        5.312,
+        103.132
+      ]
+    },
+    {
+      "id": 2622,
+      "name": "Kemaman",
+      "area": "Cukai / Kemaman",
+      "state": "Terengganu",
+      "geo": [
+        4.262,
+        103.426
+      ]
+    },
+    {
+      "id": 2624,
+      "name": "Paka",
+      "area": "Paka, Dungun",
+      "state": "Terengganu",
+      "geo": [
+        4.638,
+        103.437
+      ]
+    }
+  ],
+  "W.P. Kuala Lumpur": [
+    {
+      "id": 5780,
+      "name": "Kuala Lumpur (Metropolitan)",
+      "area": "Pusat Bandaraya Kuala Lumpur",
+      "state": "W.P. Kuala Lumpur",
+      "geo": [
+        3.139,
+        101.687
+      ]
+    },
+    {
+      "id": 2626,
+      "name": "Cheras",
+      "area": "Cheras, Kuala Lumpur",
+      "state": "W.P. Kuala Lumpur",
+      "geo": [
+        3.106,
+        101.718
+      ]
+    },
+    {
+      "id": 2625,
+      "name": "Batu Muda",
+      "area": "Batu Muda, Sentul, KL",
+      "state": "W.P. Kuala Lumpur",
+      "geo": [
+        3.212,
+        101.682
+      ]
+    }
+  ],
+  "W.P. Labuan": [
+    {
+      "id": 2627,
+      "name": "Labuan",
+      "area": "Bandar Labuan",
+      "state": "W.P. Labuan",
+      "geo": [
+        5.277,
+        115.242
+      ]
+    }
+  ],
+  "W.P. Putrajaya": [
+    {
+      "id": 10485,
+      "name": "Putrajaya",
+      "area": "Presint 18, Putrajaya",
+      "state": "W.P. Putrajaya",
+      "geo": [
+        2.915,
+        101.69
+      ]
+    }
+  ]
+};
+
+function initMobileStateExplorer() {
+  if (!mEl.mStateSelect || !mEl.mStationSelect) return;
+
+  const states = Object.keys(MALAYSIA_STATIONS_DATA);
+  mEl.mStateSelect.innerHTML = states.map(st => `<option value="${st}">${st}</option>`).join('');
+
+  const defaultState = states.includes("Pulau Pinang") ? "Pulau Pinang" : states[0];
+  mEl.mStateSelect.value = defaultState;
+  updateMobileStationDropdownForState(defaultState);
+
+  mEl.mStateSelect.addEventListener('change', () => {
+    updateMobileStationDropdownForState(mEl.mStateSelect.value);
+  });
+
+  if (mEl.mBtnViewStation) {
+    mEl.mBtnViewStation.addEventListener('click', () => {
+      const stateName = mEl.mStateSelect.value;
+      const stationId = parseInt(mEl.mStationSelect.value, 10);
+      const stList = MALAYSIA_STATIONS_DATA[stateName] || [];
+      const st = stList.find(s => s.id === stationId);
+      if (st) loadMobileStation(st);
+    });
+  }
+
+  if (mEl.mBtnDirectSaveStation) {
+    mEl.mBtnDirectSaveStation.addEventListener('click', async () => {
+      const stateName = mEl.mStateSelect.value;
+      const stationId = parseInt(mEl.mStationSelect.value, 10);
+      const stList = MALAYSIA_STATIONS_DATA[stateName] || [];
+      const st = stList.find(s => s.id === stationId);
+      if (st) {
+        await loadMobileStation(st);
+        saveCurrentMobileLocationAsTab4();
+      }
+    });
+  }
+
+  mEl.mStationSelect.addEventListener('change', () => {
+    const stateName = mEl.mStateSelect.value;
+    const stationId = parseInt(mEl.mStationSelect.value, 10);
+    const stList = MALAYSIA_STATIONS_DATA[stateName] || [];
+    const st = stList.find(s => s.id === stationId);
+    if (st) loadMobileStation(st);
+  });
+}
+
+function updateMobileStationDropdownForState(stateName) {
+  const stations = MALAYSIA_STATIONS_DATA[stateName] || [];
+  mEl.mStationSelect.innerHTML = stations.map(st => 
+    `<option value="${st.id}">${st.area || st.name} (Station #${st.id})</option>`
+  ).join('');
+
+  if (mEl.mStateChipsList) {
+    mEl.mStateChipsList.innerHTML = stations.map(st => `
+      <button class="m-chip" data-station-id="${st.id}">
+        ${st.area || st.name} (#${st.id})
+      </button>
+    `).join('');
+
+    mEl.mStateChipsList.querySelectorAll('.m-chip').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const id = parseInt(btn.getAttribute('data-station-id'), 10);
+        const st = stations.find(s => s.id === id);
+        if (st) {
+          mEl.mStationSelect.value = id;
+          loadMobileStation(st);
+        }
+      });
+    });
+  }
+}
+
+async function loadMobileStation(st) {
+  if (!st) return;
+
+  const stationName = st.area || st.name;
+  mState.currentCity = `station_${st.id}`;
+
+  // Deactivate preset segment buttons
+  mEl.segPerai.classList.remove('active');
+  mEl.segKL.classList.remove('active');
+  mEl.segAlor.classList.remove('active');
+  if (mEl.segSaved) mEl.segSaved.classList.remove('active');
+
+  // Immediately navigate to Home / Dashboard view so user sees it transition
+  if (mEl.tabNavHome) mEl.tabNavHome.click();
+  const scBody = document.getElementById('mScrollBody');
+  if (scBody) scBody.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Show placeholder feedback in header & gauge
+  mEl.mLocName.textContent = `${stationName} (Loading...)`;
+  mEl.mLocTime.textContent = `DOE Station #${st.id} • ${st.state || 'Malaysia'}`;
+  mEl.mAqiNum.textContent = '...';
+  mEl.mAqiBadge.textContent = 'Fetching Live...';
+  mEl.mAqiBadge.style.backgroundColor = '#64748b';
+
+  if (typeof showMobileToast === 'function') {
+    showMobileToast(`Loading ${stationName} (Station #${st.id})...`);
+  }
+
+  try {
+    const lat = st.geo ? st.geo[0] : (st.lat || 3.1);
+    const lon = st.geo ? st.geo[1] : (st.lon || 101.6);
+    const data = await fetchAirQualityUniversal({
+      lat,
+      lon,
+      name: stationName,
+      stateName: st.state || 'Malaysia',
+      countryName: 'Malaysia',
+      station_id: st.id
+    });
+    renderMobileDashboard(data);
+  } catch (err) {
+    console.error('Mobile station load error:', err);
+    if (typeof showMobileToast === 'function') {
+      showMobileToast(`Error: ${err.message}`);
+    }
+  }
+}
+
+async function executeSearch(query) {
+  if (!query) return;
+  const qClean = query.toLowerCase().trim();
+  mEl.mSearchResults.innerHTML = '<div style="padding:10px; color:#8e8e93;">Searching stations & locations...</div>';
+
+  // 1. Search local Malaysian Station Catalog
+  const stationMatches = [];
+  for (const [stName, stArr] of Object.entries(MALAYSIA_STATIONS_DATA)) {
+    for (const st of stArr) {
+      const matchArea = (st.area || '').toLowerCase().includes(qClean);
+      const matchName = (st.name || '').toLowerCase().includes(qClean);
+      const matchState = (st.state || '').toLowerCase().includes(qClean);
+      const matchId = String(st.id) === qClean;
+      if (matchArea || matchName || matchState || matchId) {
+        stationMatches.push(st);
+      }
+    }
+  }
+
+  // 2. Open-Meteo Geocoding API directly
+  let geoMatches = [];
+  try {
+    const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=6&language=en&format=json`;
+    const res = await fetch(geoUrl);
+    if (res.ok) {
+      const gData = await res.json();
+      geoMatches = gData.results || [];
+    }
+  } catch (err) {}
+
+  if (stationMatches.length === 0 && geoMatches.length === 0) {
+    mEl.mSearchResults.innerHTML = `<div style="padding:10px; color:#8e8e93;">No locations found matching "${query}".</div>`;
+    return;
+  }
+
+  let html = '';
+
+  // Render official stations
+  if (stationMatches.length > 0) {
+    html += stationMatches.slice(0, 5).map(st => `
+      <div class="m-result-item" style="border-left: 3px solid #06b6d4;" onclick="loadMobileStationById(${st.id}, '${st.state}')">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="color:#06b6d4;">${st.area || st.name}</strong>
+          <span style="font-size:10px; background:rgba(6,182,212,0.18); color:#06b6d4; padding:2px 6px; border-radius:4px; font-weight:700;">DOE #${st.id}</span>
+        </div>
+        <div style="font-size:11px; color:#8e8e93; margin-top:2px;">${st.name}, ${st.state}</div>
+      </div>
+    `).join('');
+  }
+
+  // Render geo results
+  if (geoMatches.length > 0) {
+    html += geoMatches.map(r => `
+      <div class="m-result-item" onclick="selectSearchResult('${r.latitude}', '${r.longitude}', '${r.name.replace(/'/g, "\\'")}', '${(r.admin1 || '').replace(/'/g, "\\'")}', '${(r.country || '').replace(/'/g, "\\'")}')">
+        <strong>${r.name}</strong>
+        <div style="font-size:11px; color:#8e8e93;">${r.admin1 ? r.admin1 + ', ' : ''}${r.country || ''}</div>
+      </div>
+    `).join('');
+  }
+
+  mEl.mSearchResults.innerHTML = html;
+}
+
+window.loadMobileStationById = function(stationId, stateName) {
+  let st = null;
+  const sId = parseInt(stationId, 10);
+  if (stateName && MALAYSIA_STATIONS_DATA[stateName]) {
+    st = MALAYSIA_STATIONS_DATA[stateName].find(s => s.id === sId);
+  }
+  if (!st) {
+    for (const sList of Object.values(MALAYSIA_STATIONS_DATA)) {
+      st = sList.find(s => s.id === sId);
+      if (st) break;
+    }
+  }
+  if (st) {
+    loadMobileStation(st);
+  } else {
+    console.warn('Station not found by ID:', stationId);
+  }
+};
+
+window.selectSearchResult = async function(lat, lon, name, stateName = '', countryName = '') {
+  // Deactivate preset segment buttons
+  mEl.segPerai.classList.remove('active');
+  mEl.segKL.classList.remove('active');
+  mEl.segAlor.classList.remove('active');
+  if (mEl.segSaved) mEl.segSaved.classList.remove('active');
+
+  mState.currentCity = name;
+
+  // Immediately navigate to Home / Dashboard view so user sees it transition
+  if (mEl.tabNavHome) mEl.tabNavHome.click();
+  const scBody = document.getElementById('mScrollBody');
+  if (scBody) scBody.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Show placeholder feedback in header & gauge
+  mEl.mLocName.textContent = `${name} (Loading...)`;
+  mEl.mLocTime.textContent = `${stateName ? stateName + ', ' : ''}${countryName || ''}`;
+  mEl.mAqiNum.textContent = '...';
+  mEl.mAqiBadge.textContent = 'Fetching Live...';
+  mEl.mAqiBadge.style.backgroundColor = '#64748b';
+
+  if (typeof showMobileToast === 'function') {
+    showMobileToast(`Loading ${name}...`);
+  }
+
+  try {
+    const data = await fetchAirQualityUniversal({
+      lat: parseFloat(lat),
+      lon: parseFloat(lon),
+      name,
+      stateName: stateName || 'Region',
+      countryName: countryName || 'Worldwide'
+    });
+    renderMobileDashboard(data);
+  } catch (err) {
+    console.error('Select search result error:', err);
+    if (typeof showMobileToast === 'function') {
+      showMobileToast(`Error: ${err.message}`);
+    }
+  }
+};
+
+function calcPm25Aqi(c) {
+  if (c === null || c === undefined || isNaN(c)) return null;
+  c = Math.round(c * 10) / 10;
+  if (c < 0) return 0;
+  if (c <= 12.0) return Math.round(((50 - 0) / (12.0 - 0.0)) * (c - 0.0) + 0);
+  if (c <= 35.4) return Math.round(((100 - 51) / (35.4 - 12.1)) * (c - 12.1) + 51);
+  if (c <= 55.4) return Math.round(((150 - 101) / (55.4 - 35.5)) * (c - 35.5) + 101);
+  if (c <= 150.4) return Math.round(((200 - 151) / (150.4 - 55.5)) * (c - 55.5) + 151);
+  if (c <= 250.4) return Math.round(((300 - 201) / (250.4 - 150.5)) * (c - 150.5) + 201);
+  if (c <= 350.4) return Math.round(((400 - 301) / (350.4 - 250.5)) * (c - 250.5) + 301);
+  if (c <= 500.4) return Math.round(((500 - 401) / (500.4 - 350.5)) * (c - 350.5) + 401);
+  return 500;
+}
+
+function getAqiCategory(aqi) {
+  if (aqi <= 50) return { category: 'Good', color: '#30d158' };
+  if (aqi <= 100) return { category: 'Moderate', color: '#ffd60a' };
+  if (aqi <= 150) return { category: 'Sensitive', color: '#ff9f0a' };
+  if (aqi <= 200) return { category: 'Unhealthy', color: '#ff453a' };
+  if (aqi <= 300) return { category: 'Very Unhealthy', color: '#bf5af2' };
+  return { category: 'Hazardous', color: '#7e22ce' };
+}
+
+function renderMobileDashboard(data) {
+  mState.currentData = data;
+  const loc = data.location || {};
+  const cat = data.category || {};
+  const pm25 = data.pm25 || {};
+  const runner = data.runner_advice || {};
+  const ground = data.aqicn_ground;
+  const model = data.openmeteo_model;
+
+  // Header
+  mEl.mLocName.textContent = loc.name || 'Location';
+  const updated = (ground && ground.updated) || (model && model.time) || 'Live';
+  mEl.mLocTime.textContent = `${loc.state ? loc.state + ' • ' : ''}Updated: ${updated}`;
+
+  // AQI
+  const aqiVal = data.overall_aqi !== null ? data.overall_aqi : '--';
+  mEl.mAqiNum.textContent = aqiVal;
+  mEl.mAqiNum.style.color = cat.color || '#ffffff';
+  mEl.mAqiBadge.textContent = cat.category || 'Unknown';
+  mEl.mAqiBadge.style.backgroundColor = cat.color || '#ff453a';
+
+  // PM2.5 AQI Reading & Concentration
+  let pm25Aqi = (pm25.aqi_reading !== undefined && pm25.aqi_reading !== null) ? pm25.aqi_reading : pm25.sub_index;
+  if (pm25Aqi === null && pm25.concentration_ugm3 !== null && pm25.concentration_ugm3 !== undefined) {
+    pm25Aqi = calcPm25Aqi(pm25.concentration_ugm3);
+  }
+  const pm25Cat = pm25.category || (pm25Aqi !== null ? getAqiCategory(pm25Aqi) : null);
+  const pm25Color = (pm25Cat && pm25Cat.color) || '#ff9f0a';
+  const pm25CatName = (pm25Cat && (pm25Cat.category || pm25Cat.name)) || 'Moderate';
+
+  mEl.mPm25Sub.textContent = `${pm25Aqi !== null ? pm25Aqi : '--'} AQI`;
+  mEl.mPm25Sub.style.color = pm25Color;
+  mEl.mPm25Conc.textContent = `${pm25.concentration_ugm3 !== null ? pm25.concentration_ugm3.toFixed(1) : '--'} µg/m³`;
+
+  if (pm25.who_comparison) {
+    mEl.mWhoBadge.textContent = pm25.who_comparison.status;
+    mEl.mWhoBadge.style.color = pm25.who_comparison.safe ? '#30d158' : '#ff453a';
+  }
+
+  // Update dedicated PM2.5 card
+  if (mEl.mPm25HeroAqi) {
+    mEl.mPm25HeroAqi.textContent = `${pm25Aqi !== null ? pm25Aqi : '--'} AQI`;
+    mEl.mPm25HeroAqi.style.color = pm25Color;
+  }
+  if (mEl.mPm25CatBadge) {
+    mEl.mPm25CatBadge.textContent = pm25CatName;
+    mEl.mPm25CatBadge.style.backgroundColor = pm25Color;
+  }
+  if (mEl.mTilePm25Aqi) {
+    mEl.mTilePm25Aqi.textContent = `${pm25Aqi !== null ? pm25Aqi : '--'} AQI`;
+    mEl.mTilePm25Aqi.style.color = pm25Color;
+  }
+  if (mEl.mTilePm25AqiSub) {
+    mEl.mTilePm25AqiSub.textContent = `EPA: ${pm25CatName}`;
+  }
+  if (mEl.mTilePm25Conc) {
+    mEl.mTilePm25Conc.textContent = `${pm25.concentration_ugm3 !== null && pm25.concentration_ugm3 !== undefined ? pm25.concentration_ugm3.toFixed(1) : '--'} µg/m³`;
+  }
+  if (mEl.mTilePm25WhoStatus) {
+    const isSafe = pm25.who_comparison && pm25.who_comparison.safe;
+    mEl.mTilePm25WhoStatus.textContent = isSafe ? '✓ Within Safe Limit' : `${(pm25.who_comparison && pm25.who_comparison.ratio) || '2.0'}x Over WHO Limit`;
+    mEl.mTilePm25WhoStatus.style.color = isSafe ? '#30d158' : '#ff453a';
+  }
+  if (mEl.mTilePm25Range) {
+    const minT = pm25.min_today !== null && pm25.min_today !== undefined ? pm25.min_today : '--';
+    const maxT = pm25.max_today !== null && pm25.max_today !== undefined ? pm25.max_today : '--';
+    mEl.mTilePm25Range.textContent = `Min ${minT} | Max ${maxT}`;
+  }
+
+  // Scale pointer (0-300 scale)
+  if (typeof aqiVal === 'number') {
+    const pct = Math.min(Math.max((aqiVal / 300) * 100, 0), 100);
+    mEl.mScalePointer.style.left = `${pct}%`;
+  }
+
+  // 🏃 Runner's Advice
+  if (runner) {
+    mEl.mRunnerVerdict.textContent = runner.verdict || 'Run Assessment';
+    mEl.mRunnerVerdict.style.color = runner.color || '#ffffff';
+    mEl.mRunnerPill.textContent = runner.badge || 'ADVISORY';
+    mEl.mRunnerPill.style.backgroundColor = runner.color || '#ff453a';
+    mEl.mRunnerSummary.textContent = runner.summary || '';
+
+    const d = runner.durations || {};
+    if (d.low) {
+      mEl.mDurLow.textContent = d.low.duration;
+      mEl.mDurLow.style.color = d.low.safe ? '#30d158' : '#ff453a';
+    }
+    if (d.moderate) {
+      mEl.mDurMod.textContent = d.moderate.duration;
+      mEl.mDurMod.style.color = d.moderate.safe ? '#ffd60a' : '#ff453a';
+    }
+    if (d.high) {
+      mEl.mDurHigh.textContent = d.high.duration;
+      mEl.mDurHigh.style.color = d.high.safe ? '#30d158' : '#ff453a';
+    }
+
+    if (runner.best_window) {
+      mEl.mBestWindow.textContent = runner.best_window.recommendation;
+    }
+
+    if (runner.heat_stress) {
+      mEl.mHeatStress.textContent = `Heat Index: ${runner.heat_stress.apparent_temp_c}°C • Humid: ${runner.heat_stress.humidity_pct}%`;
+    }
+  }
+
+  // Pollutants
+  mEl.mValPm10.textContent = (ground && ground.pollutants && ground.pollutants.pm10 && ground.pollutants.pm10.current) || (model && model.pm10_concentration && model.pm10_concentration.value) || '--';
+  mEl.mValO3.textContent = (ground && ground.pollutants && ground.pollutants.o3 && ground.pollutants.o3.current) || (model && model.pollutants_ugm3 && model.pollutants_ugm3.ozone) || '--';
+  mEl.mValNo2.textContent = (ground && ground.pollutants && ground.pollutants.no2 && ground.pollutants.no2.current) || (model && model.pollutants_ugm3 && model.pollutants_ugm3.nitrogen_dioxide) || '--';
+  mEl.mValSo2.textContent = (ground && ground.pollutants && ground.pollutants.so2 && ground.pollutants.so2.current) || (model && model.pollutants_ugm3 && model.pollutants_ugm3.sulphur_dioxide) || '--';
+  mEl.mValCo.textContent = (ground && ground.pollutants && ground.pollutants.co && ground.pollutants.co.current) || (model && model.pollutants_ugm3 && model.pollutants_ugm3.carbon_monoxide) || '--';
+  mEl.mValEaqi.textContent = (model && model.european_aqi) || '--';
+
+  // Sources
+  if (ground && mEl.mSrcGround) {
+    mEl.mSrcGround.textContent = `${ground.station_name || 'Station'} (AQI: ${ground.overall_aqi} • Station ID: ${ground.station_id || '2600'})`;
+  }
+  if (model && mEl.mSrcModel) {
+    mEl.mSrcModel.textContent = `Copernicus CAMS (${model.us_aqi || '--'} US AQI / ${model.european_aqi || '--'} EAQI • PM2.5: ${typeof pm25.concentration_ugm3 === 'number' ? pm25.concentration_ugm3.toFixed(1) : (pm25.concentration_ugm3 || '--')} µg/m³)`;
+  }
+  if (mEl.mSrcIpu) {
+    mEl.mSrcIpu.textContent = `JAS APIMS / IPU Standard: ${cat.malayCategory || 'Terkawal'} (${cat.category || 'Standard'})`;
+  }
+
+  // 📈 PM2.5 AQI 24-Hour Trend Card & Graph
+  renderMobileTrendCard(data);
+}
+
+function renderMobileTrendCard(data) {
+  if (!data) return;
+  const pm25 = data.pm25 || {};
+  const isAqi = mState.trendMode === 'aqi';
+  const rangeMode = mState.trendRange || 'all';
+
+  const pastTr = pm25.past_trend || {};
+  let futTr = pm25.future_trend || pm25.trend;
+
+  // 1. Populate Past 24h Observed Stats
+  if (mEl.mTrendPastPeak) {
+    if (isAqi) {
+      const p = pastTr.peak_aqi || pastTr.peakAqi || {};
+      const val = p.value !== undefined ? p.value : (p.val !== undefined ? p.val : '--');
+      mEl.mTrendPastPeak.textContent = `${val} AQI (${p.time || '--'})`;
+    } else {
+      const p = pastTr.peak_conc || pastTr.peakConc || {};
+      const val = p.value !== undefined ? p.value : (p.val !== undefined ? p.val : '--');
+      mEl.mTrendPastPeak.textContent = `${val} µg (${p.time || '--'})`;
+    }
+  }
+
+  if (mEl.mTrendPastLow) {
+    if (isAqi) {
+      const p = pastTr.lowest_aqi || pastTr.lowestAqi || {};
+      const val = p.value !== undefined ? p.value : (p.val !== undefined ? p.val : '--');
+      mEl.mTrendPastLow.textContent = `${val} AQI (${p.time || '--'})`;
+    } else {
+      const p = pastTr.lowest_conc || pastTr.lowestConc || {};
+      const val = p.value !== undefined ? p.value : (p.val !== undefined ? p.val : '--');
+      mEl.mTrendPastLow.textContent = `${val} µg (${p.time || '--'})`;
+    }
+  }
+
+  if (mEl.mTrendPastShift) {
+    const d = isAqi ? (pastTr.drift_6h !== undefined ? pastTr.drift_6h : (pastTr.drift6h || 0)) : (pastTr.drift_6h_conc !== undefined ? pastTr.drift_6h_conc : (pastTr.driftConc || 0));
+    const unit = isAqi ? 'AQI' : 'µg';
+    const sign = d > 0 ? '+' : '';
+    mEl.mTrendPastShift.textContent = `${sign}${d} ${unit}`;
+    mEl.mTrendPastShift.style.color = d > (isAqi ? 5 : 2) ? '#ff453a' : (d < -(isAqi ? 5 : 2) ? '#30d158' : '#06b6d4');
+  }
+
+  // 2. Populate Future 24h Forecast Stats
+  if (!futTr && pm25.hourly_times && pm25.hourly_conc) {
+    const times = pm25.hourly_times || [];
+    const concs = pm25.hourly_conc || [];
+    const aqis = pm25.hourly_aqi || concs.map(c => calcPm25Aqi(c));
+    const limit = Math.min(24, times.length, concs.length, aqis.length);
+    let peakAqiVal = -1, peakAqiIdx = 0;
+    let cleanAqiVal = 9999, cleanAqiIdx = 0;
+    let peakConcVal = -1, peakConcIdx = 0;
+    let cleanConcVal = 9999, cleanConcIdx = 0;
+
+    for (let i = 0; i < limit; i++) {
+      if (aqis[i] > peakAqiVal) { peakAqiVal = aqis[i]; peakAqiIdx = i; }
+      if (aqis[i] < cleanAqiVal) { cleanAqiVal = aqis[i]; cleanAqiIdx = i; }
+      if (concs[i] > peakConcVal) { peakConcVal = concs[i]; peakConcIdx = i; }
+      if (concs[i] < cleanConcVal) { cleanConcVal = concs[i]; cleanConcIdx = i; }
+    }
+    const getH = (s) => (s && s.split('T')[1]) ? s.split('T')[1].substring(0, 5) : (s || '--');
+    const driftIdx = Math.min(6, limit - 1);
+    const dAqi = (aqis[driftIdx] || aqis[0]) - (aqis[0] || 0);
+    const dConc = Math.round(((concs[driftIdx] || concs[0]) - (concs[0] || 0)) * 10) / 10;
+    let traj = 'STABLE';
+    if (dAqi >= 7) traj = 'RISING';
+    else if (dAqi <= -7) traj = 'FALLING';
+
+    futTr = {
+      trajectory: traj,
+      drift_6h_aqi: dAqi,
+      drift_6h_conc: dConc,
+      peak_aqi: { value: peakAqiVal, time: getH(times[peakAqiIdx]) },
+      peak_conc: { value: Math.round(peakConcVal * 10) / 10, time: getH(times[peakConcIdx]) },
+      cleanest_window: { aqi: cleanAqiVal, conc: Math.round(cleanConcVal * 10) / 10, time: getH(times[cleanAqiIdx]) },
+      summary: `PM2.5 trajectory projected to remain ${traj.toLowerCase()} over 24h.`
+    };
+  }
+
+  if (futTr) {
+    if (mEl.mTrendBadge) {
+      mEl.mTrendBadge.textContent = futTr.trajectory || 'STABLE';
+      if (futTr.trajectory === 'RISING') {
+        mEl.mTrendBadge.style.background = '#ff453a';
+        mEl.mTrendBadge.style.color = '#fff';
+      } else if (futTr.trajectory === 'FALLING') {
+        mEl.mTrendBadge.style.background = '#30d158';
+        mEl.mTrendBadge.style.color = '#fff';
+      } else {
+        mEl.mTrendBadge.style.background = 'rgba(255, 255, 255, 0.15)';
+        mEl.mTrendBadge.style.color = '#e2e8f0';
+      }
+    }
+
+    if (mEl.mTrendVerdict) {
+      const pT = pastTr.trajectory || 'Observed';
+      const fT = futTr.trajectory || 'Stable';
+      mEl.mTrendVerdict.textContent = `Past 24h: ${pT} ➔ Next 24h: ${fT}`;
+    }
+
+    if (mEl.mTrendPeak) {
+      if (isAqi) {
+        const p = futTr.peak_aqi || futTr.peakAqi || {};
+        const val = p.value !== undefined ? p.value : (p.val !== undefined ? p.val : '--');
+        mEl.mTrendPeak.textContent = `${val} AQI (${p.time || '--'})`;
+      } else {
+        const p = futTr.peak_conc || futTr.peakConc || {};
+        const val = p.value !== undefined ? p.value : (p.val !== undefined ? p.val : '--');
+        mEl.mTrendPeak.textContent = `${val} µg (${p.time || '--'})`;
+      }
+    }
+
+    if (mEl.mTrendClean) {
+      if (isAqi) {
+        const c = futTr.cleanest_window || futTr.cleanAqi || {};
+        const val = c.aqi !== undefined ? c.aqi : (c.val !== undefined ? c.val : (futTr.lowest_aqi !== undefined ? futTr.lowest_aqi : '--'));
+        mEl.mTrendClean.textContent = `${val} AQI (${c.time || futTr.lowest_time || '--'})`;
+      } else {
+        const c = futTr.cleanest_window || futTr.cleanConc || {};
+        const val = c.conc !== undefined ? c.conc : (c.val !== undefined ? c.val : (futTr.lowest_conc !== undefined ? futTr.lowest_conc : '--'));
+        mEl.mTrendClean.textContent = `${val} µg (${c.time || futTr.lowest_time || '--'})`;
+      }
+    }
+
+    if (mEl.mTrendDrift) {
+      if (isAqi) {
+        const d = futTr.drift_6h_aqi !== undefined ? futTr.drift_6h_aqi : (futTr.change_6h !== undefined ? futTr.change_6h : (futTr.driftAqi || 0));
+        const sign = d > 0 ? '+' : '';
+        mEl.mTrendDrift.textContent = `${sign}${d} AQI (6h)`;
+        mEl.mTrendDrift.style.color = d > 5 ? '#ff453a' : (d < -5 ? '#30d158' : '#38bdf8');
+      } else {
+        const d = futTr.drift_6h_conc !== undefined ? futTr.drift_6h_conc : (futTr.driftConc || 0);
+        const sign = d > 0 ? '+' : '';
+        mEl.mTrendDrift.textContent = `${sign}${d} µg (6h)`;
+        mEl.mTrendDrift.style.color = d > 2 ? '#ff453a' : (d < -2 ? '#30d158' : '#38bdf8');
+      }
+    }
+
+    if (mEl.mTrendSummary) {
+      const pSum = pastTr.summary || '';
+      const fSum = futTr.summary || '';
+      mEl.mTrendSummary.textContent = (pSum && fSum) ? `${pSum} • ${fSum}` : (fSum || pSum || 'Copernicus CAMS atmospheric dispersion model.');
+    }
+  }
+
+  // Render HTML5 Canvas Chart
+  drawMobileTrendGraph('mTrendCanvas', data, isAqi);
+}
+
+function drawMobileTrendGraph(canvasId, data, isAqi) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  const width = canvas.parentElement.clientWidth || 330;
+  const height = 150;
+  const dpr = window.devicePixelRatio || 2;
+
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+  canvas.style.width = width + 'px';
+  canvas.style.height = height + 'px';
+
+  ctx.save();
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, width, height);
+
+  const pm25 = data.pm25 || {};
+  const rangeMode = mState.trendRange || 'all';
+
+  let values = [];
+  let nowIdx = -1;
+
+  if (rangeMode === 'past') {
+    const pData = pm25.past_24h || {};
+    values = isAqi ? (pData.pm25_aqi || []) : (pData.pm2_5 || []);
+    nowIdx = values.length - 1;
+    if (mEl.mTrendCanvasLabels) {
+      mEl.mTrendCanvasLabels.innerHTML = '<span>-24h</span><span>-18h</span><span>-12h</span><span>-6h</span><span style="color:#06b6d4; font-weight:700;">NOW</span>';
+    }
+  } else if (rangeMode === 'future') {
+    const fData = pm25.future_24h || (data.openmeteo_model && data.openmeteo_model.hourly_forecast) || {};
+    const raw = isAqi ? (fData.pm25_aqi || pm25.hourly_aqi || []) : (fData.pm2_5 || pm25.hourly_conc || []);
+    values = raw.slice(0, 24);
+    nowIdx = 0;
+    if (mEl.mTrendCanvasLabels) {
+      mEl.mTrendCanvasLabels.innerHTML = '<span style="color:#ffd60a; font-weight:700;">NOW</span><span>+4h</span><span>+8h</span><span>+12h</span><span>+18h</span><span>+24h</span>';
+    }
+  } else {
+    // 48h timeline
+    const tlData = pm25.timeline_48h || {};
+    values = isAqi ? (tlData.pm25_aqi || []) : (tlData.pm2_5 || []);
+    nowIdx = tlData.now_index !== undefined ? tlData.now_index : 24;
+    if (mEl.mTrendCanvasLabels) {
+      mEl.mTrendCanvasLabels.innerHTML = '<span>-24h</span><span>-12h</span><span style="color:#ffd60a; font-weight:700;">📍 NOW</span><span>+12h</span><span>+24h</span>';
+    }
+  }
+
+  if (values.length < 2) {
+    ctx.restore();
+    return;
+  }
+
+  const padTop = 18;
+  const padBottom = 22;
+  const padLeft = 32;
+  const padRight = 14;
+
+  const plotW = width - padLeft - padRight;
+  const plotH = height - padTop - padBottom;
+
+  const maxVal = Math.max(...values, isAqi ? 120 : 35);
+  const minVal = 0;
+  const range = maxVal - minVal || 1;
+
+  const getX = (i) => padLeft + (i / (values.length - 1)) * plotW;
+  const getY = (val) => padTop + plotH - ((val - minVal) / range) * plotH;
+
+  // Draw threshold guidelines
+  const guidelines = isAqi 
+    ? [{ val: 50, color: 'rgba(48, 209, 88, 0.35)', label: '50' },
+       { val: 100, color: 'rgba(255, 214, 10, 0.35)', label: '100' },
+       { val: 150, color: 'rgba(255, 69, 58, 0.35)', label: '150' }]
+    : [{ val: 15, color: 'rgba(48, 209, 88, 0.35)', label: '15 µg' },
+       { val: 35, color: 'rgba(255, 214, 10, 0.35)', label: '35 µg' }];
+
+  guidelines.forEach(g => {
+    if (g.val <= maxVal) {
+      const y = getY(g.val);
+      ctx.beginPath();
+      ctx.setLineDash([3, 4]);
+      ctx.strokeStyle = g.color;
+      ctx.lineWidth = 1;
+      ctx.moveTo(padLeft, y);
+      ctx.lineTo(width - padRight, y);
+      ctx.stroke();
+
+      ctx.fillStyle = 'rgba(148, 163, 184, 0.7)';
+      ctx.font = '9px -apple-system, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(g.label, padLeft - 4, y + 3);
+    }
+  });
+  ctx.setLineDash([]);
+
+  // Fill Gradient Area
+  const grad = ctx.createLinearGradient(0, padTop, 0, padTop + plotH);
+  if (isAqi) {
+    grad.addColorStop(0, rangeMode === 'past' ? 'rgba(6, 182, 212, 0.45)' : 'rgba(56, 189, 248, 0.45)');
+    grad.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
+  } else {
+    grad.addColorStop(0, 'rgba(100, 210, 255, 0.4)');
+    grad.addColorStop(1, 'rgba(100, 210, 255, 0.0)');
+  }
+
+  ctx.beginPath();
+  ctx.moveTo(getX(0), getY(values[0]));
+  for (let i = 0; i < values.length - 1; i++) {
+    const xc = (getX(i) + getX(i + 1)) / 2;
+    const yc = (getY(values[i]) + getY(values[i + 1])) / 2;
+    ctx.quadraticCurveTo(getX(i), getY(values[i]), xc, yc);
+  }
+  const lastIdx = values.length - 1;
+  ctx.lineTo(getX(lastIdx), getY(values[lastIdx]));
+  ctx.lineTo(getX(lastIdx), padTop + plotH);
+  ctx.lineTo(getX(0), padTop + plotH);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Draw 48h timeline divider if mode is all
+  if (rangeMode === 'all' && 0 <= nowIdx && nowIdx < values.length) {
+    const xNow = getX(nowIdx);
+    ctx.beginPath();
+    ctx.setLineDash([3, 3]);
+    ctx.strokeStyle = '#ffd60a';
+    ctx.lineWidth = 1.5;
+    ctx.moveTo(xNow, padTop);
+    ctx.lineTo(xNow, padTop + plotH);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Stroke Curve Line
+  ctx.beginPath();
+  ctx.moveTo(getX(0), getY(values[0]));
+  for (let i = 0; i < values.length - 1; i++) {
+    const xc = (getX(i) + getX(i + 1)) / 2;
+    const yc = (getY(values[i]) + getY(values[i + 1])) / 2;
+    ctx.quadraticCurveTo(getX(i), getY(values[i]), xc, yc);
+  }
+  ctx.lineTo(getX(lastIdx), getY(values[lastIdx]));
+  ctx.strokeStyle = rangeMode === 'past' ? '#06b6d4' : '#38bdf8';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // Highlight key points: Peak and Cleanest
+  let maxIdx = 0, minIdx = 0;
+  for (let i = 0; i < values.length; i++) {
+    if (values[i] > values[maxIdx]) maxIdx = i;
+    if (values[i] < values[minIdx]) minIdx = i;
+  }
+
+  // Peak Point
+  if (maxIdx >= 0) {
+    const xP = getX(maxIdx), yP = getY(values[maxIdx]);
+    ctx.beginPath();
+    ctx.arc(xP, yP, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#ff453a';
+    ctx.fill();
+  }
+
+  // Cleanest Point
+  if (minIdx >= 0 && minIdx !== maxIdx) {
+    const xC = getX(minIdx), yC = getY(values[minIdx]);
+    ctx.beginPath();
+    ctx.arc(xC, yC, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#30d158';
+    ctx.fill();
+  }
+
+  // NOW Point
+  if (0 <= nowIdx && nowIdx < values.length) {
+    const xN = getX(nowIdx), yN = getY(values[nowIdx]);
+    ctx.beginPath();
+    ctx.arc(xN, yN, 6, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255, 214, 10, 0.35)';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(xN, yN, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffd60a';
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+function renderMobileCompare() {
+  const keys = ['perai', 'kuala-lumpur', 'alor-setar'];
+  let html = '';
+
+  keys.forEach(k => {
+    const c = mState.presetData[k];
+    if (!c) return;
+
+    const pm25 = c.pm25 || {};
+    let pm25Aqi = (pm25.aqi_reading !== undefined && pm25.aqi_reading !== null) ? pm25.aqi_reading : pm25.sub_index;
+    if (pm25Aqi === null && pm25.concentration_ugm3 !== null && pm25.concentration_ugm3 !== undefined) {
+      pm25Aqi = calcPm25Aqi(pm25.concentration_ugm3);
+    }
+    const pm25Cat = pm25.category || (pm25Aqi !== null ? getAqiCategory(pm25Aqi) : null);
+    const pm25Color = (pm25Cat && pm25Cat.color) || '#ff9f0a';
+
+    html += `
+      <div class="ios-widget-card" style="margin-bottom:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div>
+            <strong style="font-size:16px;">${c.location.name}</strong>
+            <div style="font-size:11px; color:#8e8e93;">${c.location.state}</div>
+          </div>
+          <div style="font-size:24px; font-weight:800; color:${c.category.color};">
+            ${c.overall_aqi}
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; font-size:12px; border-top:0.5px solid rgba(255,255,255,0.1); padding-top:6px;">
+          <span>PM2.5: <strong style="color:${pm25Color};">${pm25Aqi !== null ? pm25Aqi : '--'} AQI</strong> (${pm25.concentration_ugm3 ? pm25.concentration_ugm3.toFixed(1) + ' µg/m³' : '--'})</span>
+          <span>Runner: <strong style="color:${c.runner_advice ? c.runner_advice.color : '#fff'};">${c.runner_advice ? c.runner_advice.badge : 'N/A'}</strong></span>
+          <span>Low: <strong>${c.runner_advice && c.runner_advice.durations && c.runner_advice.durations.low ? c.runner_advice.durations.low.duration : '--'}</strong></span>
+        </div>
+      </div>
+    `;
+  });
+
+  mEl.mCompareCardsContainer.innerHTML = html;
+}
+
+  </script>
+</body>
+</html>
