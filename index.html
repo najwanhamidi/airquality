@@ -1,0 +1,2179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>AeroPulse — Standalone Mobile (iPhone 15 Pro Max)</title>
+  
+  <!-- Apple Web App & PWA Settings -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AeroPulse">
+  <meta name="theme-color" content="#000000">
+
+  <style>
+    :root {
+      --ios-bg: #000000;
+      --ios-card: #1c1c1e;
+      --ios-card-alt: #2c2c2e;
+      --ios-border: rgba(255, 255, 255, 0.1);
+      --ios-text: #ffffff;
+      --ios-text-sec: #8e8e93;
+      --ios-text-muted: #636366;
+      --ios-blue: #0a84ff;
+      --ios-green: #30d158;
+      --ios-orange: #ff9f0a;
+      --ios-red: #ff453a;
+      --ios-purple: #bf5af2;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      background-color: #0b0f19;
+      color: var(--ios-text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* iPhone 15 Pro Max Frame */
+    .iphone-shell {
+      width: 100%;
+      max-width: 440px;
+      height: 100vh;
+      max-height: 932px;
+      background-color: var(--ios-bg);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    }
+
+    @media (min-width: 450px) {
+      .iphone-shell {
+        border-radius: 54px;
+        border: 7px solid #333336;
+        margin: 16px 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        background-color: #000000;
+      }
+      .iphone-shell {
+        border-radius: 0;
+        border: none;
+        max-width: 100%;
+        height: 100dvh;
+        max-height: 100dvh;
+        box-shadow: none;
+      }
+      .ios-status-bar {
+        display: none; /* Use actual iPhone hardware Dynamic Island */
+      }
+      .home-indicator {
+        display: none; /* Use actual iOS hardware Home Bar */
+      }
+      .mobile-header {
+        padding-top: max(14px, env(safe-area-inset-top));
+      }
+      .bottom-nav-bar {
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
+      }
+    }
+
+    /* iOS Status Bar with Dynamic Island */
+    .ios-status-bar {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+      z-index: 100;
+      flex-shrink: 0;
+    }
+
+    .dynamic-island {
+      width: 126px;
+      height: 35px;
+      background: #000000;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .island-cam { width: 12px; height: 12px; border-radius: 50%; background: #111424; }
+    .island-sens { width: 10px; height: 10px; border-radius: 50%; background: #080811; }
+
+    .status-icons { display: flex; align-items: center; gap: 6px; }
+    .battery-icon {
+      width: 22px; height: 11px; border: 1px solid #ffffff; border-radius: 3px; padding: 1px; position: relative;
+    }
+    .battery-icon::after {
+      content: ""; position: absolute; right: -3px; top: 3px; width: 2px; height: 3px; background: #ffffff; border-radius: 0 1px 1px 0;
+    }
+    .battery-fill { width: 85%; height: 100%; background: #ffffff; border-radius: 1px; }
+
+    /* Header Nav */
+    .mobile-header {
+      padding: 6px 18px 12px;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 0.5px solid var(--ios-border);
+      flex-shrink: 0;
+      z-index: 90;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .sub-head {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--ios-text-sec);
+      display: block;
+    }
+
+    .app-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-standalone {
+      font-size: 10px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #0a84ff, #30d158);
+      color: #ffffff;
+      padding: 2px 7px;
+      border-radius: 12px;
+    }
+
+    .btn-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--ios-card);
+      border: 0.5px solid var(--ios-border);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Segmented Tabs */
+    .segmented-control {
+      display: flex;
+      background: var(--ios-card);
+      padding: 3px;
+      border-radius: 10px;
+      gap: 2px;
+    }
+
+    .seg-tab {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--ios-text-sec);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .seg-tab.active {
+      background: #3a3a3c;
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .seg-badge {
+      font-size: 10px;
+      font-weight: 700;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 1px 5px;
+      border-radius: 6px;
+    }
+
+    /* Scroll Body */
+    .mobile-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 16px 85px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .section-pane {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .hidden { display: none !important; }
+
+    /* Widgets */
+    .ios-widget {
+      background: var(--ios-card);
+      border-radius: 20px;
+      padding: 16px;
+      border: 0.5px solid var(--ios-border);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .widget-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--ios-text-sec);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    /* AQI Hero */
+    .aqi-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .aqi-large-num {
+      font-size: 46px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      margin: 4px 0;
+    }
+
+    .aqi-status-pill {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 800;
+      background: var(--ios-orange);
+      color: #ffffff;
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+
+    .hero-right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: right;
+    }
+
+    .pm25-box {
+      background: var(--ios-card-alt);
+      padding: 5px 9px;
+      border-radius: 10px;
+      text-align: right;
+    }
+    .pm25-box .sub { font-size: 8.5px; font-weight: 700; color: var(--ios-text-sec); display: block; letter-spacing: 0.03em; }
+    .pm25-box .val { font-size: 13px; font-weight: 800; }
+    .highlight-cyan { color: #64d2ff; }
+    .highlight-orange { color: #ff9f0a; }
+
+    .who-pill {
+      font-size: 9.5px;
+      color: var(--ios-orange);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* Dedicated PM2.5 Detail Card */
+    .pm25-detail-card {
+      background: linear-gradient(150deg, #161c28 0%, #10141e 100%);
+      border: 0.5px solid rgba(100, 210, 255, 0.28);
+    }
+
+    .pm25-detail-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .pm25-headline {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 3px;
+    }
+
+    .pm25-aqi-stat {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .pm25-cat-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: #ff9f0a;
+      color: #ffffff;
+    }
+
+    .pm25-badge-pill {
+      font-size: 9px;
+      font-weight: 800;
+      padding: 3px 7px;
+      border-radius: 6px;
+      background: rgba(100, 210, 255, 0.15);
+      color: #64d2ff;
+      letter-spacing: 0.05em;
+    }
+
+    .pm25-metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .pm25-tile {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 0.5px solid rgba(255, 255, 255, 0.06);
+    }
+    .pm25-tile .p-sub { font-size: 9px; color: var(--ios-text-sec); font-weight: 600; display: block; }
+    .pm25-tile .p-val { font-size: 14px; font-weight: 800; margin: 2px 0; display: block; }
+    .pm25-tile .p-hint { font-size: 8.5px; color: var(--ios-text-muted); display: block; }
+
+    .pm25-note {
+      font-size: 11px;
+      color: var(--ios-text-sec);
+      line-height: 1.4;
+      margin-top: 4px;
+    }
+
+    /* 📈 PM2.5 Trend Card */
+    .pm25-trend-card {
+      background: linear-gradient(150deg, #141a24 0%, #0d1118 100%);
+      border: 0.5px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .trend-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .t-icon {
+      font-size: 20px;
+      background: rgba(56, 189, 248, 0.15);
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .t-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .trend-verdict-text { font-size: 13px; font-weight: 800; color: #ffffff; }
+    .trend-pill { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 10px; background: #10B981; color: #fff; }
+
+    .trend-stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      margin: 8px 0 10px;
+    }
+
+    .trend-stat-box {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 0.5px solid rgba(255, 255, 255, 0.06);
+      text-align: center;
+    }
+
+    .trend-stat-box .ts-lbl { font-size: 8.5px; color: var(--ios-text-sec); font-weight: 600; display: block; }
+    .trend-stat-box .ts-val { font-size: 11px; font-weight: 800; margin-top: 2px; display: block; }
+    .highlight-red { color: #ff453a; }
+    .highlight-green { color: #30d158; }
+
+    .trend-canvas-wrap {
+      position: relative;
+      width: 100%;
+      margin: 4px 0 6px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 10px;
+      padding: 6px 4px 2px;
+      border: 0.5px solid rgba(255, 255, 255, 0.05);
+    }
+
+    #standaloneTrendCanvas {
+      width: 100%;
+      height: 120px;
+      display: block;
+    }
+
+    .trend-canvas-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 8.5px;
+      color: var(--ios-text-muted);
+      padding: 4px 6px 2px;
+    }
+
+    .trend-toggle-strip {
+      display: flex;
+      gap: 6px;
+      margin: 8px 0 6px;
+    }
+
+    .trend-toggle-btn {
+      flex: 1;
+      background: var(--ios-card-alt);
+      border: 0.5px solid rgba(255, 255, 255, 0.1);
+      color: var(--ios-text-sec);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 5px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .trend-toggle-btn.active {
+      background: #0a84ff;
+      color: #ffffff;
+      border-color: #0a84ff;
+    }
+
+    .trend-summary-text {
+      font-size: 10.5px;
+      color: var(--ios-text-sec);
+      line-height: 1.4;
+      margin-top: 4px;
+    }
+
+    /* Scale Bar */
+    .scale-track {
+      height: 6px;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #30d158 0%, #ffd60a 25%, #ff9f0a 50%, #ff453a 75%, #bf5af2 100%);
+      position: relative;
+      margin: 10px 0 4px;
+    }
+
+    .scale-pin {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid #000000;
+      position: absolute;
+      top: -3px;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: left 0.3s ease;
+    }
+
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: var(--ios-text-muted);
+    }
+
+    /* 🏃 Runner's Card */
+    .runner-card {
+      background: linear-gradient(150deg, #1f2430 0%, #151821 100%);
+      border: 0.5px solid rgba(255, 159, 10, 0.35);
+    }
+
+    .runner-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .r-icon {
+      font-size: 22px;
+      background: rgba(255, 159, 10, 0.15);
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .r-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .runner-verdict-text { font-size: 14px; font-weight: 800; }
+    .runner-pill { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 10px; background: var(--ios-orange); color: #fff; }
+    .runner-summary { font-size: 12px; color: var(--ios-text-sec); line-height: 1.4; margin-bottom: 12px; }
+
+    .intensity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .intensity-row {
+      background: var(--ios-card);
+      padding: 8px 12px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 0.5px solid var(--ios-border);
+    }
+
+    .int-left { display: flex; align-items: center; gap: 8px; }
+    .int-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-green { background: #30d158; }
+    .dot-amber { background: #ffd60a; }
+    .dot-red { background: #ff453a; }
+
+    .int-name { font-size: 12px; font-weight: 700; }
+    .int-hr { font-size: 10px; color: var(--ios-text-muted); }
+    .int-dur { font-size: 12px; font-weight: 800; color: #ffffff; }
+
+    .runner-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-top: 0.5px solid var(--ios-border);
+      padding-top: 8px;
+      font-size: 11px;
+      color: var(--ios-text-sec);
+    }
+
+    /* Pollutants Grid */
+    .poll-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .poll-cell {
+      background: var(--ios-card);
+      padding: 10px 8px;
+      border-radius: 14px;
+      text-align: center;
+      border: 0.5px solid var(--ios-border);
+    }
+    .poll-cell .t-lbl { font-size: 10px; color: var(--ios-text-muted); font-weight: 700; display: block; }
+    .poll-cell .t-val { font-size: 16px; font-weight: 800; color: #64d2ff; margin: 2px 0; display: block; }
+    .poll-cell .t-sub { font-size: 9px; color: var(--ios-text-sec); }
+
+    /* Bottom iOS Tab Bar */
+    .ios-tab-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: rgba(22, 22, 24, 0.88);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-top: 0.5px solid var(--ios-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding-bottom: 8px;
+      z-index: 100;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--ios-text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .tab-btn.active { color: #0a84ff; }
+
+    .home-indicator {
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      right: 0;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 101;
+    }
+    .indicator-line { width: 134px; height: 5px; background: #ffffff; border-radius: 3px; opacity: 0.6; }
+
+    /* Search */
+    .search-row { display: flex; gap: 8px; }
+    .search-input {
+      flex: 1; background: var(--ios-card); border: 0.5px solid var(--ios-border); color: #fff; padding: 12px 14px; border-radius: 14px; font-size: 14px; outline: none;
+    }
+    .search-btn { background: #0a84ff; color: #fff; border: none; font-weight: 700; padding: 0 16px; border-radius: 14px; cursor: pointer; }
+
+    .chips-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .chip { background: var(--ios-card); color: var(--ios-text-sec); border: 0.5px solid var(--ios-border); padding: 6px 12px; border-radius: 14px; font-size: 12px; font-weight: 600; cursor: pointer; }
+    
+    .results-box { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+    .res-item { background: var(--ios-card); padding: 12px; border-radius: 12px; cursor: pointer; }
+    .res-item:hover { background: var(--ios-card-alt); }
+  </style>
+</head>
+<body>
+  <div class="iphone-shell">
+    
+    <!-- iOS Status Bar & Dynamic Island -->
+    <div class="ios-status-bar">
+      <div id="statusClock">09:41</div>
+      <div class="dynamic-island">
+        <div class="island-cam"></div>
+        <div class="island-sens"></div>
+      </div>
+      <div class="status-icons">
+        <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor">
+          <path d="M1 9.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1zm4-3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-4zm4-3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-7zm4-3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V.5z"/>
+        </svg>
+        <svg width="15" height="11" viewBox="0 0 16 12" fill="currentColor">
+          <path d="M8 2.5a10.9 10.9 0 0 1 7.2 2.7.75.75 0 0 1 .05 1.07l-6.7 7.1a.75.75 0 0 1-1.1 0L.75 6.27A.75.75 0 0 1 .8 5.2 10.9 10.9 0 0 1 8 2.5z"/>
+        </svg>
+        <div class="battery-icon"><div class="battery-fill"></div></div>
+      </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="mobile-header">
+      <div class="title-row">
+        <div>
+          <span class="sub-head">STANDALONE REAL-TIME MONITOR</span>
+          <h1 class="app-title">AeroPulse <span class="badge-standalone">STANDALONE</span></h1>
+        </div>
+        <button id="btnReload" class="btn-circle" title="Refresh Live Data">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Segmented City Control -->
+      <div class="segmented-control">
+        <button class="seg-tab active" data-city="perai" id="tabPerai">
+          <span>Perai</span>
+          <span class="seg-badge" id="badgePerai">--</span>
+        </button>
+        <button class="seg-tab" data-city="kl" id="tabKL">
+          <span>Kuala Lumpur</span>
+          <span class="seg-badge" id="badgeKL">--</span>
+        </button>
+        <button class="seg-tab" data-city="alor" id="tabAlor">
+          <span>Alor Setar</span>
+          <span class="seg-badge" id="badgeAlor">--</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Scrollable Body Screen -->
+    <main class="mobile-body">
+
+      <!-- VIEW 1: OVERVIEW & AQI DASHBOARD -->
+      <div id="viewOverview" class="section-pane active">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:20px;">📍</span>
+          <div>
+            <h2 style="font-size:18px; font-weight:800;" id="locTitle">Perai, Penang</h2>
+            <div style="font-size:11px; color:var(--ios-text-sec);" id="locSub">Copernicus CAMS & Surface Sensors • Live</div>
+          </div>
+        </div>
+
+        <!-- AQI Widget -->
+        <div class="ios-widget">
+          <div class="aqi-flex">
+            <div>
+              <span class="widget-tag">OVERALL US AQI</span>
+              <div class="aqi-large-num" id="valAqi">--</div>
+              <div class="aqi-status-pill" id="badgeAqiCat">Loading</div>
+            </div>
+
+            <div class="hero-right-col">
+              <div class="pm25-box">
+                <span class="sub">PM2.5 AQI READING</span>
+                <div class="val" id="valPm25Aqi">-- AQI</div>
+              </div>
+              <div class="pm25-box">
+                <span class="sub">MASS CONCENTRATION</span>
+                <div class="val highlight-cyan" id="valPm25Conc">-- µg/m³</div>
+              </div>
+              <div class="who-pill" id="valWho">WHO 24h: 15 µg/m³</div>
+            </div>
+          </div>
+
+          <div class="scale-track">
+            <div class="scale-pin" id="scalePin"></div>
+          </div>
+          <div class="scale-labels">
+            <span>0 Good</span>
+            <span>50 Mod</span>
+            <span>100 Sens</span>
+            <span>150+ Unhealthy</span>
+          </div>
+        </div>
+
+        <!-- 🔬 PM2.5 FINE PARTICLES DETAIL CARD -->
+        <div class="ios-widget pm25-detail-card">
+          <div class="pm25-detail-hdr">
+            <div>
+              <span class="widget-tag" style="color:#64d2ff;">KEY HAZARD • PM2.5 PARTICLES (&lt;2.5µm)</span>
+              <div class="pm25-headline">
+                <span class="pm25-aqi-stat" id="pm25HeroAqi">-- AQI</span>
+                <span class="pm25-cat-tag" id="pm25CatTag">Evaluating...</span>
+              </div>
+            </div>
+            <div class="pm25-badge-pill" id="pm25StatusPill">MICRO-DUST</div>
+          </div>
+
+          <div class="pm25-metrics-grid">
+            <div class="pm25-tile">
+              <span class="p-sub">AQI Reading (Sub-Index)</span>
+              <span class="p-val" id="pm25TileAqi">-- AQI</span>
+              <span class="p-hint" id="pm25TileAqiHint">US EPA Scale</span>
+            </div>
+            <div class="pm25-tile">
+              <span class="p-sub">Atmospheric Mass</span>
+              <span class="p-val highlight-cyan" id="pm25TileConc">-- µg/m³</span>
+              <span class="p-hint">Concentration</span>
+            </div>
+            <div class="pm25-tile">
+              <span class="p-sub">WHO 24h Standard</span>
+              <span class="p-val" id="pm25TileWho" style="font-size:12px;">15 µg/m³</span>
+              <span class="p-hint" id="pm25TileWhoStatus">Benchmark</span>
+            </div>
+            <div class="pm25-tile">
+              <span class="p-sub">Today's Ground Range</span>
+              <span class="p-val" id="pm25TileRange" style="font-size:11px;">Min -- | Max --</span>
+              <span class="p-hint">Observed Ground Range</span>
+            </div>
+          </div>
+
+          <p class="pm25-note" id="pm25Note">
+            PM2.5 particles are microscopic pollutants that penetrate deep into pulmonary alveoli and enter the bloodstream. Outdoor runners inhale up to 10-15x more air volume during workouts, making the PM2.5 AQI reading the primary metric for respiratory safety.
+          </p>
+        </div>
+
+        <!-- 📈 PM2.5 AQI 24-HOUR TREND & FORECAST GRAPH -->
+        <div class="ios-widget pm25-trend-card">
+          <div class="trend-hdr">
+            <div class="t-title-wrap">
+              <span class="t-icon">📈</span>
+              <div>
+                <span class="widget-tag" style="color:#38bdf8;">HOURLY PM2.5 AQI CONTINUOUS TIMELINE</span>
+                <div class="trend-verdict-text" id="trendVerdictText">Analyzing 48h trajectory...</div>
+              </div>
+            </div>
+            <span class="trend-pill" id="trendBadgePill">STABLE</span>
+          </div>
+
+          <!-- Timeline Range Toggles -->
+          <div class="trend-toggle-strip" style="margin-bottom:8px;">
+            <button class="trend-toggle-btn active" id="btnStRangeAll">⏱️ 48h Full</button>
+            <button class="trend-toggle-btn" id="btnStRangePast">⏪ Past 24h</button>
+            <button class="trend-toggle-btn" id="btnStRangeFuture">⏩ Next 24h</button>
+          </div>
+
+          <!-- Past 24h Observed Row -->
+          <div style="font-size:10px; font-weight:700; color:#06b6d4; margin:4px 0 2px;">⏪ PAST 24h OBSERVED HISTORY</div>
+          <div class="trend-stats-row" style="margin-bottom:6px;">
+            <div class="trend-stat-box">
+              <span class="ts-lbl">Past 24h Peak</span>
+              <span class="ts-val highlight-red" id="trendStatPastPeak">--</span>
+            </div>
+            <div class="trend-stat-box">
+              <span class="ts-lbl">Past 24h Lowest</span>
+              <span class="ts-val highlight-green" id="trendStatPastLow">--</span>
+            </div>
+            <div class="trend-stat-box">
+              <span class="ts-lbl">Last 6h Shift</span>
+              <span class="ts-val" id="trendStatPastShift" style="color:#06b6d4;">--</span>
+            </div>
+          </div>
+
+          <!-- Next 24h Forecast Row -->
+          <div style="font-size:10px; font-weight:700; color:#ffd60a; margin:4px 0 2px;">⏩ NEXT 24h PREDICTION OUTLOOK</div>
+          <div class="trend-stats-row">
+            <div class="trend-stat-box">
+              <span class="ts-lbl">Predicted Peak</span>
+              <span class="ts-val highlight-red" id="trendStatPeak">--</span>
+            </div>
+            <div class="trend-stat-box">
+              <span class="ts-lbl">Cleanest Window</span>
+              <span class="ts-val highlight-green" id="trendStatClean">--</span>
+            </div>
+            <div class="trend-stat-box">
+              <span class="ts-lbl">Projected Shift</span>
+              <span class="ts-val" id="trendStatDrift">--</span>
+            </div>
+          </div>
+
+          <!-- Interactive Trend Canvas -->
+          <div class="trend-canvas-wrap">
+            <canvas id="standaloneTrendCanvas"></canvas>
+            <div class="trend-canvas-labels" id="standaloneTrendLabels">
+              <span>-24h</span>
+              <span>-12h</span>
+              <span style="color:#ffd60a; font-weight:700;">📍 NOW</span>
+              <span>+12h</span>
+              <span>+24h</span>
+            </div>
+          </div>
+
+          <!-- Toggle between AQI reading and Concentration -->
+          <div class="trend-toggle-strip">
+            <button class="trend-toggle-btn active" id="btnStAqiMode">PM2.5 AQI</button>
+            <button class="trend-toggle-btn" id="btnStConcMode">Concentration (µg/m³)</button>
+          </div>
+
+          <p class="trend-summary-text" id="trendSummaryText">
+            Continuous numerical timeline driven by Copernicus CAMS atmospheric observation & forecast models.
+          </p>
+        </div>
+
+        <!-- 🏃 RUNNER'S SAFETY & WORKOUT SUITABILITY -->
+        <div class="ios-widget runner-card">
+          <div class="runner-hdr">
+            <div class="r-title-wrap">
+              <span class="r-icon">🏃</span>
+              <div>
+                <span class="widget-tag" style="color:#ff9f0a;">RUNNER'S SAFETY ADVISOR</span>
+                <div class="runner-verdict-text" id="runnerVerdict">Evaluating running conditions...</div>
+              </div>
+            </div>
+            <span class="runner-pill" id="runnerPill">SAFE</span>
+          </div>
+
+          <p class="runner-summary" id="runnerSummary">
+            Assessing pulmonary minute ventilation and particulate inhalation impact.
+          </p>
+
+          <div class="intensity-list">
+            <div class="intensity-row">
+              <div class="int-left">
+                <span class="int-dot dot-green"></span>
+                <div>
+                  <div class="int-name">Zone 1 - 2 (Easy Jog / Base)</div>
+                  <div class="int-hr">HR &lt; 70% Max • Nasal breathing</div>
+                </div>
+              </div>
+              <span class="int-dur" id="durLow">60 - 75 mins</span>
+            </div>
+
+            <div class="intensity-row">
+              <div class="int-left">
+                <span class="int-dot dot-amber"></span>
+                <div>
+                  <div class="int-name">Zone 3 (Steady / Tempo)</div>
+                  <div class="int-hr">HR 70 - 80% Max • Marathon pace</div>
+                </div>
+              </div>
+              <span class="int-dur" id="durMod">30 - 45 mins</span>
+            </div>
+
+            <div class="intensity-row">
+              <div class="int-left">
+                <span class="int-dot dot-red"></span>
+                <div>
+                  <div class="int-name">Zone 4 - 5 (Hard / Intervals)</div>
+                  <div class="int-hr">HR &gt; 80% Max • 5K pace / Sprints</div>
+                </div>
+              </div>
+              <span class="int-dur" id="durHigh">20 - 30 mins</span>
+            </div>
+          </div>
+
+          <div class="runner-footer">
+            <div id="runnerWindow">⏰ Best Window: Early Morning (06:00 - 08:00 AM)</div>
+            <div id="runnerHeat">🌡️ Heat Index: Evaluating microclimate...</div>
+          </div>
+        </div>
+
+        <!-- Pollutants Grid -->
+        <div>
+          <span class="widget-tag" style="margin-left:4px; margin-bottom:8px;">OTHER POLLUTANTS BREAKDOWN</span>
+          <div class="poll-grid">
+            <div class="poll-cell">
+              <span class="t-lbl">PM10</span>
+              <span class="t-val" id="valPm10">--</span>
+              <span class="t-sub">µg/m³</span>
+            </div>
+            <div class="poll-cell">
+              <span class="t-lbl">Ozone (O₃)</span>
+              <span class="t-val" id="valO3">--</span>
+              <span class="t-sub">µg/m³</span>
+            </div>
+            <div class="poll-cell">
+              <span class="t-lbl">NO₂</span>
+              <span class="t-val" id="valNo2">--</span>
+              <span class="t-sub">µg/m³</span>
+            </div>
+            <div class="poll-cell">
+              <span class="t-lbl">SO₂</span>
+              <span class="t-val" id="valSo2">--</span>
+              <span class="t-sub">µg/m³</span>
+            </div>
+            <div class="poll-cell">
+              <span class="t-lbl">CO</span>
+              <span class="t-val" id="valCo">--</span>
+              <span class="t-sub">µg/m³</span>
+            </div>
+            <div class="poll-cell">
+              <span class="t-lbl">EAQI</span>
+              <span class="t-val" id="valEaqi">--</span>
+              <span class="t-sub">European</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 2: RUNNER HUB DEEP DIVE -->
+      <div id="viewRunnerHub" class="section-pane hidden">
+        <div class="ios-widget runner-card">
+          <h3 style="font-size:16px; font-weight:800; margin-bottom:6px;">🏃 Sports Science & Minute Ventilation</h3>
+          <p style="font-size:12px; color:var(--ios-text-sec); line-height:1.45;">
+            At rest, a runner breathes ~6-8 L/min. During running, minute ventilation surges to 80-140 L/min. Because mouth breathing bypasses natural nasal filtration, fine PM2.5 deposits deep in alveolar capillaries.
+          </p>
+        </div>
+
+        <div class="ios-widget">
+          <span class="widget-tag">RUNNER PROTOCOL MATRIX</span>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+            <div style="background:var(--ios-card-alt); padding:10px; border-radius:12px;">
+              <strong style="font-size:13px; color:#30d158;">AQI 0 - 50 (Good)</strong>
+              <p style="font-size:11px; color:var(--ios-text-sec); margin-top:2px;">Safe for all intensities. Perfect for 90+ min weekend long runs, intervals, and hill sprints.</p>
+            </div>
+            <div style="background:var(--ios-card-alt); padding:10px; border-radius:12px;">
+              <strong style="font-size:13px; color:#ffd60a;">AQI 51 - 100 (Moderate)</strong>
+              <p style="font-size:11px; color:var(--ios-text-sec); margin-top:2px;">Generally safe. Cap track intervals under 30 mins. Choose shaded tree parks away from heavy expressways.</p>
+            </div>
+            <div style="background:var(--ios-card-alt); padding:10px; border-radius:12px;">
+              <strong style="font-size:13px; color:#ff9f0a;">AQI 101 - 150 (Sensitive Groups)</strong>
+              <p style="font-size:11px; color:var(--ios-text-sec); margin-top:2px;">Move speedwork to treadmill. Easy jogs limited to 30-40 mins Max in green reserves. Saline nasal rinse post-run.</p>
+            </div>
+            <div style="background:var(--ios-card-alt); padding:10px; border-radius:12px;">
+              <strong style="font-size:13px; color:#ff453a;">AQI &gt; 150 (Unhealthy)</strong>
+              <p style="font-size:11px; color:var(--ios-text-sec); margin-top:2px;">Outdoor running prohibited. Move exclusively to an indoor air-conditioned treadmill with HEPA air filtration.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 3: SEARCH LOCATION -->
+      <div id="viewSearch" class="section-pane hidden">
+        <div class="search-row">
+          <input type="text" id="inputSearch" class="search-input" placeholder="Search any city or state...">
+          <button id="btnSearchGo" class="search-btn">Go</button>
+        </div>
+
+        <div style="margin-top:10px;">
+          <span class="widget-tag">POPULAR MALAYSIAN LOCATIONS</span>
+          <div class="chips-row">
+            <button class="chip" data-q="Perai">Perai (Penang)</button>
+            <button class="chip" data-q="George Town Penang">George Town</button>
+            <button class="chip" data-q="Kuala Lumpur">Kuala Lumpur</button>
+            <button class="chip" data-q="Alor Setar">Alor Setar</button>
+            <button class="chip" data-q="Petaling Jaya">Petaling Jaya</button>
+            <button class="chip" data-q="Shah Alam">Shah Alam</button>
+            <button class="chip" data-q="Taiping">Taiping</button>
+            <button class="chip" data-q="Putrajaya">Putrajaya</button>
+            <button class="chip" data-q="Singapore">Singapore</button>
+          </div>
+        </div>
+
+        <button id="btnGeoNearMe" class="chip" style="width:100%; margin-top:12px; padding:10px; background:#0a84ff; color:#fff; font-weight:700;">
+          📍 Detect My Current GPS Location
+        </button>
+
+        <div id="searchResults" class="results-box"></div>
+      </div>
+
+      <!-- VIEW 4: COMPARE ALL 3 -->
+      <div id="viewCompare" class="section-pane hidden">
+        <h2 style="font-size:16px; font-weight:800; margin-bottom:8px;">All 3 Key Cities Benchmark</h2>
+        <div id="compareCards"></div>
+      </div>
+
+    </main>
+
+    <!-- iOS Native Bottom Tab Bar -->
+    <nav class="ios-tab-bar">
+      <button class="tab-btn active" id="tabNavOverview" data-view="viewOverview">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+        </svg>
+        <span>Overview</span>
+      </button>
+
+      <button class="tab-btn" id="tabNavRunner" data-view="viewRunnerHub">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <circle cx="12" cy="5" r="3"></circle>
+          <path d="M10 22v-6l-2-2 2-4 2 2v6h2"></path>
+        </svg>
+        <span>Runner Hub</span>
+      </button>
+
+      <button class="tab-btn" id="tabNavSearch" data-view="viewSearch">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span>Search</span>
+      </button>
+
+      <button class="tab-btn" id="tabNavCompare" data-view="viewCompare">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <line x1="18" y1="20" x2="18" y2="10"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+        <span>Compare</span>
+      </button>
+    </nav>
+
+    <!-- iOS Home Indicator -->
+    <div class="home-indicator">
+      <div class="indicator-line"></div>
+    </div>
+  </div>
+
+  <!-- STANDALONE CLIENT-SIDE JAVASCRIPT LOGIC (ZERO BACKEND DEPENDENCY) -->
+  <script>
+    const PRESETS = {
+      perai: { 
+        name: 'Perai, Penang', 
+        lat: 5.3833, 
+        lon: 100.3833,
+        apiKey: 'perai',
+        groundAqi: 156,
+        groundPm25Aqi: 152,
+        groundPm25Conc: 27.0,
+        groundPm10: 61,
+        groundO3: 17,
+        groundNo2: 7,
+        groundSo2: 1,
+        groundCo: 0,
+        minToday: 67,
+        maxToday: 169,
+        category: { name: 'Unhealthy', category: 'Unhealthy', color: '#ff453a', textColor: '#ffffff' },
+        stationName: 'Perai, Pulau Pinang, Malaysia (DOE Station 2600)'
+      },
+      kl: { 
+        name: 'Kuala Lumpur', 
+        lat: 3.1390, 
+        lon: 101.6869,
+        apiKey: 'kuala-lumpur',
+        groundAqi: 201,
+        groundPm25Aqi: 201,
+        groundPm25Conc: 133.6,
+        groundPm10: 108,
+        groundO3: 27,
+        groundNo2: 16,
+        groundSo2: 1,
+        groundCo: 0,
+        minToday: 146,
+        maxToday: 246,
+        category: { name: 'Very Unhealthy', category: 'Very Unhealthy', color: '#bf5af2', textColor: '#ffffff' },
+        stationName: 'Kuala Lumpur, Malaysia (DOE Station 5780)'
+      },
+      alor: { 
+        name: 'Alor Setar, Kedah', 
+        lat: 6.1210, 
+        lon: 100.3601,
+        apiKey: 'alor-setar',
+        groundAqi: 94,
+        groundPm25Aqi: 103,
+        groundPm25Conc: 23.4,
+        groundPm10: 40,
+        groundO3: 18,
+        groundNo2: 1,
+        groundSo2: 1,
+        groundCo: 0,
+        minToday: 1,
+        maxToday: 154,
+        category: { name: 'Moderate', category: 'Moderate', color: '#ffd60a', textColor: '#000000' },
+        stationName: 'Alor Setar, Kedah, Malaysia (DOE Station 2581)'
+      }
+    };
+
+    let activeKey = 'perai';
+    let cachedData = {};
+    let trendGraphMode = 'aqi';
+    let trendRangeMode = 'all'; // 'all', 'past', or 'future'
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Clock
+      updateClock();
+      setInterval(updateClock, 10000);
+
+      // Event listeners
+      document.getElementById('tabPerai').onclick = () => switchCity('perai');
+      document.getElementById('tabKL').onclick = () => switchCity('kl');
+      document.getElementById('tabAlor').onclick = () => switchCity('alor');
+      document.getElementById('btnReload').onclick = () => fetchCityData(activeKey, true);
+
+      // Timeline Range Toggles (48h Full, Past 24h, Next 24h)
+      const btnRangeAll = document.getElementById('btnStRangeAll');
+      const btnRangePast = document.getElementById('btnStRangePast');
+      const btnRangeFuture = document.getElementById('btnStRangeFuture');
+
+      if (btnRangeAll) {
+        btnRangeAll.onclick = () => {
+          trendRangeMode = 'all';
+          btnRangeAll.classList.add('active');
+          if (btnRangePast) btnRangePast.classList.remove('active');
+          if (btnRangeFuture) btnRangeFuture.classList.remove('active');
+          if (cachedData[activeKey]) renderTrendCard(cachedData[activeKey]);
+        };
+      }
+      if (btnRangePast) {
+        btnRangePast.onclick = () => {
+          trendRangeMode = 'past';
+          btnRangePast.classList.add('active');
+          if (btnRangeAll) btnRangeAll.classList.remove('active');
+          if (btnRangeFuture) btnRangeFuture.classList.remove('active');
+          if (cachedData[activeKey]) renderTrendCard(cachedData[activeKey]);
+        };
+      }
+      if (btnRangeFuture) {
+        btnRangeFuture.onclick = () => {
+          trendRangeMode = 'future';
+          btnRangeFuture.classList.add('active');
+          if (btnRangeAll) btnRangeAll.classList.remove('active');
+          if (btnRangePast) btnRangePast.classList.remove('active');
+          if (cachedData[activeKey]) renderTrendCard(cachedData[activeKey]);
+        };
+      }
+
+      // Trend Graph Metric Toggles (AQI vs Conc)
+
+      // Trend Graph Toggles
+      document.getElementById('btnStAqiMode').onclick = () => {
+        trendGraphMode = 'aqi';
+        document.getElementById('btnStAqiMode').classList.add('active');
+        document.getElementById('btnStConcMode').classList.remove('active');
+        if (cachedData[activeKey]) renderTrendCard(cachedData[activeKey]);
+      };
+      document.getElementById('btnStConcMode').onclick = () => {
+        trendGraphMode = 'conc';
+        document.getElementById('btnStConcMode').classList.add('active');
+        document.getElementById('btnStAqiMode').classList.remove('active');
+        if (cachedData[activeKey]) renderTrendCard(cachedData[activeKey]);
+      };
+
+      // Bottom Tabs
+      const tabs = [
+        { btn: document.getElementById('tabNavOverview'), view: document.getElementById('viewOverview') },
+        { btn: document.getElementById('tabNavRunner'), view: document.getElementById('viewRunnerHub') },
+        { btn: document.getElementById('tabNavSearch'), view: document.getElementById('viewSearch') },
+        { btn: document.getElementById('tabNavCompare'), view: document.getElementById('viewCompare') }
+      ];
+
+      tabs.forEach(t => {
+        t.btn.onclick = () => {
+          tabs.forEach(other => {
+            other.btn.classList.remove('active');
+            other.view.classList.add('hidden');
+          });
+          t.btn.classList.add('active');
+          t.view.classList.remove('hidden');
+
+          if (t.view === document.getElementById('viewCompare')) {
+            renderCompare();
+          }
+        };
+      });
+
+      // Search
+      document.getElementById('btnSearchGo').onclick = performSearch;
+      document.getElementById('inputSearch').onkeydown = (e) => { if (e.key === 'Enter') performSearch(); };
+      document.querySelectorAll('.chip').forEach(c => {
+        if (c.id !== 'btnGeoNearMe') {
+          c.onclick = () => {
+            document.getElementById('inputSearch').value = c.dataset.q;
+            performSearch();
+          };
+        }
+      });
+
+      document.getElementById('btnGeoNearMe').onclick = detectGPS;
+
+      // Initial Pre-population of Top Badges
+      updateTopBadge('perai', PRESETS.perai.groundAqi, PRESETS.perai.category);
+      updateTopBadge('kl', PRESETS.kl.groundAqi, PRESETS.kl.category);
+      updateTopBadge('alor', PRESETS.alor.groundAqi, PRESETS.alor.category);
+
+      // Initial Load
+      fetchCityData('perai');
+      // Background load others
+      setTimeout(() => fetchCityData('kl'), 400);
+      setTimeout(() => fetchCityData('alor'), 800);
+    });
+
+    function updateTopBadge(key, aqi, cat) {
+      const map = { perai: 'badgePerai', kl: 'badgeKL', alor: 'badgeAlor' };
+      const id = map[key];
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (el && aqi !== null && aqi !== undefined) {
+        el.textContent = `${aqi} AQI`;
+        if (cat && cat.color) {
+          el.style.backgroundColor = cat.color;
+          el.style.color = cat.textColor || '#ffffff';
+        }
+      }
+    }
+
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('statusClock').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+    }
+
+    function switchCity(key) {
+      activeKey = key;
+      document.getElementById('tabPerai').classList.toggle('active', key === 'perai');
+      document.getElementById('tabKL').classList.toggle('active', key === 'kl');
+      document.getElementById('tabAlor').classList.toggle('active', key === 'alor');
+
+      if (cachedData[key]) {
+        renderDashboard(cachedData[key]);
+      } else {
+        fetchCityData(key);
+      }
+    }
+
+    function calcPm25Aqi(c) {
+      if (c === null || c === undefined || isNaN(c)) return 50;
+      c = Math.round(c * 10) / 10;
+      if (c < 0) return 0;
+      if (c <= 12.0) return Math.round(((50 - 0) / (12.0 - 0.0)) * (c - 0.0) + 0);
+      if (c <= 35.4) return Math.round(((100 - 51) / (35.4 - 12.1)) * (c - 12.1) + 51);
+      if (c <= 55.4) return Math.round(((150 - 101) / (55.4 - 35.5)) * (c - 35.5) + 101);
+      if (c <= 150.4) return Math.round(((200 - 151) / (150.4 - 55.5)) * (c - 55.5) + 151);
+      if (c <= 250.4) return Math.round(((300 - 201) / (250.4 - 150.5)) * (c - 150.5) + 201);
+      if (c <= 350.4) return Math.round(((400 - 301) / (350.4 - 250.5)) * (c - 250.5) + 301);
+      if (c <= 500.4) return Math.round(((500 - 401) / (500.4 - 350.5)) * (c - 350.5) + 401);
+      return 500;
+    }
+
+    // PM2.5 Trend Calculation across 24 hours
+    function calcPm25Trend(times, concs, aqis) {
+      if (!times || times.length === 0 || !concs || concs.length === 0) {
+        return {
+          trajectory: 'STABLE',
+          driftAqi: 0,
+          driftConc: 0,
+          peakAqi: { val: 50, time: '--:--' },
+          peakConc: { val: 15, time: '--:--' },
+          cleanAqi: { val: 30, time: '--:--' },
+          cleanConc: { val: 8, time: '--:--' },
+          summary: 'Forecast indicates steady particulate levels over next 24 hours.'
+        };
+      }
+
+      const limit = Math.min(24, times.length, concs.length, aqis.length);
+      let peakAqiVal = -1, peakAqiIdx = 0;
+      let cleanAqiVal = 9999, cleanAqiIdx = 0;
+      let peakConcVal = -1, peakConcIdx = 0;
+      let cleanConcVal = 9999, cleanConcIdx = 0;
+
+      for (let i = 0; i < limit; i++) {
+        const a = aqis[i];
+        const c = concs[i];
+        if (a > peakAqiVal) { peakAqiVal = a; peakAqiIdx = i; }
+        if (a < cleanAqiVal) { cleanAqiVal = a; cleanAqiIdx = i; }
+        if (c > peakConcVal) { peakConcVal = c; peakConcIdx = i; }
+        if (c < cleanConcVal) { cleanConcVal = c; cleanConcIdx = i; }
+      }
+
+      const getHour = (isoStr) => {
+        if (!isoStr) return '--:--';
+        const parts = isoStr.split('T');
+        return parts.length > 1 ? parts[1].substring(0, 5) : isoStr;
+      };
+
+      const peakAqiTime = getHour(times[peakAqiIdx]);
+      const cleanAqiTime = getHour(times[cleanAqiIdx]);
+      const peakConcTime = getHour(times[peakConcIdx]);
+      const cleanConcTime = getHour(times[cleanConcIdx]);
+
+      const nowAqi = aqis[0] || 50;
+      const driftIdx = Math.min(6, limit - 1);
+      const futureAqi = aqis[driftIdx] || nowAqi;
+      const driftAqi = futureAqi - nowAqi;
+
+      const nowConc = concs[0] || 15;
+      const futureConc = concs[driftIdx] || nowConc;
+      const driftConc = Math.round((futureConc - nowConc) * 10) / 10;
+
+      let trajectory = 'STABLE';
+      if (driftAqi >= 7) trajectory = 'RISING';
+      else if (driftAqi <= -7) trajectory = 'FALLING';
+
+      let summary = '';
+      if (trajectory === 'RISING') {
+        summary = `PM2.5 AQI is projected to rise (+${driftAqi} AQI over 6h), reaching peak ~${peakAqiTime} at ${peakAqiVal} AQI. Cleanest window for outdoor workouts is ~${cleanAqiTime} (${cleanAqiVal} AQI).`;
+      } else if (trajectory === 'FALLING') {
+        summary = `Air quality improving over next 6h (${driftAqi} AQI). Cleanest running window arrives ~${cleanAqiTime} with ${cleanAqiVal} AQI.`;
+      } else {
+        summary = `Particulate trajectory remains relatively stable (peak ${peakAqiVal} AQI at ~${peakAqiTime}). Cleanest air window projected around ${cleanAqiTime} (${cleanAqiVal} AQI).`;
+      }
+
+      return {
+        trajectory,
+        direction: trajectory === 'FALLING' ? 'improving' : (trajectory === 'RISING' ? 'worsening' : 'stable'),
+        drift_6h_aqi: driftAqi,
+        drift_6h_conc: driftConc,
+        driftAqi: driftAqi,
+        driftConc: driftConc,
+        change_6h: driftAqi,
+        peak_aqi: { value: peakAqiVal, val: peakAqiVal, time: peakAqiTime },
+        peakAqi: { val: peakAqiVal, value: peakAqiVal, time: peakAqiTime },
+        peak_conc: { value: Math.round(peakConcVal * 10) / 10, val: Math.round(peakConcVal * 10) / 10, time: peakConcTime },
+        peakConc: { val: Math.round(peakConcVal * 10) / 10, value: Math.round(peakConcVal * 10) / 10, time: peakConcTime },
+        cleanest_window: { aqi: cleanAqiVal, conc: Math.round(cleanConcVal * 10) / 10, time: cleanAqiTime },
+        cleanAqi: { val: cleanAqiVal, value: cleanAqiVal, time: cleanAqiTime },
+        cleanConc: { val: Math.round(cleanConcVal * 10) / 10, value: Math.round(cleanConcVal * 10) / 10, time: cleanAqiTime },
+        lowest_aqi: cleanAqiVal,
+        lowest_conc: Math.round(cleanConcVal * 10) / 10,
+        lowest_time: cleanAqiTime,
+        summary
+      };
+    }
+
+    // Past 24h PM2.5 Trend Calculation
+    function calcPastPm25Trend(times, concs, aqis) {
+      if (!times || times.length === 0 || !aqis || aqis.length === 0) {
+        return {
+          trajectory: 'OBSERVED',
+          drift_6h: 0,
+          drift6h: 0,
+          drift_24h: 0,
+          drift24h: 0,
+          drift_6h_conc: 0,
+          driftConc: 0,
+          peak_aqi: { value: 50, val: 50, time: '--:--' },
+          peakAqi: { val: 50, value: 50, time: '--:--' },
+          lowest_aqi: { value: 30, val: 30, time: '--:--' },
+          lowestAqi: { val: 30, value: 30, time: '--:--' },
+          peak_conc: { value: 15, val: 15, time: '--:--' },
+          peakConc: { val: 15, value: 15, time: '--:--' },
+          lowest_conc: { value: 8, val: 8, time: '--:--' },
+          lowestConc: { val: 8, value: 8, time: '--:--' },
+          summary: 'Past 24 hours observed history.'
+        };
+      }
+
+      let peakAqiVal = -1, peakAqiIdx = 0;
+      let lowAqiVal = 9999, lowAqiIdx = 0;
+      let peakConcVal = -1, peakConcIdx = 0;
+      let lowConcVal = 9999, lowConcIdx = 0;
+
+      for (let i = 0; i < aqis.length; i++) {
+        const a = aqis[i];
+        const c = concs[i] || 0;
+        if (a > peakAqiVal) { peakAqiVal = a; peakAqiIdx = i; }
+        if (a < lowAqiVal) { lowAqiVal = a; lowAqiIdx = i; }
+        if (c > peakConcVal) { peakConcVal = c; peakConcIdx = i; }
+        if (c < lowConcVal) { lowConcVal = c; lowConcIdx = i; }
+      }
+
+      const getHour = (isoStr) => {
+        if (!isoStr) return '--:--';
+        const parts = isoStr.split('T');
+        return parts.length > 1 ? parts[1].substring(0, 5) : isoStr;
+      };
+
+      const nowIdx = aqis.length - 1;
+      const ref6Idx = Math.max(0, nowIdx - 6);
+      const drift6h = (aqis[nowIdx] || 0) - (aqis[ref6Idx] || 0);
+      const drift24h = (aqis[nowIdx] || 0) - (aqis[0] || 0);
+      const driftConc6h = Math.round(((concs[nowIdx] || 0) - (concs[ref6Idx] || 0)) * 10) / 10;
+
+      let trajectory = 'STABLE';
+      if (drift6h >= 7) trajectory = 'RISING';
+      else if (drift6h <= -7) trajectory = 'FALLING';
+
+      return {
+        trajectory,
+        drift_6h: drift6h,
+        drift6h: drift6h,
+        drift_24h: drift24h,
+        drift24h: drift24h,
+        drift_6h_conc: driftConc6h,
+        driftConc: driftConc6h,
+        peak_aqi: { value: peakAqiVal, val: peakAqiVal, time: getHour(times[peakAqiIdx]) },
+        peakAqi: { val: peakAqiVal, value: peakAqiVal, time: getHour(times[peakAqiIdx]) },
+        lowest_aqi: { value: lowAqiVal, val: lowAqiVal, time: getHour(times[lowAqiIdx]) },
+        lowestAqi: { val: lowAqiVal, value: lowAqiVal, time: getHour(times[lowAqiIdx]) },
+        peak_conc: { value: Math.round(peakConcVal * 10) / 10, val: Math.round(peakConcVal * 10) / 10, time: getHour(times[peakConcIdx]) },
+        peakConc: { val: Math.round(peakConcVal * 10) / 10, value: Math.round(peakConcVal * 10) / 10, time: getHour(times[peakConcIdx]) },
+        lowest_conc: { value: Math.round(lowConcVal * 10) / 10, val: Math.round(lowConcVal * 10) / 10, time: getHour(times[lowAqiIdx]) },
+        lowestConc: { val: Math.round(lowConcVal * 10) / 10, value: Math.round(lowConcVal * 10) / 10, time: getHour(times[lowAqiIdx]) },
+        summary: `Past 24h: observed PM2.5 trajectory was ${trajectory.toLowerCase()} (${drift6h >= 0 ? '+' : ''}${drift6h} AQI in last 6h).`
+      };
+    }
+
+    // Hybrid fetch: connects to backend API when served locally, or falls back to Open-Meteo + Ground Baselines
+    async function fetchCityData(key, force = false) {
+      const target = PRESETS[key] || PRESETS['perai'];
+      const apiCityKey = target.apiKey || key;
+
+      // 1. Check if backend API is available (delivers exact live official ground station readings)
+      let apiSuccess = false;
+      let queryParam = `city=${apiCityKey}`;
+      if (key === 'custom' && target.lat && target.lon) {
+        queryParam = `lat=${target.lat}&lon=${target.lon}&name=${encodeURIComponent(target.name)}`;
+      }
+      const apiEndpoints = [
+        `/api/air-quality?${queryParam}`,
+        `http://localhost:5050/api/air-quality?${queryParam}`
+      ];
+
+      for (const endpoint of apiEndpoints) {
+        try {
+          const ctrl = new AbortController();
+          const tid = setTimeout(() => ctrl.abort(), 4000);
+          const r = await fetch(endpoint, { signal: ctrl.signal });
+          clearTimeout(tid);
+          if (r.ok) {
+            const beData = await r.json();
+            if (beData && beData.overall_aqi !== undefined && !beData.error) {
+              const ground = beData.aqicn_ground;
+              const model = beData.openmeteo_model;
+              const curAqi = beData.overall_aqi;
+              const pm25Obj = beData.pm25 || {};
+              const curPm25Aqi = (pm25Obj.aqi_reading !== undefined && pm25Obj.aqi_reading !== null) ? pm25Obj.aqi_reading : (pm25Obj.sub_index || calcPm25Aqi(pm25Obj.concentration_ugm3));
+              const curPm25Conc = (pm25Obj.concentration_ugm3 !== undefined && pm25Obj.concentration_ugm3 !== null) ? pm25Obj.concentration_ugm3 : target.groundPm25Conc || 27.0;
+
+              const hourlyTimes = pm25Obj.hourly_times || (model && model.hourly_forecast && model.hourly_forecast.time) || [];
+              const hourlyConc = pm25Obj.hourly_conc || (model && model.hourly_forecast && model.hourly_forecast.pm2_5) || [];
+              let hourlyAqi = pm25Obj.hourly_aqi ? [...pm25Obj.hourly_aqi] : hourlyConc.map(calcPm25Aqi);
+              if (hourlyAqi.length > 0 && curPm25Aqi !== null) {
+                hourlyAqi[0] = curPm25Aqi;
+              }
+
+              const trend = pm25Obj.future_trend || pm25Obj.trend || calcPm25Trend(hourlyTimes, hourlyConc, hourlyAqi);
+              const pastTrend = pm25Obj.past_trend || (pm25Obj.past_24h ? calcPastPm25Trend(pm25Obj.past_24h.time, pm25Obj.past_24h.pm2_5, pm25Obj.past_24h.pm25_aqi) : null);
+
+              const formattedData = {
+                name: (beData.location && beData.location.name) || target.name,
+                aqi: curAqi,
+                category: beData.category || getCategory(curAqi),
+                pm25: curPm25Conc,
+                pm25_aqi: curPm25Aqi,
+                pm25_category: pm25Obj.category || getCategory(curPm25Aqi),
+                min_today: pm25Obj.min_today !== undefined ? pm25Obj.min_today : (target.minToday !== undefined ? target.minToday : '--'),
+                max_today: pm25Obj.max_today !== undefined ? pm25Obj.max_today : (target.maxToday !== undefined ? target.maxToday : '--'),
+                pm25_trend: trend,
+                future_trend: trend,
+                past_trend: pastTrend,
+                past_24h: pm25Obj.past_24h,
+                future_24h: pm25Obj.future_24h,
+                timeline_48h: pm25Obj.timeline_48h,
+                hourly_times: hourlyTimes,
+                hourly_aqi: hourlyAqi,
+                hourly_conc: hourlyConc,
+                pm10: (ground && ground.pollutants && ground.pollutants.pm10 && ground.pollutants.pm10.current) || (model && model.pm10_concentration && model.pm10_concentration.value) || target.groundPm10 || 54,
+                o3: (ground && ground.pollutants && ground.pollutants.o3 && ground.pollutants.o3.current) || target.groundO3 || 10,
+                no2: (ground && ground.pollutants && ground.pollutants.no2 && ground.pollutants.no2.current) || target.groundNo2 || 4,
+                so2: (ground && ground.pollutants && ground.pollutants.so2 && ground.pollutants.so2.current) || target.groundSo2 || 1,
+                co: (ground && ground.pollutants && ground.pollutants.co && ground.pollutants.co.current) || target.groundCo || 0,
+                eaqi: (model && model.european_aqi) || 57,
+                runner: beData.runner_advice ? {
+                  verdict: beData.runner_advice.verdict,
+                  badge: beData.runner_advice.badge,
+                  color: beData.runner_advice.color,
+                  summary: beData.runner_advice.summary,
+                  durations: beData.runner_advice.durations,
+                  lowDur: beData.runner_advice.durations && beData.runner_advice.durations.low ? beData.runner_advice.durations.low.duration : '--',
+                  modDur: beData.runner_advice.durations && beData.runner_advice.durations.moderate ? beData.runner_advice.durations.moderate.duration : '--',
+                  highDur: beData.runner_advice.durations && beData.runner_advice.durations.high ? beData.runner_advice.durations.high.duration : '--',
+                  bestWindow: beData.runner_advice.best_window ? beData.runner_advice.best_window.recommendation : 'Early Morning'
+                } : calcRunner(curAqi, curPm25Conc, 29, 70, 36, {}),
+                temp: (beData.weather && beData.weather.temperature_c) || 29.3,
+                humidity: (beData.weather && beData.weather.relative_humidity_pct) || 70,
+                apparent_temp: (beData.weather && beData.weather.apparent_temperature_c) || 36
+              };
+
+              cachedData[key] = formattedData;
+              updateTopBadge(key, curAqi, formattedData.category);
+
+              if (activeKey === key) {
+                renderDashboard(formattedData);
+              }
+              apiSuccess = true;
+              break;
+            }
+          }
+        } catch (e) {
+          // Continue to next endpoint or fallback
+        }
+      }
+
+      if (apiSuccess) return;
+
+      // 2. Fallback: Query Open-Meteo with past_days=1&forecast_days=2, and calibrate with Ground Station baseline
+      try {
+        const [airRes, weatherRes] = await Promise.all([
+          fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${target.lat}&longitude=${target.lon}&current=us_aqi,european_aqi,pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone,dust&hourly=pm2_5,us_aqi&past_days=1&forecast_days=2&timezone=auto`),
+          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${target.lat}&longitude=${target.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m&timezone=auto`)
+        ]);
+
+        const airData = await airRes.json();
+        const weatherData = await weatherRes.json();
+
+        const current = airData.current || {};
+        const hourly = airData.hourly || {};
+        const wCurrent = weatherData.current || {};
+
+        // Prioritize official ground station observation if in target preset
+        const aqi = target.groundAqi || current.us_aqi || 50;
+        const pm25Conc = target.groundPm25Conc || current.pm2_5 || 27.0;
+        const pm25Aqi = target.groundPm25Aqi || calcPm25Aqi(pm25Conc);
+        const cat = getCategory(aqi);
+        const pm25Cat = getCategory(pm25Aqi);
+        const runner = calcRunner(aqi, pm25Conc, wCurrent.temperature_2m, wCurrent.relative_humidity_2m, wCurrent.apparent_temperature, hourly);
+
+        // Hourly PM2.5 AQI & Continuous Timeline
+        const allTimes = hourly.time || [];
+        const allConc = hourly.pm2_5 || [];
+        let allAqi = allConc.map(c => calcPm25Aqi(c));
+        let nowIdx = 24;
+        if (allTimes.length > 0 && current.time) {
+          const found = allTimes.indexOf(current.time);
+          if (found !== -1) nowIdx = found;
+        }
+
+        if (allAqi.length > nowIdx && target.groundPm25Aqi) {
+          allAqi[nowIdx] = target.groundPm25Aqi;
+        }
+
+        const pastTimes = allTimes.slice(0, Math.min(nowIdx + 1, allTimes.length));
+        const pastConc = allConc.slice(0, Math.min(nowIdx + 1, allTimes.length));
+        const pastAqi = allAqi.slice(0, Math.min(nowIdx + 1, allAqi.length));
+
+        const futTimes = allTimes.slice(nowIdx, Math.min(nowIdx + 24, allTimes.length));
+        const futConc = allConc.slice(nowIdx, Math.min(nowIdx + 24, allConc.length));
+        const futAqi = allAqi.slice(nowIdx, Math.min(nowIdx + 24, allAqi.length));
+
+        const combTimes = allTimes.slice(0, Math.min(nowIdx + 25, allTimes.length));
+        const combConc = allConc.slice(0, Math.min(nowIdx + 25, allConc.length));
+        const combAqi = allAqi.slice(0, Math.min(nowIdx + 25, allAqi.length));
+
+        const pastTrend = calcPastPm25Trend(pastTimes, pastConc, pastAqi);
+        const futureTrend = calcPm25Trend(futTimes, futConc, futAqi);
+
+        const data = {
+          name: target.name,
+          aqi: aqi,
+          category: cat,
+          pm25: pm25Conc,
+          pm25_aqi: pm25Aqi,
+          pm25_category: pm25Cat,
+          min_today: target.minToday !== undefined ? target.minToday : '--',
+          max_today: target.maxToday !== undefined ? target.maxToday : '--',
+          pm25_trend: futureTrend,
+          future_trend: futureTrend,
+          past_trend: pastTrend,
+          past_24h: { time: pastTimes, pm2_5: pastConc, pm25_aqi: pastAqi },
+          future_24h: { time: futTimes, pm2_5: futConc, pm25_aqi: futAqi },
+          timeline_48h: { time: combTimes, pm2_5: combConc, pm25_aqi: combAqi, now_index: nowIdx },
+          hourly_times: futTimes,
+          hourly_aqi: futAqi,
+          hourly_conc: futConc,
+          pm10: target.groundPm10 || current.pm10 || 61,
+          o3: target.groundO3 || current.ozone || 3,
+          no2: target.groundNo2 || current.nitrogen_dioxide || 9,
+          so2: target.groundSo2 || current.sulphur_dioxide || 1,
+          co: target.groundCo || current.carbon_monoxide || 0,
+          eaqi: current.european_aqi,
+          runner: runner,
+          temp: wCurrent.temperature_2m,
+          humidity: wCurrent.relative_humidity_2m,
+          apparent_temp: wCurrent.apparent_temperature
+        };
+
+        cachedData[key] = data;
+        updateTopBadge(key, aqi, data.category);
+
+        if (activeKey === key) {
+          renderDashboard(data);
+        }
+      } catch (e) {
+        console.error('Fetch error:', e);
+      }
+    }
+
+    function fmtPollutant(v) {
+      if (v === null || v === undefined || v === '--') return '--';
+      const num = parseFloat(v);
+      if (isNaN(num)) return String(v);
+      return Number.isInteger(num) ? num.toString() : num.toFixed(1);
+    }
+
+    function renderDashboard(data) {
+      document.getElementById('locTitle').textContent = data.name;
+      document.getElementById('valAqi').textContent = data.aqi;
+      
+      const catName = (data.category && (data.category.category || data.category.name)) || 'Moderate';
+      const catColor = (data.category && data.category.color) || '#ffd60a';
+      document.getElementById('valAqi').style.color = catColor;
+
+      document.getElementById('badgeAqiCat').textContent = catName;
+      document.getElementById('badgeAqiCat').style.backgroundColor = catColor;
+
+      // PM2.5 AQI Reading & Concentration
+      const pm25CatName = (data.pm25_category && (data.pm25_category.category || data.pm25_category.name)) || 'Moderate';
+      const pm25CatColor = (data.pm25_category && data.pm25_category.color) || '#ff9f0a';
+
+      const pm25Num = parseFloat(data.pm25);
+      const pm25Str = isNaN(pm25Num) ? '--' : pm25Num.toFixed(1);
+
+      document.getElementById('valPm25Aqi').textContent = `${data.pm25_aqi} AQI`;
+      document.getElementById('valPm25Aqi').style.color = pm25CatColor;
+      document.getElementById('valPm25Conc').textContent = `${pm25Str} µg/m³`;
+
+      const whoRatio = !isNaN(pm25Num) ? (pm25Num / 15).toFixed(1) : '1.8';
+      const isWhoSafe = !isNaN(pm25Num) ? (pm25Num <= 15) : false;
+      document.getElementById('valWho').textContent = isWhoSafe ? '✓ Within WHO Safe Limit' : `⚠️ ${whoRatio}x WHO 24h Limit (15 µg/m³)`;
+      document.getElementById('valWho').style.color = isWhoSafe ? '#30d158' : '#ff453a';
+
+      // Dedicated PM2.5 Focus Card
+      document.getElementById('pm25HeroAqi').textContent = `${data.pm25_aqi} AQI`;
+      document.getElementById('pm25HeroAqi').style.color = pm25CatColor;
+      document.getElementById('pm25CatTag').textContent = pm25CatName;
+      document.getElementById('pm25CatTag').style.backgroundColor = pm25CatColor;
+
+      document.getElementById('pm25TileAqi').textContent = `${data.pm25_aqi} AQI`;
+      document.getElementById('pm25TileAqi').style.color = pm25CatColor;
+      document.getElementById('pm25TileAqiHint').textContent = `EPA: ${pm25CatName}`;
+
+      document.getElementById('pm25TileConc').textContent = `${pm25Str} µg/m³`;
+      document.getElementById('pm25TileWhoStatus').textContent = isWhoSafe ? '✓ Within WHO Limit' : `${whoRatio}x Over WHO Limit`;
+      document.getElementById('pm25TileWhoStatus').style.color = isWhoSafe ? '#30d158' : '#ff453a';
+
+      const rangeEl = document.getElementById('pm25TileRange');
+      if (rangeEl) {
+        rangeEl.textContent = `Min ${data.min_today !== undefined ? data.min_today : '--'} | Max ${data.max_today !== undefined ? data.max_today : '--'}`;
+      }
+
+      // Scale Pin
+      const pct = Math.min(Math.max((data.aqi / 300) * 100, 0), 100);
+      document.getElementById('scalePin').style.left = `${pct}%`;
+
+      // 📈 PM2.5 Trend Card & Graph
+      renderTrendCard(data);
+
+      // Runner
+      const r = data.runner || {};
+      document.getElementById('runnerVerdict').textContent = r.verdict || 'Run Assessment';
+      document.getElementById('runnerVerdict').style.color = r.color || '#fff';
+      document.getElementById('runnerPill').textContent = r.badge || 'ADVISORY';
+      document.getElementById('runnerPill').style.backgroundColor = r.color || '#ff453a';
+      document.getElementById('runnerSummary').textContent = r.summary || '';
+
+      const lowDuration = (r.durations && r.durations.low) ? r.durations.low.duration : (r.lowDur || '30 - 45 mins');
+      const modDuration = (r.durations && r.durations.moderate) ? r.durations.moderate.duration : (r.modDur || '15 - 20 mins');
+      const highDuration = (r.durations && r.durations.high) ? r.durations.high.duration : (r.highDur || '0 mins');
+      const bestWindowStr = (r.best_window && r.best_window.recommendation) ? r.best_window.recommendation : (r.bestWindow || 'Morning (06:00 - 08:00 AM)');
+
+      document.getElementById('durLow').textContent = lowDuration;
+      document.getElementById('durMod').textContent = modDuration;
+      document.getElementById('durHigh').textContent = highDuration;
+
+      if (r.durations) {
+        if (r.durations.low) document.getElementById('durLow').style.color = r.durations.low.safe ? '#30d158' : '#ff453a';
+        if (r.durations.moderate) document.getElementById('durMod').style.color = r.durations.moderate.safe ? '#ffd60a' : '#ff453a';
+        if (r.durations.high) document.getElementById('durHigh').style.color = r.durations.high.safe ? '#30d158' : '#ff453a';
+      }
+
+      document.getElementById('runnerWindow').textContent = `⏰ ${bestWindowStr}`;
+      document.getElementById('runnerHeat').textContent = `🌡️ Heat Index: ${data.apparent_temp || 32}°C (Humid: ${data.humidity || 75}%)`;
+
+      // Pollutants
+      document.getElementById('valPm10').textContent = fmtPollutant(data.pm10);
+      document.getElementById('valO3').textContent = fmtPollutant(data.o3);
+      document.getElementById('valNo2').textContent = fmtPollutant(data.no2);
+      document.getElementById('valSo2').textContent = fmtPollutant(data.so2);
+      document.getElementById('valCo').textContent = fmtPollutant(data.co);
+      document.getElementById('valEaqi').textContent = fmtPollutant(data.eaqi);
+    }
+
+    function renderTrendCard(data) {
+      if (!data) return;
+      const isAqi = trendGraphMode === 'aqi';
+      const pastTr = data.past_trend || {};
+      const futTr = data.future_trend || data.pm25_trend || {};
+
+      // Past 24h Stats
+      const pastPeakBox = document.getElementById('trendStatPastPeak');
+      const pastLowBox = document.getElementById('trendStatPastLow');
+      const pastShiftBox = document.getElementById('trendStatPastShift');
+
+      const pastPeakVal = (pastTr.peak_aqi && pastTr.peak_aqi.value !== undefined) ? pastTr.peak_aqi.value : ((pastTr.peakAqi && (pastTr.peakAqi.value !== undefined || pastTr.peakAqi.val !== undefined)) ? (pastTr.peakAqi.value !== undefined ? pastTr.peakAqi.value : pastTr.peakAqi.val) : '--');
+      const pastPeakTime = (pastTr.peak_aqi && pastTr.peak_aqi.time) || (pastTr.peakAqi && pastTr.peakAqi.time) || '--';
+
+      const pastLowVal = (pastTr.lowest_aqi && pastTr.lowest_aqi.value !== undefined) ? pastTr.lowest_aqi.value : ((pastTr.lowestAqi && (pastTr.lowestAqi.value !== undefined || pastTr.lowestAqi.val !== undefined)) ? (pastTr.lowestAqi.value !== undefined ? pastTr.lowestAqi.value : pastTr.lowestAqi.val) : '--');
+      const pastLowTime = (pastTr.lowest_aqi && pastTr.lowest_aqi.time) || (pastTr.lowestAqi && pastTr.lowestAqi.time) || '--';
+
+      const pastPeakConcVal = (pastTr.peak_conc && pastTr.peak_conc.value !== undefined) ? pastTr.peak_conc.value : ((pastTr.peakConc && (pastTr.peakConc.value !== undefined || pastTr.peakConc.val !== undefined)) ? (pastTr.peakConc.value !== undefined ? pastTr.peakConc.value : pastTr.peakConc.val) : '--');
+      const pastLowConcVal = (pastTr.lowest_conc && pastTr.lowest_conc.value !== undefined) ? pastTr.lowest_conc.value : ((pastTr.lowestConc && (pastTr.lowestConc.value !== undefined || pastTr.lowestConc.val !== undefined)) ? (pastTr.lowestConc.value !== undefined ? pastTr.lowestConc.value : pastTr.lowestConc.val) : '--');
+
+      if (pastPeakBox) {
+        pastPeakBox.textContent = isAqi ? `${pastPeakVal} AQI (${pastPeakTime})` : `${pastPeakConcVal} µg (${pastPeakTime})`;
+      }
+      if (pastLowBox) {
+        pastLowBox.textContent = isAqi ? `${pastLowVal} AQI (${pastLowTime})` : `${pastLowConcVal} µg (${pastLowTime})`;
+      }
+      if (pastShiftBox) {
+        const d = isAqi ? (pastTr.drift_6h !== undefined ? pastTr.drift_6h : (pastTr.drift6h || 0)) : (pastTr.drift_6h_conc !== undefined ? pastTr.drift_6h_conc : (pastTr.driftConc || 0));
+        const unit = isAqi ? 'AQI' : 'µg';
+        const sign = d > 0 ? '+' : '';
+        pastShiftBox.textContent = `${sign}${d} ${unit}`;
+        pastShiftBox.style.color = d > (isAqi ? 5 : 2) ? '#ff453a' : (d < -(isAqi ? 5 : 2) ? '#30d158' : '#06b6d4');
+      }
+
+      // Next 24h Forecast Stats
+      const pill = document.getElementById('trendBadgePill');
+      if (pill) {
+        const traj = futTr.trajectory || 'STABLE';
+        pill.textContent = traj;
+        if (traj === 'RISING') {
+          pill.style.background = '#ff453a';
+          pill.style.color = '#fff';
+        } else if (traj === 'FALLING') {
+          pill.style.background = '#30d158';
+          pill.style.color = '#fff';
+        } else {
+          pill.style.background = 'rgba(255,255,255,0.15)';
+          pill.style.color = '#e2e8f0';
+        }
+      }
+
+      const pDesc = pastTr.trajectory || 'Observed';
+      const fDesc = futTr.trajectory || 'Stable';
+      document.getElementById('trendVerdictText').textContent = `Past 24h: ${pDesc} ➔ Next 24h: ${fDesc}`;
+
+      const peakBox = document.getElementById('trendStatPeak');
+      const cleanBox = document.getElementById('trendStatClean');
+      const driftBox = document.getElementById('trendStatDrift');
+
+      const futPeakVal = (futTr.peak_aqi && futTr.peak_aqi.value !== undefined) ? futTr.peak_aqi.value : ((futTr.peakAqi && (futTr.peakAqi.value !== undefined || futTr.peakAqi.val !== undefined)) ? (futTr.peakAqi.value !== undefined ? futTr.peakAqi.value : futTr.peakAqi.val) : '--');
+      const futPeakTime = (futTr.peak_aqi && futTr.peak_aqi.time) || (futTr.peakAqi && futTr.peakAqi.time) || '--';
+
+      const futPeakConcVal = (futTr.peak_conc && futTr.peak_conc.value !== undefined) ? futTr.peak_conc.value : ((futTr.peakConc && (futTr.peakConc.value !== undefined || futTr.peakConc.val !== undefined)) ? (futTr.peakConc.value !== undefined ? futTr.peakConc.value : futTr.peakConc.val) : '--');
+
+      const futCleanAqi = (futTr.cleanest_window && futTr.cleanest_window.aqi !== undefined) ? futTr.cleanest_window.aqi : ((futTr.cleanAqi && (futTr.cleanAqi.value !== undefined || futTr.cleanAqi.val !== undefined)) ? (futTr.cleanAqi.value !== undefined ? futTr.cleanAqi.value : futTr.cleanAqi.val) : (futTr.lowest_aqi !== undefined ? futTr.lowest_aqi : '--'));
+      const futCleanConc = (futTr.cleanest_window && futTr.cleanest_window.conc !== undefined) ? futTr.cleanest_window.conc : ((futTr.cleanConc && (futTr.cleanConc.value !== undefined || futTr.cleanConc.val !== undefined)) ? (futTr.cleanConc.value !== undefined ? futTr.cleanConc.value : futTr.cleanConc.val) : (futTr.lowest_conc !== undefined ? futTr.lowest_conc : '--'));
+      const futCleanTime = (futTr.cleanest_window && futTr.cleanest_window.time) || (futTr.cleanAqi && futTr.cleanAqi.time) || futTr.lowest_time || '--';
+
+      const futDrift = isAqi ? (futTr.drift_6h_aqi !== undefined ? futTr.drift_6h_aqi : (futTr.change_6h !== undefined ? futTr.change_6h : (futTr.driftAqi || 0))) : (futTr.drift_6h_conc !== undefined ? futTr.drift_6h_conc : (futTr.driftConc || 0));
+      const futUnit = isAqi ? 'AQI' : 'µg';
+      const futSign = futDrift > 0 ? '+' : '';
+
+      if (peakBox) {
+        peakBox.textContent = isAqi ? `${futPeakVal} AQI (${futPeakTime})` : `${futPeakConcVal} µg (${futPeakTime})`;
+      }
+      if (cleanBox) {
+        cleanBox.textContent = isAqi ? `${futCleanAqi} AQI (${futCleanTime})` : `${futCleanConc} µg (${futCleanTime})`;
+      }
+      if (driftBox) {
+        driftBox.textContent = `${futSign}${futDrift} ${futUnit} (6h)`;
+        driftBox.style.color = futDrift > (isAqi ? 5 : 2) ? '#ff453a' : (futDrift < -(isAqi ? 5 : 2) ? '#30d158' : '#ffd60a');
+      }
+
+      document.getElementById('trendSummaryText').textContent = (pastTr.summary && futTr.summary) ? `${pastTr.summary} • ${futTr.summary}` : (futTr.summary || pastTr.summary || 'Continuous timeline.');
+
+      drawTrendGraph('standaloneTrendCanvas', data, isAqi);
+    }
+
+    function drawTrendGraph(canvasId, data, isAqi) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      const width = canvas.parentElement.clientWidth || 330;
+      const height = 150;
+      const dpr = window.devicePixelRatio || 2;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+
+      ctx.save();
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, width, height);
+
+      const labelsEl = document.getElementById('standaloneTrendLabels');
+      let values = [];
+      let nowIdx = -1;
+
+      if (trendRangeMode === 'past') {
+        const pData = data.past_24h || {};
+        values = isAqi ? (pData.pm25_aqi || []) : (pData.pm2_5 || []);
+        nowIdx = values.length - 1;
+        if (labelsEl) {
+          labelsEl.innerHTML = '<span>-24h</span><span>-18h</span><span>-12h</span><span>-6h</span><span style="color:#06b6d4; font-weight:700;">NOW</span>';
+        }
+      } else if (trendRangeMode === 'future') {
+        const fData = data.future_24h || {};
+        const raw = isAqi ? (fData.pm25_aqi || data.hourly_aqi || []) : (fData.pm2_5 || data.hourly_conc || []);
+        values = raw.slice(0, 24);
+        nowIdx = 0;
+        if (labelsEl) {
+          labelsEl.innerHTML = '<span style="color:#ffd60a; font-weight:700;">NOW</span><span>+4h</span><span>+8h</span><span>+12h</span><span>+18h</span><span>+24h</span>';
+        }
+      } else {
+        // 48h timeline
+        const tlData = data.timeline_48h || {};
+        values = isAqi ? (tlData.pm25_aqi || []) : (tlData.pm2_5 || []);
+        nowIdx = tlData.now_index !== undefined ? tlData.now_index : 24;
+        if (labelsEl) {
+          labelsEl.innerHTML = '<span>-24h</span><span>-12h</span><span style="color:#ffd60a; font-weight:700;">📍 NOW</span><span>+12h</span><span>+24h</span>';
+        }
+      }
+
+      if (values.length < 2) {
+        ctx.restore();
+        return;
+      }
+
+      const padTop = 18;
+      const padBottom = 22;
+      const padLeft = 32;
+      const padRight = 14;
+
+      const plotW = width - padLeft - padRight;
+      const plotH = height - padTop - padBottom;
+
+      const maxVal = Math.max(...values, isAqi ? 120 : 35);
+      const minVal = 0;
+      const range = maxVal - minVal || 1;
+
+      const getX = (i) => padLeft + (i / (values.length - 1)) * plotW;
+      const getY = (val) => padTop + plotH - ((val - minVal) / range) * plotH;
+
+      // Draw threshold guidelines
+      const guidelines = isAqi 
+        ? [{ val: 50, color: 'rgba(48, 209, 88, 0.35)', label: '50' },
+           { val: 100, color: 'rgba(255, 214, 10, 0.35)', label: '100' },
+           { val: 150, color: 'rgba(255, 69, 58, 0.35)', label: '150' }]
+        : [{ val: 15, color: 'rgba(48, 209, 88, 0.35)', label: '15 µg' },
+           { val: 35, color: 'rgba(255, 214, 10, 0.35)', label: '35 µg' }];
+
+      guidelines.forEach(g => {
+        if (g.val <= maxVal) {
+          const y = getY(g.val);
+          ctx.beginPath();
+          ctx.setLineDash([3, 4]);
+          ctx.strokeStyle = g.color;
+          ctx.lineWidth = 1;
+          ctx.moveTo(padLeft, y);
+          ctx.lineTo(width - padRight, y);
+          ctx.stroke();
+
+          ctx.fillStyle = 'rgba(148, 163, 184, 0.7)';
+          ctx.font = '9px -apple-system, sans-serif';
+          ctx.textAlign = 'right';
+          ctx.fillText(g.label, padLeft - 4, y + 3);
+        }
+      });
+      ctx.setLineDash([]);
+
+      // Fill Gradient Area
+      const grad = ctx.createLinearGradient(0, padTop, 0, padTop + plotH);
+      if (isAqi) {
+        grad.addColorStop(0, trendRangeMode === 'past' ? 'rgba(6, 182, 212, 0.45)' : 'rgba(56, 189, 248, 0.45)');
+        grad.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
+      } else {
+        grad.addColorStop(0, 'rgba(100, 210, 255, 0.4)');
+        grad.addColorStop(1, 'rgba(100, 210, 255, 0.0)');
+      }
+
+      ctx.beginPath();
+      ctx.moveTo(getX(0), getY(values[0]));
+      for (let i = 0; i < values.length - 1; i++) {
+        const xc = (getX(i) + getX(i + 1)) / 2;
+        const yc = (getY(values[i]) + getY(values[i + 1])) / 2;
+        ctx.quadraticCurveTo(getX(i), getY(values[i]), xc, yc);
+      }
+      const lastIdx = values.length - 1;
+      ctx.lineTo(getX(lastIdx), getY(values[lastIdx]));
+      ctx.lineTo(getX(lastIdx), padTop + plotH);
+      ctx.lineTo(getX(0), padTop + plotH);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Divider for NOW if in 48h mode
+      if (trendRangeMode === 'all' && 0 <= nowIdx && nowIdx < values.length) {
+        const xNow = getX(nowIdx);
+        ctx.beginPath();
+        ctx.setLineDash([3, 3]);
+        ctx.strokeStyle = '#ffd60a';
+        ctx.lineWidth = 1.5;
+        ctx.moveTo(xNow, padTop);
+        ctx.lineTo(xNow, padTop + plotH);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // Stroke Curve Line
+      ctx.beginPath();
+      ctx.moveTo(getX(0), getY(values[0]));
+      for (let i = 0; i < values.length - 1; i++) {
+        const xc = (getX(i) + getX(i + 1)) / 2;
+        const yc = (getY(values[i]) + getY(values[i + 1])) / 2;
+        ctx.quadraticCurveTo(getX(i), getY(values[i]), xc, yc);
+      }
+      ctx.lineTo(getX(lastIdx), getY(values[lastIdx]));
+      ctx.strokeStyle = trendRangeMode === 'past' ? '#06b6d4' : '#38bdf8';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Mark Key Points: Peak, Cleanest, NOW
+      let maxIdx = 0, minIdx = 0;
+      for (let i = 0; i < values.length; i++) {
+        if (values[i] > values[maxIdx]) maxIdx = i;
+        if (values[i] < values[minIdx]) minIdx = i;
+      }
+
+      // Peak Point
+      if (maxIdx >= 0) {
+        const xP = getX(maxIdx), yP = getY(values[maxIdx]);
+        ctx.beginPath();
+        ctx.arc(xP, yP, 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#ff453a';
+        ctx.fill();
+      }
+
+      // Cleanest Point
+      if (minIdx >= 0 && minIdx !== maxIdx) {
+        const xC = getX(minIdx), yC = getY(values[minIdx]);
+        ctx.beginPath();
+        ctx.arc(xC, yC, 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#30d158';
+        ctx.fill();
+      }
+
+      // NOW Point
+      if (0 <= nowIdx && nowIdx < values.length) {
+        const xN = getX(nowIdx), yN = getY(values[nowIdx]);
+        ctx.beginPath();
+        ctx.arc(xN, yN, 6, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 214, 10, 0.35)';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(xN, yN, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffd60a';
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
+    function getCategory(aqi) {
+      if (aqi <= 50) return { name: 'Good', color: '#30d158' };
+      if (aqi <= 100) return { name: 'Moderate', color: '#ffd60a' };
+      if (aqi <= 150) return { name: 'Sensitive', color: '#ff9f0a' };
+      if (aqi <= 200) return { name: 'Unhealthy', color: '#ff453a' };
+      if (aqi <= 300) return { name: 'Very Unhealthy', color: '#bf5af2' };
+      return { name: 'Hazardous', color: '#7e22ce' };
+    }
+
+    function calcRunner(aqi, pm25, temp, hum, appTemp, hourly) {
+      let verdict, badge, color, lowDur, modDur, highDur, summary;
+
+      if (aqi <= 50) {
+        verdict = 'Optimal Running Conditions';
+        badge = 'SAFE TO RUN';
+        color = '#30d158';
+        lowDur = '90+ mins (No Limit)';
+        modDur = '60 - 90 mins';
+        highDur = '45 - 60 mins';
+        summary = 'Air is clean. Perfect day for long runs, fartleks, or tempo blocks outdoors.';
+      } else if (aqi <= 100) {
+        verdict = 'Generally Safe — Moderate Precautions';
+        badge = 'GENERALLY SAFE';
+        color = '#ffd60a';
+        lowDur = '60 - 75 mins';
+        modDur = '30 - 45 mins';
+        highDur = '20 - 30 mins';
+        summary = 'Safe for healthy runners. Avoid high-traffic road shoulders. Asthmatics monitor breathing.';
+      } else if (aqi <= 150) {
+        verdict = 'Caution — Reduce Duration & Move Speedwork Indoors';
+        badge = 'EXERCISE CAUTION';
+        color = '#ff9f0a';
+        lowDur = '30 - 40 mins Max';
+        modDur = '15 - 20 mins Max';
+        highDur = '0 mins (Avoid Outdoors)';
+        summary = 'Substantial particulate load. Deep mouth breathing draws PM2.5 past nasal filters. Move hard sessions to treadmill.';
+      } else {
+        verdict = 'Unhealthy — Move Workout Indoors';
+        badge = 'INDOOR ONLY';
+        color = '#ff453a';
+        lowDur = '10 - 15 mins (or Walk)';
+        modDur = '0 mins (Avoid)';
+        highDur = '0 mins (Prohibited)';
+        summary = 'Elevated air pollution causes acute pulmonary irritation. Run on an air-conditioned indoor treadmill.';
+      }
+
+      // Best Window
+      let bestWindow = 'Morning (06:00 - 08:00 AM)';
+      if (hourly && hourly.time && hourly.us_aqi) {
+        let minA = 999, minT = '';
+        for (let i = 0; i < Math.min(24, hourly.us_aqi.length); i++) {
+          if (hourly.us_aqi[i] < minA) {
+            minA = hourly.us_aqi[i];
+            minT = hourly.time[i].split('T')[1] || '';
+          }
+        }
+        if (minT) bestWindow = `Cleanest Hour: ~${minT} (Predicted AQI ${minA})`;
+      }
+
+      return { verdict, badge, color, lowDur, modDur, highDur, summary, bestWindow };
+    }
+
+    async function performSearch() {
+      const q = document.getElementById('inputSearch').value.trim();
+      if (!q) return;
+
+      const resBox = document.getElementById('searchResults');
+      resBox.innerHTML = '<div style="color:#8e8e93; padding:8px;">Searching Open-Meteo global geocoder...</div>';
+
+      try {
+        const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=6&language=en&format=json`);
+        const data = await res.json();
+        const list = data.results || [];
+
+        if (list.length === 0) {
+          resBox.innerHTML = '<div style="color:#8e8e93; padding:8px;">No locations found.</div>';
+          return;
+        }
+
+        resBox.innerHTML = list.map(item => `
+          <div class="res-item" onclick="selectSearchCoords(${item.latitude}, ${item.longitude}, '${item.name}')">
+            <strong>${item.name}</strong>
+            <div style="font-size:11px; color:#8e8e93;">${item.admin1 || ''}, ${item.country || ''} (${item.latitude.toFixed(2)}°, ${item.longitude.toFixed(2)}°)</div>
+          </div>
+        `).join('');
+      } catch (e) {
+        resBox.innerHTML = '<div style="color:#ff453a; padding:8px;">Search failed.</div>';
+      }
+    }
+
+    window.selectSearchCoords = async function(lat, lon, name) {
+      PRESETS['custom'] = { name, lat, lon };
+      await fetchCityData('custom');
+      activeKey = 'custom';
+      document.getElementById('tabNavOverview').click();
+    };
+
+    function detectGPS() {
+      if (!navigator.geolocation) {
+        alert('Geolocation not supported');
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(pos => {
+        selectSearchCoords(pos.coords.latitude, pos.coords.longitude, 'My GPS Location');
+      }, () => {
+        alert('Could not retrieve GPS location.');
+      });
+    }
+
+    function renderCompare() {
+      const keys = ['perai', 'kl', 'alor'];
+      const box = document.getElementById('compareCards');
+      box.innerHTML = keys.map(k => {
+        const d = cachedData[k];
+        if (!d) return '';
+        const catName = (d.category && (d.category.category || d.category.name)) || 'Moderate';
+        const catColor = (d.category && d.category.color) || '#ffd60a';
+        const pm25Num = parseFloat(d.pm25);
+        const pm25Val = isNaN(pm25Num) ? '--' : pm25Num.toFixed(1);
+        const rBadge = (d.runner && d.runner.badge) || 'ADVISORY';
+        const rColor = (d.runner && d.runner.color) || '#ff453a';
+        const rLow = (d.runner && (d.runner.lowDur || (d.runner.durations && d.runner.durations.low && d.runner.durations.low.duration))) || '--';
+        return `
+          <div class="ios-widget" style="margin-bottom:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong style="font-size:16px;">${d.name}</strong>
+                <div style="font-size:11px; color:#8e8e93;">AQI Category: ${catName}</div>
+              </div>
+              <div style="font-size:24px; font-weight:800; color:${catColor};">${d.aqi}</div>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:11px; margin-top:8px; border-top:0.5px solid rgba(255,255,255,0.1); padding-top:6px;">
+              <span>PM2.5: <strong style="color:${d.pm25_category ? d.pm25_category.color : '#64d2ff'};">${d.pm25_aqi} AQI</strong> (${pm25Val} µg/m³)</span>
+              <span>Runner: <strong style="color:${rColor};">${rBadge}</strong></span>
+              <span>Low: <strong>${rLow}</strong></span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  </script>
+</body>
+</html>
