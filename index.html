@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeroPulse — Air Quality Monitor (Malaysia & Global)</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/>
+            <path d="M9.6 4.6A2 2 0 1 1 11 8H2"/>
+            <path d="M12.6 19.4A2 2 0 1 0 14 16H2"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">AeroPulse <span class="badge-live">LIVE</span></div>
+          <div class="brand-sub">Malaysia & Global Real-time Air Quality Monitor</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div class="refresh-controls">
+          <label class="auto-refresh-label" for="autoRefreshSelect">
+            <span>Auto-refresh:</span>
+            <select id="autoRefreshSelect" class="select-input">
+              <option value="0">Off</option>
+              <option value="300" selected>Every 5m</option>
+              <option value="900">Every 15m</option>
+            </select>
+          </label>
+
+          <button id="refreshBtn" class="btn btn-secondary" title="Refresh Air Quality Data">
+            <svg id="refreshIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+            </svg>
+            <span>Refresh</span>
+          </button>
+        </div>
+
+        <a href="mobile.html" class="btn btn-secondary mobile-link-btn" title="Open iPhone 15 Pro Max Mobile Version">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="4" ry="4"></rect>
+            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+          </svg>
+          <span>iPhone View</span>
+        </a>
+
+        <button id="themeToggleBtn" class="btn btn-icon" title="Toggle Light/Dark Theme">
+          <svg id="themeIconSun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="12" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg id="themeIconMoon" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-layout">
+    <!-- Top Bar: Navigation Tabs & Search -->
+    <section class="control-panel">
+      <!-- Target Cities Quick Tabs -->
+      <div class="tabs-wrapper">
+        <div class="tabs-label">Primary Monitoring Stations:</div>
+        <div class="city-tabs" id="cityTabs">
+          <button class="tab-btn active" data-city="perai" id="tabPerai">
+            <span class="tab-dot dot-perai"></span>
+            <span class="tab-name">Perai, Penang</span>
+            <span class="tab-badge" id="badgePerai">...</span>
+          </button>
+          <button class="tab-btn" data-city="kuala-lumpur" id="tabKL">
+            <span class="tab-dot dot-kl"></span>
+            <span class="tab-name">Kuala Lumpur</span>
+            <span class="tab-badge" id="badgeKL">...</span>
+          </button>
+          <button class="tab-btn" data-city="alor-setar" id="tabAlorSetar">
+            <span class="tab-dot dot-alor"></span>
+            <span class="tab-name">Alor Setar, Kedah</span>
+            <span class="tab-badge" id="badgeAlor">...</span>
+          </button>
+          <button class="tab-btn tab-saved" id="tabSaved" title="Saved 4th location (click to view)">
+            <span class="tab-dot dot-saved"></span>
+            <span class="tab-name" id="tabSavedName">📌 Tab 4: [Empty]</span>
+            <span class="tab-badge" id="badgeSaved">--</span>
+          </button>
+          <button class="tab-btn tab-compare" data-view="compare" id="tabCompare">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="18" rx="1"/>
+              <rect x="14" y="3" width="7" height="18" rx="1"/>
+            </svg>
+            <span>Compare All 3</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Section -->
+      <div class="search-section">
+        <div class="search-box-wrapper">
+          <div class="search-input-container">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="searchInput" placeholder="Search any city, state, or district (e.g. George Town, Petaling Jaya, Taiping, Singapore)..." autocomplete="off" />
+            <button id="clearSearchBtn" class="clear-btn hidden" title="Clear">×</button>
+            <button id="geoBtn" class="geo-btn" title="Detect My Current Location">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+              </svg>
+              <span>Near Me</span>
+            </button>
+          </div>
+          <!-- Autocomplete Dropdown -->
+          <div id="searchDropdown" class="search-dropdown hidden"></div>
+        </div>
+
+        <!-- Quick Search Tags -->
+        <div class="quick-tags">
+          <span class="tag-title">Suggestions:</span>
+          <button class="quick-chip" data-q="George Town Penang">George Town (Penang)</button>
+          <button class="quick-chip" data-q="Petaling Jaya">Petaling Jaya</button>
+          <button class="quick-chip" data-q="Shah Alam">Shah Alam</button>
+          <button class="quick-chip" data-q="Putrajaya">Putrajaya</button>
+          <button class="quick-chip" data-q="Taiping">Taiping</button>
+          <button class="quick-chip" data-q="Johor Bahru">Johor Bahru</button>
+          <button class="quick-chip" data-q="Kuching">Kuching</button>
+          <button class="quick-chip" data-q="Singapore">Singapore</button>
+        </div>
+      </div>
+
+      <!-- 🇲🇾 Malaysian State & Station Explorer -->
+      <div class="state-explorer-card" id="stateExplorerCard">
+        <div class="state-explorer-header">
+          <div class="explorer-badge">
+            <span class="explorer-flag">🇲🇾</span>
+            <span class="explorer-badge-title">BROWSE MALAYSIAN STATIONS BY STATE</span>
+          </div>
+          <span class="explorer-meta">59 Official DOE Continuous Monitoring Stations across all 16 States & Federal Territories</span>
+        </div>
+
+        <div class="state-explorer-controls">
+          <div class="explorer-control-group">
+            <label for="stateSelect" class="explorer-label">Select State / Federal Territory:</label>
+            <div class="select-container">
+              <select id="stateSelect" class="explorer-select">
+                <!-- 16 States populated dynamically -->
+              </select>
+            </div>
+          </div>
+
+          <div class="explorer-control-group flex-grow">
+            <label for="stationSelect" class="explorer-label">Select Monitoring Station:</label>
+            <div class="select-container">
+              <select id="stationSelect" class="explorer-select">
+                <!-- Stations populated dynamically -->
+              </select>
+            </div>
+          </div>
+
+          <button id="btnViewStation" class="btn btn-primary explorer-submit-btn">
+            <span>View Station Readings</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+
+        <!-- Quick Station Chips in Selected State -->
+        <div class="state-chips-container">
+          <span class="chips-label">Stations in State:</span>
+          <div class="state-chips-list" id="stateChipsList">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Loading State -->
+    <div id="loadingOverlay" class="loading-state hidden">
+      <div class="spinner"></div>
+      <div class="loading-text" id="loadingText">Retrieving real-time air quality data from official stations & satellites...</div>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorBanner" class="error-banner hidden">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span id="errorMessage">Unable to fetch air quality data. Please check connection.</span>
+      <button id="retryBtn" class="btn btn-sm">Retry</button>
+    </div>
+
+    <!-- MAIN VIEW 1: SINGLE LOCATION DASHBOARD -->
+    <div id="singleLocationView" class="dashboard-view">
+      <!-- Location Header Bar -->
+      <div class="location-header">
+        <div class="location-title-box">
+          <div class="location-pin">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+          </div>
+          <div>
+            <h1 class="location-name" id="locName">Perai</h1>
+            <div class="location-sub" id="locSub">Penang (Pulau Pinang), Malaysia • <span id="locCoords">5.38°N, 100.38°E</span></div>
+          </div>
+        </div>
+
+        <div class="location-meta">
+          <div class="meta-item">
+            <span class="meta-label">Last Updated:</span>
+            <span class="meta-val" id="locUpdated">Fetching...</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Primary Source:</span>
+            <span class="meta-val highlight" id="locSource">WAQI / Malaysia DOE Ground Station</span>
+          </div>
+        </div>
+
+        <div class="location-header-actions">
+          <button id="btnSaveLocation" class="btn btn-save-tab" title="Save this location as your 4th custom tab">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span id="btnSaveLocationText">★ Save as 4th Tab</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Hero Metrics Grid -->
+      <div class="hero-grid">
+        <!-- Main Overall AQI Gauge Card -->
+        <div class="metric-card aqi-hero-card" id="aqiHeroCard">
+          <div class="card-tag">Overall Air Quality Index (AQI)</div>
+          <div class="aqi-display-wrap">
+            <div class="aqi-gauge-circle" id="aqiGaugeCircle">
+              <div class="aqi-number" id="aqiValue">--</div>
+              <div class="aqi-scale-label">US EPA / WAQI SCALE</div>
+            </div>
+            
+            <div class="aqi-status-info">
+              <div class="status-badge" id="aqiBadge">Loading</div>
+              <div class="status-malay" id="aqiMalayBadge">Indeks Pencemaran Udara (IPU)</div>
+              <p class="status-desc" id="aqiHealthSummary">Air quality metrics are being updated in real time.</p>
+            </div>
+          </div>
+
+          <!-- AQI Scale Bar -->
+          <div class="aqi-scale-container">
+            <div class="scale-bar">
+              <div class="scale-segment seg-good" title="Good (0-50)"></div>
+              <div class="scale-segment seg-moderate" title="Moderate (51-100)"></div>
+              <div class="scale-segment seg-sensitive" title="Unhealthy for Sensitive (101-150)"></div>
+              <div class="scale-segment seg-unhealthy" title="Unhealthy (151-200)"></div>
+              <div class="scale-segment seg-very-unhealthy" title="Very Unhealthy (201-300)"></div>
+              <div class="scale-segment seg-hazardous" title="Hazardous (301+)"></div>
+              <div class="scale-marker" id="aqiScaleMarker"></div>
+            </div>
+            <div class="scale-labels">
+              <span>0 (Good)</span>
+              <span>50</span>
+              <span>100</span>
+              <span>150</span>
+              <span>200</span>
+              <span>300+ (Hazardous)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PM2.5 Fine Particulate Matter Focus Card -->
+        <div class="metric-card pm25-hero-card" id="pm25Card">
+          <div class="card-header-flex">
+            <div class="card-tag">Key Pollutant: Fine Particulate Matter (PM2.5)</div>
+            <div class="info-pill" title="PM2.5 particles are less than 2.5 micrometers in diameter, small enough to penetrate deep into the lungs and enter the bloodstream.">
+              <span>Particle &lt; 2.5µm</span>
+            </div>
+          </div>
+
+          <div class="pm25-content">
+            <div class="pm25-main-values">
+              <div class="pm25-val-block">
+                <span class="sub-label">Ground Station AQI Sub-index</span>
+                <div class="pm25-num-wrap">
+                  <span class="pm25-large" id="pm25Aqi">--</span>
+                  <span class="pm25-unit">AQI</span>
+                </div>
+              </div>
+
+              <div class="val-divider"></div>
+
+              <div class="pm25-val-block">
+                <span class="sub-label">Atmospheric Mass Concentration</span>
+                <div class="pm25-num-wrap">
+                  <span class="pm25-large" id="pm25Ugm3">--</span>
+                  <span class="pm25-unit">µg/m³</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Today's Range & WHO Limit & Trend -->
+            <div class="pm25-details-row">
+              <div class="detail-badge">
+                <span class="det-lbl">Today's Range (Ground):</span>
+                <span class="det-val" id="pm25Range">Min: -- | Max: --</span>
+              </div>
+              <div class="detail-badge" id="whoBadgeWrap">
+                <span class="det-lbl">WHO 24h Guideline (15 µg/m³):</span>
+                <span class="det-val" id="whoComparison">Comparing...</span>
+              </div>
+              <div class="detail-badge" id="pm25TrendWrap">
+                <span class="det-lbl">PM2.5 AQI 24h Trend:</span>
+                <span class="det-val" id="pm25TrendText">Evaluating...</span>
+              </div>
+            </div>
+
+            <p class="pm25-explanation" id="pm25Explanation">
+              PM2.5 is the primary health hazard during haze and urban pollution episodes in Malaysia, originating from vehicle combustion, industrial emissions, and biomass burning.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RUNNER'S SUITABILITY & SAFE WORKOUT HUB -->
+      <section class="metric-card runner-hub-card" id="runnerHubCard">
+        <div class="card-header-flex">
+          <div>
+            <div class="card-tag">🏃 Runner's Air Quality & Safe Workout Advisor</div>
+            <div class="card-sub-tag">Sports physiology guidance based on minute ventilation, particle deposition, and heat index</div>
+          </div>
+          <div class="runner-badge" id="runnerBadge">ANALYZING</div>
+        </div>
+
+        <!-- Overall Runner Verdict -->
+        <div class="runner-verdict-box" id="runnerVerdictBox">
+          <div class="runner-verdict-header">
+            <div class="runner-verdict-icon" id="runnerVerdictIcon">🏃</div>
+            <div>
+              <h2 class="runner-verdict-title" id="runnerVerdictTitle">Calculating Outdoor Running Suitability...</h2>
+              <p class="runner-verdict-desc" id="runnerVerdictDesc">Assessing physiological impact of current particulate levels.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Workout Intensity & Max Duration Breakdown -->
+        <div class="runner-intensities-grid">
+          <!-- Low Intensity Card -->
+          <div class="intensity-card border-low" id="cardLowIntensity">
+            <div class="intensity-header">
+              <span class="intensity-pill pill-low">Zone 1 - 2</span>
+              <span class="intensity-status" id="statusLow">Safe</span>
+            </div>
+            <div class="intensity-title">Low Intensity (Easy / Recovery)</div>
+            <div class="intensity-sub">Heart Rate &lt; 70% Max • Nasal / Light oral breathing</div>
+            <div class="duration-highlight">
+              <span class="dur-label">Recommended Max Duration:</span>
+              <span class="dur-val" id="durLow">60 - 75 mins</span>
+            </div>
+            <p class="intensity-note" id="noteLow">Ventilation ~35-45 L/min. Safe for steady endurance and aerobic base building.</p>
+          </div>
+
+          <!-- Moderate Intensity Card -->
+          <div class="intensity-card border-mod" id="cardModIntensity">
+            <div class="intensity-header">
+              <span class="intensity-pill pill-mod">Zone 3</span>
+              <span class="intensity-status" id="statusMod">Moderate</span>
+            </div>
+            <div class="intensity-title">Moderate Intensity (Steady / Tempo)</div>
+            <div class="intensity-sub">Heart Rate 70 - 80% Max • Marathon pace / Steady tempo</div>
+            <div class="duration-highlight">
+              <span class="dur-label">Recommended Max Duration:</span>
+              <span class="dur-val" id="durMod">30 - 45 mins</span>
+            </div>
+            <p class="intensity-note" id="noteMod">Ventilation ~60-80 L/min. Keep intervals controlled and stay off highway shoulders.</p>
+          </div>
+
+          <!-- High Intensity Card -->
+          <div class="intensity-card border-high" id="cardHighIntensity">
+            <div class="intensity-header">
+              <span class="intensity-pill pill-high">Zone 4 - 5</span>
+              <span class="intensity-status" id="statusHigh">Caution</span>
+            </div>
+            <div class="intensity-title">High Intensity (Intervals / Sprints)</div>
+            <div class="intensity-sub">Heart Rate &gt; 80% Max • 5K pace, VO2 Max, Hill repeats</div>
+            <div class="duration-highlight">
+              <span class="dur-label">Recommended Max Duration:</span>
+              <span class="dur-val" id="durHigh">20 - 30 mins</span>
+            </div>
+            <p class="intensity-note" id="noteHigh">Heavy oral breathing (>120 L/min). Deep alveolar penetration risk if PM2.5 elevated.</p>
+          </div>
+        </div>
+
+        <!-- Microclimate & Best Running Time Window -->
+        <div class="runner-insights-grid">
+          <div class="insight-box">
+            <div class="insight-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div class="insight-content">
+              <div class="insight-title">Best Time Window to Run (Next 24h)</div>
+              <div class="insight-val" id="runnerBestWindow">Scanning forecast...</div>
+              <div class="insight-desc">Based on Copernicus CAMS hourly diurnal atmospheric dispersion model.</div>
+            </div>
+          </div>
+
+          <div class="insight-box">
+            <div class="insight-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path>
+              </svg>
+            </div>
+            <div class="insight-content">
+              <div class="insight-title">Tropical Heat Index & Hydration</div>
+              <div class="insight-val" id="runnerHeatIndex">Checking microclimate...</div>
+              <div class="insight-desc" id="runnerHeatWarning">Ambient humidity and apparent temperature impact on cooling rate.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Runner's Essential Checklist -->
+        <div class="runner-tips-strip">
+          <div class="runner-tip-item">
+            <strong>🌳 Route Strategy:</strong> Choose shaded park loops with high tree density (e.g. botanical gardens or forest trails). Stay &gt;200m away from heavy traffic corridors.
+          </div>
+          <div class="runner-tip-item">
+            <strong>🚿 Post-Run Care:</strong> Use a saline nasal spray/rinse post-run to expel trapped particles from upper airways. Wash face and eyes immediately.
+          </div>
+          <div class="runner-tip-item">
+            <strong>🏋️ Indoor Alternative:</strong> If AQI &gt; 100, move interval sessions or tempo repeats to an indoor treadmill with HEPA air filtration.
+          </div>
+        </div>
+      </section>
+
+      <!-- Secondary Metrics: Other Pollutants & Weather -->
+      <div class="secondary-grid">
+        <!-- Additional Pollutants Grid -->
+        <div class="metric-card">
+          <div class="card-tag">Other Air Pollutants Breakdown</div>
+          <div class="pollutants-grid">
+            <div class="pollutant-item">
+              <div class="poll-header">
+                <span class="poll-name">PM10</span>
+                <span class="poll-desc">Coarse Dust (&lt;10µm)</span>
+              </div>
+              <div class="poll-val" id="valPm10">--</div>
+              <div class="poll-range" id="rangePm10">Ground AQI / µg/m³</div>
+            </div>
+
+            <div class="pollutant-item">
+              <div class="poll-header">
+                <span class="poll-name">O₃</span>
+                <span class="poll-desc">Ozone (Surface)</span>
+              </div>
+              <div class="poll-val" id="valO3">--</div>
+              <div class="poll-range" id="rangeO3">Photochemical smog</div>
+            </div>
+
+            <div class="pollutant-item">
+              <div class="poll-header">
+                <span class="poll-name">NO₂</span>
+                <span class="poll-desc">Nitrogen Dioxide</span>
+              </div>
+              <div class="poll-val" id="valNo2">--</div>
+              <div class="poll-range" id="rangeNo2">Traffic exhaust</div>
+            </div>
+
+            <div class="pollutant-item">
+              <div class="poll-header">
+                <span class="poll-name">SO₂</span>
+                <span class="poll-desc">Sulfur Dioxide</span>
+              </div>
+              <div class="poll-val" id="valSo2">--</div>
+              <div class="poll-range" id="rangeSo2">Industrial emissions</div>
+            </div>
+
+            <div class="pollutant-item">
+              <div class="poll-header">
+                <span class="poll-name">CO</span>
+                <span class="poll-desc">Carbon Monoxide</span>
+              </div>
+              <div class="poll-val" id="valCo">--</div>
+              <div class="poll-range" id="rangeCo">Incomplete combustion</div>
+            </div>
+
+            <div class="pollutant-item">
+              <div class="poll-header">
+                <span class="poll-name">European AQI</span>
+                <span class="poll-desc">Copernicus EAQI</span>
+              </div>
+              <div class="poll-val" id="valEaqi">--</div>
+              <div class="poll-range">CAMS Index (0-100+)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weather Conditions -->
+        <div class="metric-card">
+          <div class="card-tag">Atmospheric & Weather Conditions</div>
+          <div class="weather-grid">
+            <div class="weather-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+              </svg>
+              <div class="weather-info">
+                <div class="w-val" id="valHumidity">--%</div>
+                <div class="w-lbl">Relative Humidity</div>
+              </div>
+            </div>
+
+            <div class="weather-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/>
+              </svg>
+              <div class="weather-info">
+                <div class="w-val" id="valWind">-- m/s</div>
+                <div class="w-lbl">Wind Speed</div>
+              </div>
+            </div>
+
+            <div class="weather-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="6" x2="12" y2="12"></line>
+                <line x1="12" y1="12" x2="16" y2="16"></line>
+              </svg>
+              <div class="weather-info">
+                <div class="w-val" id="valPressure">-- hPa</div>
+                <div class="w-lbl">Barometric Pressure</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Health Guidance & Recommendations -->
+      <div class="metric-card health-guide-card">
+        <div class="card-header-flex">
+          <div class="card-tag">Health Action Guide & Protection Advice</div>
+          <div class="health-level-badge" id="healthLevelBadge">Advisory Active</div>
+        </div>
+
+        <div class="health-checklist-grid">
+          <div class="health-tip-box" id="tipOutdoor">
+            <div class="tip-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="5" r="3"></circle>
+                <path d="M10 22v-6l-2-2 2-4 2 2v6h2"></path>
+              </svg>
+            </div>
+            <div class="tip-content">
+              <div class="tip-title">Outdoor Activities</div>
+              <div class="tip-text" id="adviceOutdoor">Analyzing current air quality...</div>
+            </div>
+          </div>
+
+          <div class="health-tip-box" id="tipMask">
+            <div class="tip-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 10a8 8 0 0 1 16 0v4a8 8 0 0 1-16 0z"></path>
+                <path d="M4 14h16"></path>
+              </svg>
+            </div>
+            <div class="tip-content">
+              <div class="tip-title">Mask Protection</div>
+              <div class="tip-text" id="adviceMask">Checking recommendation...</div>
+            </div>
+          </div>
+
+          <div class="health-tip-box" id="tipIndoor">
+            <div class="tip-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </div>
+            <div class="tip-content">
+              <div class="tip-title">Indoor Air & Purifiers</div>
+              <div class="tip-text" id="adviceIndoor">Determining ventilation advice...</div>
+            </div>
+          </div>
+
+          <div class="health-tip-box" id="tipSensitive">
+            <div class="tip-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </div>
+            <div class="tip-content">
+              <div class="tip-title">Sensitive Groups</div>
+              <div class="tip-text" id="adviceSensitive">Children, seniors, and asthma patients precautions...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Forecast Charts: Past 24h & Future 48-Hour Trend -->
+      <div class="metric-card chart-card">
+        <div class="card-header-flex" style="flex-wrap:wrap; gap:0.75rem;">
+          <div>
+            <div class="card-tag">Air Quality & PM2.5 Continuous Timeline</div>
+            <div class="card-sub-tag">Copernicus CAMS & Ground Station Reanalysis (Past 24h History ➔ Future Prediction)</div>
+          </div>
+          <div class="chart-controls-wrap" style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center;">
+            <!-- Timeline Range Selector -->
+            <div class="chart-toggles" id="rangeToggles">
+              <button class="chart-toggle-btn active" id="btnRangeAll">⏱️ 48h Full Timeline</button>
+              <button class="chart-toggle-btn" id="btnRangePast">⏪ Past 24h Observed</button>
+              <button class="chart-toggle-btn" id="btnRangeFuture">⏩ Next 24h Forecast</button>
+            </div>
+            <!-- Metric Type Selector -->
+            <div class="chart-toggles" id="metricToggles">
+              <button class="chart-toggle-btn active" id="btnChartPm25Aqi">PM2.5 AQI</button>
+              <button class="chart-toggle-btn" id="btnChartPm25">PM2.5 (µg/m³)</button>
+              <button class="chart-toggle-btn" id="btnChartAqi">Overall AQI</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PM2.5 AQI Trend Metrics Bar: Past 24h History + Next 24h Forecast -->
+        <div class="trend-summary-bar" id="chartTrendBar" style="display:flex; flex-wrap:wrap; gap:1rem; justify-content:space-between;">
+          <div class="trend-group" style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center;">
+            <div class="trend-item">
+              <span class="t-lbl" style="color:var(--accent-cyan); font-weight:700;">⏪ Past 24h:</span>
+              <span class="t-val" id="chartPastTraj">Observed</span>
+            </div>
+            <div class="trend-item">
+              <span class="t-lbl">Past Peak:</span>
+              <span class="t-val" id="chartPastPeak">--</span>
+            </div>
+            <div class="trend-item">
+              <span class="t-lbl">Past Lowest:</span>
+              <span class="t-val" id="chartPastLow">--</span>
+            </div>
+            <div class="trend-item">
+              <span class="t-lbl">Last 6h Shift:</span>
+              <span class="t-val" id="chartPastShift">--</span>
+            </div>
+          </div>
+          <div class="trend-group" style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center; border-left:1px solid var(--border-color); padding-left:1rem;">
+            <div class="trend-item">
+              <span class="t-lbl" style="color:var(--aqi-moderate); font-weight:700;">⏩ Next 24h:</span>
+              <span class="t-val" id="chartTrendDir">Analyzing...</span>
+            </div>
+            <div class="trend-item">
+              <span class="t-lbl">Predicted Peak:</span>
+              <span class="t-val" id="chartTrendPeak">--</span>
+            </div>
+            <div class="trend-item">
+              <span class="t-lbl">Cleanest Air:</span>
+              <span class="t-val" id="chartTrendClean">--</span>
+            </div>
+            <div class="trend-item">
+              <span class="t-lbl">Projected 6h Shift:</span>
+              <span class="t-val" id="chartFutShift">--</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="forecastChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Source Verification & Multi-Source Transparency Table -->
+      <div class="metric-card source-transparency-card">
+        <div class="card-tag">Multi-Source Verification & Official References</div>
+        <p class="source-intro">
+          This application cross-references ground continuous emission monitoring sensors (DOE Malaysia) with European Copernicus (CAMS) high-resolution atmospheric models to provide maximum data reliability.
+        </p>
+
+        <div class="sources-table-wrap">
+          <table class="sources-table">
+            <thead>
+              <tr>
+                <th>Data Source</th>
+                <th>Monitoring Type</th>
+                <th>Overall AQI</th>
+                <th>PM2.5 Metric</th>
+                <th>Status & Verification</th>
+              </tr>
+            </thead>
+            <tbody id="sourcesTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN VIEW 2: SIDE-BY-SIDE COMPARISON VIEW -->
+    <div id="compareView" class="dashboard-view hidden">
+      <div class="location-header">
+        <div class="location-title-box">
+          <div class="location-pin">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <rect x="3" y="3" width="7" height="18" rx="1"/>
+              <rect x="14" y="3" width="7" height="18" rx="1"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="location-name">Side-by-Side Air Quality Comparison</h1>
+            <div class="location-sub">Real-time benchmark across Malaysia's key industrial, administrative, and northern regions</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="compare-grid" id="compareGrid">
+        <!-- Cards for Perai, KL, Alor Setar will be injected dynamically -->
+      </div>
+
+      <div class="metric-card compare-matrix-card">
+        <div class="card-tag">Detailed Multi-City Metrics Matrix</div>
+        <div class="sources-table-wrap">
+          <table class="sources-table compare-table" id="compareMatrixTable">
+            <thead>
+              <tr>
+                <th>Location</th>
+                <th>Overall AQI</th>
+                <th>Air Quality Category</th>
+                <th>PM2.5 (AQI Sub-index)</th>
+                <th>PM2.5 (Mass Conc.)</th>
+                <th>PM10</th>
+                <th>Dominant Pollutant</th>
+                <th>Official Station Link</th>
+              </tr>
+            </thead>
+            <tbody id="compareTableBody">
+              <!-- Populated via app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Air Quality Map of Malaysia -->
+    <section class="metric-card map-section">
+      <div class="card-header-flex">
+        <div>
+          <div class="card-tag">Interactive Malaysia Air Quality Map</div>
+          <div class="card-sub-tag">Click any station to view its real-time AQI and detailed pollutant readings</div>
+        </div>
+        <div class="map-legend">
+          <span class="leg-item"><span class="leg-dot bg-good"></span> Good (0-50)</span>
+          <span class="leg-item"><span class="leg-dot bg-mod"></span> Moderate (51-100)</span>
+          <span class="leg-item"><span class="leg-dot bg-sens"></span> Sensitive (101-150)</span>
+          <span class="leg-item"><span class="leg-dot bg-unh"></span> Unhealthy (151-200)</span>
+          <span class="leg-item"><span class="leg-dot bg-vunh"></span> Very Unhealthy (201+)</span>
+        </div>
+      </div>
+      <div id="aqiMap" class="leaflet-map-container"></div>
+    </section>
+
+    <!-- Malaysian Air Pollutant Index (APIMS / IPU) Reference Guide -->
+    <section class="metric-card ipu-info-section">
+      <div class="card-tag">Malaysia Department of Environment (DOE) APIMS / IPU Classification Standards</div>
+      <div class="ipu-grid">
+        <div class="ipu-card border-good">
+          <div class="ipu-badge badge-good">0 - 50 (Baik / Good)</div>
+          <div class="ipu-desc">Low pollution without any bad effect on health. Safe for all outdoor activities.</div>
+        </div>
+        <div class="ipu-card border-mod">
+          <div class="ipu-badge badge-mod">51 - 100 (Sederhana / Moderate)</div>
+          <div class="ipu-desc">Moderate pollution that does not pose health hazards to the general public.</div>
+        </div>
+        <div class="ipu-card border-sens">
+          <div class="ipu-badge badge-sens">101 - 200 (Tidak Sihat / Unhealthy)</div>
+          <div class="ipu-desc">Worsening health condition of high-risk people (heart & lung complications). General public experience irritation.</div>
+        </div>
+        <div class="ipu-card border-unh">
+          <div class="ipu-badge badge-unh">201 - 300 (Sangat Tidak Sihat / Very Unhealthy)</div>
+          <div class="ipu-desc">Worsens health and causes symptoms in the general population. Vigorous outdoor exertion should be avoided.</div>
+        </div>
+        <div class="ipu-card border-haz">
+          <div class="ipu-badge badge-haz">&gt; 300 (Berbahaya / Hazardous)</div>
+          <div class="ipu-desc">Hazardous to highly sensitive people and general public. Stay indoors and seal ventilation.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p>
+        AeroPulse Air Quality Platform • Ground data sourced from 
+        <a href="https://aqicn.org" target="_blank" rel="noopener">World Air Quality Index (WAQI / AQICN)</a> & 
+        <a href="https://apims.doe.gov.my" target="_blank" rel="noopener">Department of Environment Malaysia (DOE / APIMS)</a>.
+        Atmospheric modeling provided by <a href="https://atmosphere.copernicus.eu" target="_blank" rel="noopener">Copernicus CAMS</a> & NOAA via <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts: Leaflet and Chart.js from CDN -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

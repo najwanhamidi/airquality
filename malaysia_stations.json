@@ -1,0 +1,1218 @@
+{
+  "by_state": {
+    "Johor": [
+      {
+        "id": 2578,
+        "name": "Johor Bahru",
+        "area": "Larkin / Johor Bahru",
+        "state": "Johor",
+        "geo": [
+          1.498,
+          103.731
+        ]
+      },
+      {
+        "id": 2580,
+        "name": "Pasir Gudang",
+        "area": "Pasir Gudang",
+        "state": "Johor",
+        "geo": [
+          1.47,
+          103.896
+        ]
+      },
+      {
+        "id": 9494,
+        "name": "Kluang",
+        "area": "Kluang",
+        "state": "Johor",
+        "geo": [
+          2.029,
+          103.324
+        ]
+      },
+      {
+        "id": 9493,
+        "name": "Batu Pahat",
+        "area": "Batu Pahat",
+        "state": "Johor",
+        "geo": [
+          1.854,
+          102.932
+        ]
+      },
+      {
+        "id": 9492,
+        "name": "Segamat",
+        "area": "Segamat",
+        "state": "Johor",
+        "geo": [
+          2.494,
+          102.863
+        ]
+      },
+      {
+        "id": 10484,
+        "name": "Tangkak",
+        "area": "Tangkak / Muar",
+        "state": "Johor",
+        "geo": [
+          2.268,
+          102.546
+        ]
+      },
+      {
+        "id": 1665,
+        "name": "Skudai",
+        "area": "Skudai / Kulai",
+        "state": "Johor",
+        "geo": [
+          1.536,
+          103.659
+        ]
+      }
+    ],
+    "Kedah": [
+      {
+        "id": 2581,
+        "name": "Alor Setar",
+        "area": "Bandar Diraja Alor Setar",
+        "state": "Kedah",
+        "geo": [
+          6.137,
+          100.347
+        ]
+      },
+      {
+        "id": 2582,
+        "name": "Sungai Petani",
+        "area": "Bakar Arang, Sg. Petani",
+        "state": "Kedah",
+        "geo": [
+          5.63,
+          100.468
+        ]
+      },
+      {
+        "id": 9488,
+        "name": "Kulim Hi-Tech",
+        "area": "Kulim Hi-Tech Park",
+        "state": "Kedah",
+        "geo": [
+          5.402,
+          100.59
+        ]
+      },
+      {
+        "id": 2583,
+        "name": "Langkawi",
+        "area": "Kuah, Langkawi",
+        "state": "Kedah",
+        "geo": [
+          6.332,
+          99.858
+        ]
+      }
+    ],
+    "Kelantan": [
+      {
+        "id": 9556,
+        "name": "Kota Bharu",
+        "area": "Kota Bharu",
+        "state": "Kelantan",
+        "geo": [
+          6.125,
+          102.24
+        ]
+      },
+      {
+        "id": 2585,
+        "name": "Tanah Merah",
+        "area": "Tanah Merah",
+        "state": "Kelantan",
+        "geo": [
+          5.809,
+          102.147
+        ]
+      }
+    ],
+    "Melaka": [
+      {
+        "id": 2586,
+        "name": "Bandaraya Melaka",
+        "area": "Batu Berendam, Melaka",
+        "state": "Melaka",
+        "geo": [
+          2.191,
+          102.257
+        ]
+      },
+      {
+        "id": 2587,
+        "name": "Bukit Rambai",
+        "area": "Kawasan Perindustrian Bukit Rambai",
+        "state": "Melaka",
+        "geo": [
+          2.259,
+          102.173
+        ]
+      },
+      {
+        "id": 9491,
+        "name": "Alor Gajah",
+        "area": "Alor Gajah",
+        "state": "Melaka",
+        "geo": [
+          2.371,
+          102.225
+        ]
+      }
+    ],
+    "Negeri Sembilan": [
+      {
+        "id": 2590,
+        "name": "Seremban",
+        "area": "Seremban",
+        "state": "Negeri Sembilan",
+        "geo": [
+          2.723,
+          101.968
+        ]
+      },
+      {
+        "id": 2588,
+        "name": "Nilai",
+        "area": "Bandar Baru Nilai",
+        "state": "Negeri Sembilan",
+        "geo": [
+          2.822,
+          101.811
+        ]
+      },
+      {
+        "id": 2589,
+        "name": "Port Dickson",
+        "area": "Port Dickson",
+        "state": "Negeri Sembilan",
+        "geo": [
+          2.441,
+          101.867
+        ]
+      }
+    ],
+    "Pahang": [
+      {
+        "id": 2592,
+        "name": "Kuantan",
+        "area": "Indera Mahkota, Kuantan",
+        "state": "Pahang",
+        "geo": [
+          3.816,
+          103.316
+        ]
+      },
+      {
+        "id": 9497,
+        "name": "Temerloh",
+        "area": "Mentakab / Temerloh",
+        "state": "Pahang",
+        "geo": [
+          3.472,
+          102.376
+        ]
+      },
+      {
+        "id": 2593,
+        "name": "Jerantut",
+        "area": "Jerantut",
+        "state": "Pahang",
+        "geo": [
+          3.948,
+          102.367
+        ]
+      }
+    ],
+    "Perak": [
+      {
+        "id": 2594,
+        "name": "Ipoh (Tasek)",
+        "area": "Jalan Tasek, Ipoh",
+        "state": "Perak",
+        "geo": [
+          4.629,
+          101.117
+        ]
+      },
+      {
+        "id": 2596,
+        "name": "Ipoh (Pegoh)",
+        "area": "SK Jalan Pegoh, Ipoh",
+        "state": "Perak",
+        "geo": [
+          4.553,
+          101.08
+        ]
+      },
+      {
+        "id": 2595,
+        "name": "Taiping",
+        "area": "Kg. Air Putih, Taiping",
+        "state": "Perak",
+        "geo": [
+          4.899,
+          100.679
+        ]
+      },
+      {
+        "id": 2597,
+        "name": "Seri Manjung",
+        "area": "Lumut / Seri Manjung",
+        "state": "Perak",
+        "geo": [
+          4.2,
+          100.663
+        ]
+      },
+      {
+        "id": 2598,
+        "name": "Tanjung Malim",
+        "area": "Tanjung Malim",
+        "state": "Perak",
+        "geo": [
+          3.688,
+          101.524
+        ]
+      }
+    ],
+    "Perlis": [
+      {
+        "id": 2599,
+        "name": "Kangar",
+        "area": "Kangar, Perlis",
+        "state": "Perlis",
+        "geo": [
+          6.43,
+          100.211
+        ]
+      }
+    ],
+    "Pulau Pinang": [
+      {
+        "id": 2600,
+        "name": "Perai",
+        "area": "Perai Industrial Area, Seberang Perai",
+        "state": "Pulau Pinang",
+        "geo": [
+          5.329,
+          100.443
+        ]
+      },
+      {
+        "id": 2601,
+        "name": "Seberang Jaya",
+        "area": "Seberang Jaya 2",
+        "state": "Pulau Pinang",
+        "geo": [
+          5.398,
+          100.404
+        ]
+      },
+      {
+        "id": 9489,
+        "name": "Minden (USM)",
+        "area": "Minden, Pulau Pinang",
+        "state": "Pulau Pinang",
+        "geo": [
+          5.356,
+          100.308
+        ]
+      },
+      {
+        "id": 9490,
+        "name": "Balik Pulau",
+        "area": "Balik Pulau, Pulau Pinang",
+        "state": "Pulau Pinang",
+        "geo": [
+          5.338,
+          100.215
+        ]
+      }
+    ],
+    "Sabah": [
+      {
+        "id": 2604,
+        "name": "Kota Kinabalu",
+        "area": "Putatan / Kota Kinabalu",
+        "state": "Sabah",
+        "geo": [
+          5.975,
+          116.072
+        ]
+      },
+      {
+        "id": 2605,
+        "name": "Sandakan",
+        "area": "Sandakan",
+        "state": "Sabah",
+        "geo": [
+          5.84,
+          118.118
+        ]
+      },
+      {
+        "id": 2606,
+        "name": "Tawau",
+        "area": "Tawau",
+        "state": "Sabah",
+        "geo": [
+          4.25,
+          117.936
+        ]
+      },
+      {
+        "id": 2603,
+        "name": "Keningau",
+        "area": "Keningau",
+        "state": "Sabah",
+        "geo": [
+          5.339,
+          116.164
+        ]
+      }
+    ],
+    "Sarawak": [
+      {
+        "id": 2610,
+        "name": "Kuching",
+        "area": "Kuching",
+        "state": "Sarawak",
+        "geo": [
+          1.554,
+          110.344
+        ]
+      },
+      {
+        "id": 2613,
+        "name": "Samarahan",
+        "area": "Kota Samarahan",
+        "state": "Sarawak",
+        "geo": [
+          1.442,
+          110.457
+        ]
+      },
+      {
+        "id": 2616,
+        "name": "Sri Aman",
+        "area": "Simanggang, Sri Aman",
+        "state": "Sarawak",
+        "geo": [
+          1.238,
+          111.462
+        ]
+      },
+      {
+        "id": 2614,
+        "name": "Sarikei",
+        "area": "Sarikei",
+        "state": "Sarawak",
+        "geo": [
+          2.126,
+          111.524
+        ]
+      },
+      {
+        "id": 2615,
+        "name": "Sibu",
+        "area": "Sibu",
+        "state": "Sarawak",
+        "geo": [
+          2.314,
+          111.832
+        ]
+      },
+      {
+        "id": 9501,
+        "name": "Mukah",
+        "area": "Mukah",
+        "state": "Sarawak",
+        "geo": [
+          2.898,
+          112.091
+        ]
+      },
+      {
+        "id": 2607,
+        "name": "Bintulu",
+        "area": "Bintulu",
+        "state": "Sarawak",
+        "geo": [
+          3.172,
+          113.043
+        ]
+      },
+      {
+        "id": 2609,
+        "name": "Kapit",
+        "area": "Kapit",
+        "state": "Sarawak",
+        "geo": [
+          2.016,
+          112.935
+        ]
+      },
+      {
+        "id": 2612,
+        "name": "Miri",
+        "area": "Miri",
+        "state": "Sarawak",
+        "geo": [
+          4.425,
+          114.012
+        ]
+      },
+      {
+        "id": 2611,
+        "name": "Limbang",
+        "area": "Limbang",
+        "state": "Sarawak",
+        "geo": [
+          4.75,
+          115.0
+        ]
+      }
+    ],
+    "Selangor": [
+      {
+        "id": 2621,
+        "name": "Shah Alam",
+        "area": "Seksyen 2, Shah Alam",
+        "state": "Selangor",
+        "geo": [
+          3.105,
+          101.556
+        ]
+      },
+      {
+        "id": 2620,
+        "name": "Petaling Jaya",
+        "area": "Seksyen 17, Petaling Jaya",
+        "state": "Selangor",
+        "geo": [
+          3.133,
+          101.608
+        ]
+      },
+      {
+        "id": 2619,
+        "name": "Pelabuhan Klang",
+        "area": "Pelabuhan Klang (Port Klang)",
+        "state": "Selangor",
+        "geo": [
+          3.015,
+          101.413
+        ]
+      },
+      {
+        "id": 2617,
+        "name": "Banting",
+        "area": "Kuala Langat / Banting",
+        "state": "Selangor",
+        "geo": [
+          2.817,
+          101.623
+        ]
+      },
+      {
+        "id": 2618,
+        "name": "Kuala Selangor",
+        "area": "Kuala Selangor",
+        "state": "Selangor",
+        "geo": [
+          3.321,
+          101.256
+        ]
+      }
+    ],
+    "Terengganu": [
+      {
+        "id": 2623,
+        "name": "Kuala Terengganu",
+        "area": "Kuala Terengganu",
+        "state": "Terengganu",
+        "geo": [
+          5.312,
+          103.132
+        ]
+      },
+      {
+        "id": 2622,
+        "name": "Kemaman",
+        "area": "Cukai / Kemaman",
+        "state": "Terengganu",
+        "geo": [
+          4.262,
+          103.426
+        ]
+      },
+      {
+        "id": 2624,
+        "name": "Paka",
+        "area": "Paka, Dungun",
+        "state": "Terengganu",
+        "geo": [
+          4.638,
+          103.437
+        ]
+      }
+    ],
+    "W.P. Kuala Lumpur": [
+      {
+        "id": 5780,
+        "name": "Kuala Lumpur (Metropolitan)",
+        "area": "Pusat Bandaraya Kuala Lumpur",
+        "state": "W.P. Kuala Lumpur",
+        "geo": [
+          3.139,
+          101.687
+        ]
+      },
+      {
+        "id": 2626,
+        "name": "Cheras",
+        "area": "Cheras, Kuala Lumpur",
+        "state": "W.P. Kuala Lumpur",
+        "geo": [
+          3.106,
+          101.718
+        ]
+      },
+      {
+        "id": 2625,
+        "name": "Batu Muda",
+        "area": "Batu Muda, Sentul, KL",
+        "state": "W.P. Kuala Lumpur",
+        "geo": [
+          3.212,
+          101.682
+        ]
+      }
+    ],
+    "W.P. Labuan": [
+      {
+        "id": 2627,
+        "name": "Labuan",
+        "area": "Bandar Labuan",
+        "state": "W.P. Labuan",
+        "geo": [
+          5.277,
+          115.242
+        ]
+      }
+    ],
+    "W.P. Putrajaya": [
+      {
+        "id": 10485,
+        "name": "Putrajaya",
+        "area": "Presint 18, Putrajaya",
+        "state": "W.P. Putrajaya",
+        "geo": [
+          2.915,
+          101.69
+        ]
+      }
+    ]
+  },
+  "stations": {
+    "2578": {
+      "id": 2578,
+      "name": "Johor Bahru",
+      "area": "Larkin / Johor Bahru",
+      "state": "Johor",
+      "geo": [
+        1.498,
+        103.731
+      ]
+    },
+    "2580": {
+      "id": 2580,
+      "name": "Pasir Gudang",
+      "area": "Pasir Gudang",
+      "state": "Johor",
+      "geo": [
+        1.47,
+        103.896
+      ]
+    },
+    "9494": {
+      "id": 9494,
+      "name": "Kluang",
+      "area": "Kluang",
+      "state": "Johor",
+      "geo": [
+        2.029,
+        103.324
+      ]
+    },
+    "9493": {
+      "id": 9493,
+      "name": "Batu Pahat",
+      "area": "Batu Pahat",
+      "state": "Johor",
+      "geo": [
+        1.854,
+        102.932
+      ]
+    },
+    "9492": {
+      "id": 9492,
+      "name": "Segamat",
+      "area": "Segamat",
+      "state": "Johor",
+      "geo": [
+        2.494,
+        102.863
+      ]
+    },
+    "10484": {
+      "id": 10484,
+      "name": "Tangkak",
+      "area": "Tangkak / Muar",
+      "state": "Johor",
+      "geo": [
+        2.268,
+        102.546
+      ]
+    },
+    "1665": {
+      "id": 1665,
+      "name": "Skudai",
+      "area": "Skudai / Kulai",
+      "state": "Johor",
+      "geo": [
+        1.536,
+        103.659
+      ]
+    },
+    "2581": {
+      "id": 2581,
+      "name": "Alor Setar",
+      "area": "Bandar Diraja Alor Setar",
+      "state": "Kedah",
+      "geo": [
+        6.137,
+        100.347
+      ]
+    },
+    "2582": {
+      "id": 2582,
+      "name": "Sungai Petani",
+      "area": "Bakar Arang, Sg. Petani",
+      "state": "Kedah",
+      "geo": [
+        5.63,
+        100.468
+      ]
+    },
+    "9488": {
+      "id": 9488,
+      "name": "Kulim Hi-Tech",
+      "area": "Kulim Hi-Tech Park",
+      "state": "Kedah",
+      "geo": [
+        5.402,
+        100.59
+      ]
+    },
+    "2583": {
+      "id": 2583,
+      "name": "Langkawi",
+      "area": "Kuah, Langkawi",
+      "state": "Kedah",
+      "geo": [
+        6.332,
+        99.858
+      ]
+    },
+    "9556": {
+      "id": 9556,
+      "name": "Kota Bharu",
+      "area": "Kota Bharu",
+      "state": "Kelantan",
+      "geo": [
+        6.125,
+        102.24
+      ]
+    },
+    "2585": {
+      "id": 2585,
+      "name": "Tanah Merah",
+      "area": "Tanah Merah",
+      "state": "Kelantan",
+      "geo": [
+        5.809,
+        102.147
+      ]
+    },
+    "2586": {
+      "id": 2586,
+      "name": "Bandaraya Melaka",
+      "area": "Batu Berendam, Melaka",
+      "state": "Melaka",
+      "geo": [
+        2.191,
+        102.257
+      ]
+    },
+    "2587": {
+      "id": 2587,
+      "name": "Bukit Rambai",
+      "area": "Kawasan Perindustrian Bukit Rambai",
+      "state": "Melaka",
+      "geo": [
+        2.259,
+        102.173
+      ]
+    },
+    "9491": {
+      "id": 9491,
+      "name": "Alor Gajah",
+      "area": "Alor Gajah",
+      "state": "Melaka",
+      "geo": [
+        2.371,
+        102.225
+      ]
+    },
+    "2590": {
+      "id": 2590,
+      "name": "Seremban",
+      "area": "Seremban",
+      "state": "Negeri Sembilan",
+      "geo": [
+        2.723,
+        101.968
+      ]
+    },
+    "2588": {
+      "id": 2588,
+      "name": "Nilai",
+      "area": "Bandar Baru Nilai",
+      "state": "Negeri Sembilan",
+      "geo": [
+        2.822,
+        101.811
+      ]
+    },
+    "2589": {
+      "id": 2589,
+      "name": "Port Dickson",
+      "area": "Port Dickson",
+      "state": "Negeri Sembilan",
+      "geo": [
+        2.441,
+        101.867
+      ]
+    },
+    "2592": {
+      "id": 2592,
+      "name": "Kuantan",
+      "area": "Indera Mahkota, Kuantan",
+      "state": "Pahang",
+      "geo": [
+        3.816,
+        103.316
+      ]
+    },
+    "9497": {
+      "id": 9497,
+      "name": "Temerloh",
+      "area": "Mentakab / Temerloh",
+      "state": "Pahang",
+      "geo": [
+        3.472,
+        102.376
+      ]
+    },
+    "2593": {
+      "id": 2593,
+      "name": "Jerantut",
+      "area": "Jerantut",
+      "state": "Pahang",
+      "geo": [
+        3.948,
+        102.367
+      ]
+    },
+    "2594": {
+      "id": 2594,
+      "name": "Ipoh (Tasek)",
+      "area": "Jalan Tasek, Ipoh",
+      "state": "Perak",
+      "geo": [
+        4.629,
+        101.117
+      ]
+    },
+    "2596": {
+      "id": 2596,
+      "name": "Ipoh (Pegoh)",
+      "area": "SK Jalan Pegoh, Ipoh",
+      "state": "Perak",
+      "geo": [
+        4.553,
+        101.08
+      ]
+    },
+    "2595": {
+      "id": 2595,
+      "name": "Taiping",
+      "area": "Kg. Air Putih, Taiping",
+      "state": "Perak",
+      "geo": [
+        4.899,
+        100.679
+      ]
+    },
+    "2597": {
+      "id": 2597,
+      "name": "Seri Manjung",
+      "area": "Lumut / Seri Manjung",
+      "state": "Perak",
+      "geo": [
+        4.2,
+        100.663
+      ]
+    },
+    "2598": {
+      "id": 2598,
+      "name": "Tanjung Malim",
+      "area": "Tanjung Malim",
+      "state": "Perak",
+      "geo": [
+        3.688,
+        101.524
+      ]
+    },
+    "2599": {
+      "id": 2599,
+      "name": "Kangar",
+      "area": "Kangar, Perlis",
+      "state": "Perlis",
+      "geo": [
+        6.43,
+        100.211
+      ]
+    },
+    "2600": {
+      "id": 2600,
+      "name": "Perai",
+      "area": "Perai Industrial Area, Seberang Perai",
+      "state": "Pulau Pinang",
+      "geo": [
+        5.329,
+        100.443
+      ]
+    },
+    "2601": {
+      "id": 2601,
+      "name": "Seberang Jaya",
+      "area": "Seberang Jaya 2",
+      "state": "Pulau Pinang",
+      "geo": [
+        5.398,
+        100.404
+      ]
+    },
+    "9489": {
+      "id": 9489,
+      "name": "Minden (USM)",
+      "area": "Minden, Pulau Pinang",
+      "state": "Pulau Pinang",
+      "geo": [
+        5.356,
+        100.308
+      ]
+    },
+    "9490": {
+      "id": 9490,
+      "name": "Balik Pulau",
+      "area": "Balik Pulau, Pulau Pinang",
+      "state": "Pulau Pinang",
+      "geo": [
+        5.338,
+        100.215
+      ]
+    },
+    "2604": {
+      "id": 2604,
+      "name": "Kota Kinabalu",
+      "area": "Putatan / Kota Kinabalu",
+      "state": "Sabah",
+      "geo": [
+        5.975,
+        116.072
+      ]
+    },
+    "2605": {
+      "id": 2605,
+      "name": "Sandakan",
+      "area": "Sandakan",
+      "state": "Sabah",
+      "geo": [
+        5.84,
+        118.118
+      ]
+    },
+    "2606": {
+      "id": 2606,
+      "name": "Tawau",
+      "area": "Tawau",
+      "state": "Sabah",
+      "geo": [
+        4.25,
+        117.936
+      ]
+    },
+    "2603": {
+      "id": 2603,
+      "name": "Keningau",
+      "area": "Keningau",
+      "state": "Sabah",
+      "geo": [
+        5.339,
+        116.164
+      ]
+    },
+    "2610": {
+      "id": 2610,
+      "name": "Kuching",
+      "area": "Kuching",
+      "state": "Sarawak",
+      "geo": [
+        1.554,
+        110.344
+      ]
+    },
+    "2613": {
+      "id": 2613,
+      "name": "Samarahan",
+      "area": "Kota Samarahan",
+      "state": "Sarawak",
+      "geo": [
+        1.442,
+        110.457
+      ]
+    },
+    "2616": {
+      "id": 2616,
+      "name": "Sri Aman",
+      "area": "Simanggang, Sri Aman",
+      "state": "Sarawak",
+      "geo": [
+        1.238,
+        111.462
+      ]
+    },
+    "2614": {
+      "id": 2614,
+      "name": "Sarikei",
+      "area": "Sarikei",
+      "state": "Sarawak",
+      "geo": [
+        2.126,
+        111.524
+      ]
+    },
+    "2615": {
+      "id": 2615,
+      "name": "Sibu",
+      "area": "Sibu",
+      "state": "Sarawak",
+      "geo": [
+        2.314,
+        111.832
+      ]
+    },
+    "9501": {
+      "id": 9501,
+      "name": "Mukah",
+      "area": "Mukah",
+      "state": "Sarawak",
+      "geo": [
+        2.898,
+        112.091
+      ]
+    },
+    "2607": {
+      "id": 2607,
+      "name": "Bintulu",
+      "area": "Bintulu",
+      "state": "Sarawak",
+      "geo": [
+        3.172,
+        113.043
+      ]
+    },
+    "2609": {
+      "id": 2609,
+      "name": "Kapit",
+      "area": "Kapit",
+      "state": "Sarawak",
+      "geo": [
+        2.016,
+        112.935
+      ]
+    },
+    "2612": {
+      "id": 2612,
+      "name": "Miri",
+      "area": "Miri",
+      "state": "Sarawak",
+      "geo": [
+        4.425,
+        114.012
+      ]
+    },
+    "2611": {
+      "id": 2611,
+      "name": "Limbang",
+      "area": "Limbang",
+      "state": "Sarawak",
+      "geo": [
+        4.75,
+        115.0
+      ]
+    },
+    "2621": {
+      "id": 2621,
+      "name": "Shah Alam",
+      "area": "Seksyen 2, Shah Alam",
+      "state": "Selangor",
+      "geo": [
+        3.105,
+        101.556
+      ]
+    },
+    "2620": {
+      "id": 2620,
+      "name": "Petaling Jaya",
+      "area": "Seksyen 17, Petaling Jaya",
+      "state": "Selangor",
+      "geo": [
+        3.133,
+        101.608
+      ]
+    },
+    "2619": {
+      "id": 2619,
+      "name": "Pelabuhan Klang",
+      "area": "Pelabuhan Klang (Port Klang)",
+      "state": "Selangor",
+      "geo": [
+        3.015,
+        101.413
+      ]
+    },
+    "2617": {
+      "id": 2617,
+      "name": "Banting",
+      "area": "Kuala Langat / Banting",
+      "state": "Selangor",
+      "geo": [
+        2.817,
+        101.623
+      ]
+    },
+    "2618": {
+      "id": 2618,
+      "name": "Kuala Selangor",
+      "area": "Kuala Selangor",
+      "state": "Selangor",
+      "geo": [
+        3.321,
+        101.256
+      ]
+    },
+    "2623": {
+      "id": 2623,
+      "name": "Kuala Terengganu",
+      "area": "Kuala Terengganu",
+      "state": "Terengganu",
+      "geo": [
+        5.312,
+        103.132
+      ]
+    },
+    "2622": {
+      "id": 2622,
+      "name": "Kemaman",
+      "area": "Cukai / Kemaman",
+      "state": "Terengganu",
+      "geo": [
+        4.262,
+        103.426
+      ]
+    },
+    "2624": {
+      "id": 2624,
+      "name": "Paka",
+      "area": "Paka, Dungun",
+      "state": "Terengganu",
+      "geo": [
+        4.638,
+        103.437
+      ]
+    },
+    "5780": {
+      "id": 5780,
+      "name": "Kuala Lumpur (Metropolitan)",
+      "area": "Pusat Bandaraya Kuala Lumpur",
+      "state": "W.P. Kuala Lumpur",
+      "geo": [
+        3.139,
+        101.687
+      ]
+    },
+    "2626": {
+      "id": 2626,
+      "name": "Cheras",
+      "area": "Cheras, Kuala Lumpur",
+      "state": "W.P. Kuala Lumpur",
+      "geo": [
+        3.106,
+        101.718
+      ]
+    },
+    "2625": {
+      "id": 2625,
+      "name": "Batu Muda",
+      "area": "Batu Muda, Sentul, KL",
+      "state": "W.P. Kuala Lumpur",
+      "geo": [
+        3.212,
+        101.682
+      ]
+    },
+    "2627": {
+      "id": 2627,
+      "name": "Labuan",
+      "area": "Bandar Labuan",
+      "state": "W.P. Labuan",
+      "geo": [
+        5.277,
+        115.242
+      ]
+    },
+    "10485": {
+      "id": 10485,
+      "name": "Putrajaya",
+      "area": "Presint 18, Putrajaya",
+      "state": "W.P. Putrajaya",
+      "geo": [
+        2.915,
+        101.69
+      ]
+    }
+  }
+}
