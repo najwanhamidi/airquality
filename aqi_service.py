@@ -2,7 +2,8 @@ import requests
 import re
 import json
 import time
-from datetime import datetime
+import math
+from datetime import datetime, timedelta
 from urllib.parse import quote
 from concurrent.futures import ThreadPoolExecutor
 
@@ -1319,10 +1320,35 @@ def get_complete_air_quality(location_key_or_query, lat=None, lon=None, station_
     # Integrate official AQICN ground station historical measurements
     ground_hist = aqicn_data.get("history", {}) if aqicn_data else {}
     ground_pm25_hist = ground_hist.get("pm25")
+    cur_hour_str = datetime.now().strftime("%Y-%m-%dT%H:00")
+
     if ground_pm25_hist and ground_pm25_hist.get("pm25_aqi"):
         g_aqis = list(ground_pm25_hist["pm25_aqi"])
-        g_times = list(ground_pm25_hist.get("time", [])) or past_times
+        g_times = list(ground_pm25_hist.get("time", [])) or list(past_times)
         g_concs = list(ground_pm25_hist.get("pm2_5", [])) or [aqi_to_pm25_conc(v) for v in g_aqis]
+
+        # Ensure the historical series extends up to the current local hour without shifting past hours
+        if g_times and pm25_aqi is not None:
+            try:
+                live_val = int(pm25_aqi)
+                live_conc = aqi_to_pm25_conc(live_val)
+                last_dt = datetime.strptime(g_times[-1][:13], "%Y-%m-%dT%H")
+                cur_dt = datetime.strptime(cur_hour_str[:13], "%Y-%m-%dT%H")
+                diff_hrs = int(round((cur_dt - last_dt).total_seconds() / 3600.0))
+                if 1 <= diff_hrs <= 4:
+                    for h_step in range(1, diff_hrs + 1):
+                        step_str = (last_dt + timedelta(hours=h_step)).strftime("%Y-%m-%dT%H:00")
+                        g_times.append(step_str)
+                        g_aqis.append(live_val)
+                        g_concs.append(live_conc)
+                    g_times = g_times[-24:]
+                    g_aqis = g_aqis[-24:]
+                    g_concs = g_concs[-24:]
+                elif diff_hrs == 0:
+                    g_aqis[-1] = live_val
+                    g_concs[-1] = live_conc
+            except Exception:
+                pass
 
         if not past_24h_data:
             past_24h_data = {}
@@ -1336,41 +1362,55 @@ def get_complete_air_quality(location_key_or_query, lat=None, lon=None, station_
         # Also supply overall US AQI history if ground station decoded it
         ground_aqi_hist = ground_hist.get("aqi")
         if ground_aqi_hist and ground_aqi_hist.get("values"):
-            past_24h_data["us_aqi"] = list(ground_aqi_hist["values"])
+            past_24h_data["us_aqi"] = list(ground_aqi_hist["values"])[-len(g_aqis):]
 
-        # Splice ground historical readings into timeline_48h past segment
-        if timeline_48h_data and comb_now_idx is not None and comb_pm25_aqi:
-            comb_pm25_aqi = list(comb_pm25_aqi)
-            comb_pm25_conc = list(comb_pm25_conc)
-            n_pts = min(len(g_aqis), comb_now_idx + 1)
-            for i in range(n_pts):
-                target_idx = comb_now_idx - (n_pts - 1 - i)
-                if 0 <= target_idx < len(comb_pm25_aqi):
-                    comb_pm25_aqi[target_idx] = g_aqis[i]
-                    if i < len(g_concs) and target_idx < len(comb_pm25_conc):
-                        comb_pm25_conc[target_idx] = g_concs[i]
-            timeline_48h_data["pm25_aqi"] = comb_pm25_aqi
-            timeline_48h_data["pm2_5"] = comb_pm25_conc
-
-    # Calibrate index 0 of future, index -1 of past, and index now_index of timeline_48h with ground station PM2.5 observation
+    # Smoothly calibrate future_24h and past_24h with ground station PM2.5 observation
     if pm25_aqi is not None:
         try:
             val_int = int(pm25_aqi)
+            val_conc = aqi_to_pm25_conc(val_int)
             if hourly_pm25_aqi:
-                hourly_pm25_aqi = list(hourly_pm25_aqi)
-                hourly_pm25_aqi[0] = val_int
+                raw_fc_aqi = list(hourly_pm25_aqi)
+                raw_base = raw_fc_aqi[0] if raw_fc_aqi[0] is not None else val_int
+                offset = val_int - raw_base
+                cal_fc_aqi = []
+                cal_fc_conc = []
+                for i, r_val in enumerate(raw_fc_aqi):
+                    if i == 0 or r_val is None:
+                        c_aqi = val_int
+                    else:
+                        weight = 0.45 + 0.55 * math.exp(-i / 8.0)
+                        c_aqi = max(5, min(500, int(round(r_val + offset * weight))))
+                    cal_fc_aqi.append(c_aqi)
+                    cal_fc_conc.append(aqi_to_pm25_conc(c_aqi))
+                hourly_pm25_aqi = cal_fc_aqi
+                hourly_pm25_conc = cal_fc_conc
                 if hourly_fc:
                     hourly_fc["pm25_aqi"] = hourly_pm25_aqi
+                    hourly_fc["pm2_5"] = hourly_pm25_conc
+
             if past_pm25_aqi:
                 past_pm25_aqi = list(past_pm25_aqi)
                 past_pm25_aqi[-1] = val_int
+                if past_pm25_conc:
+                    past_pm25_conc = list(past_pm25_conc)
+                    past_pm25_conc[-1] = val_conc
                 if past_24h_data:
                     past_24h_data["pm25_aqi"] = past_pm25_aqi
-            if comb_pm25_aqi and comb_now_idx < len(comb_pm25_aqi):
-                comb_pm25_aqi = list(comb_pm25_aqi)
-                comb_pm25_aqi[comb_now_idx] = val_int
-                if timeline_48h_data:
-                    timeline_48h_data["pm25_aqi"] = comb_pm25_aqi
+                    past_24h_data["pm2_5"] = past_pm25_conc
+
+            # Rebuild timeline_48h directly from past_24h + future_24h[1:25] so all 3 modes match 100%
+            if past_times and hourly_times:
+                comb_times = list(past_times) + list(hourly_times[1:25])
+                comb_pm25_aqi = list(past_pm25_aqi) + list(hourly_pm25_aqi[1:25])
+                comb_pm25_conc = list(past_pm25_conc) + list(hourly_pm25_conc[1:25])
+                comb_now_idx = len(past_times) - 1
+                if not timeline_48h_data:
+                    timeline_48h_data = {}
+                timeline_48h_data["time"] = comb_times
+                timeline_48h_data["pm25_aqi"] = comb_pm25_aqi
+                timeline_48h_data["pm2_5"] = comb_pm25_conc
+                timeline_48h_data["now_index"] = comb_now_idx
         except (ValueError, TypeError):
             pass
 
